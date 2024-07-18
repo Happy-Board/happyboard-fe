@@ -27,4 +27,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f happyboard-fe-container
       - name: Run docker container
-        run: docker run -d -p 8888:80 --name happyboard-fe-container duymt3/happyboard-fe
+        run: docker run -d -p 80:80 --name happyboard-fe-container duymt3/happyboard-fe
