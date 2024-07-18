@@ -9,7 +9,7 @@ export default defineConfig({
     vue(),
   ],
   server:{
-    host:'localhost',
+    host:'52.74.146.23',
     port: 8888
   },
   resolve: {
