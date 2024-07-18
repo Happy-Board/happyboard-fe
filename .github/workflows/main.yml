@@ -18,13 +18,13 @@ jobs:
       - name: Publish image to docker hub
         run: docker push duymt3/happyboard-fe:latest
         
-  deploy:
-    needs: build
-    runs-on: self-hosted
-    steps:
-      - name: Pull image from docker hub
-        run: docker pull duymt3/happyboard-fe:latest
-      - name: Delete old container
-        run: docker rm -f happyboard-fe-container
-      - name: Run docker container
-        run: docker run -d -p 8888:8888 --name happyboard-fe-container duymt3/happyboard-fe
+#   deploy:
+#     needs: build
+#     runs-on: self-hosted
+#     steps:
+#       - name: Pull image from docker hub
+#         run: docker pull duymt3/happyboard-fe:latest
+#       - name: Delete old container
+#         run: docker rm -f happyboard-fe-container
+#       - name: Run docker container
+#         run: docker run -d -p 8888:8888 --name happyboard-fe-container duymt3/happyboard-fe
