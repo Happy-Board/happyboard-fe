@@ -8,9 +8,9 @@ COPY . .
 RUN npm run build
 
 #deploy stage
-FROM nginx:latest
-COPY default.conf /etc/nginx/conf.d/default.conf
-# Expose port 80
-EXPOSE 80
-# Command to run Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# FROM nginx:latest
+# COPY default.conf /etc/nginx/conf.d/default.conf
+# # Expose port 80
+# EXPOSE 80
+# # Command to run Nginx
+# CMD ["nginx", "-g", "daemon off;"]
