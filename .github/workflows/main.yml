@@ -20,11 +20,11 @@ jobs:
         
   deploy:
     needs: build
-    runs-on: self-hosted
+    runs-on: fe
     steps:
       - name: Pull image from docker hub
         run: docker pull duymt3/happyboard-fe:latest
       - name: Delete old container
         run: docker rm -f happyboard-fe-container
       - name: Run docker container
-        run: docker run -d -p 80:80 --name happyboard-fe-container duymt3/happyboard-fe
+        run: docker run -d -p 80:8888 --name happyboard-fe-container duymt3/happyboard-fe
