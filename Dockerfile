@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-
+CMD ["npm", "run", "dev"]
 # production stage
 # FROM nginx:latest
 # # Copy the custom configuration file to the Nginx configuration directory
