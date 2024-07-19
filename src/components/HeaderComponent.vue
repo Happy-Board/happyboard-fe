@@ -12,8 +12,9 @@
         </a>
       </div>
       <div class="col-span-4 relative flex w-full gap-2">
-        <div class="relative h-10 w-full min-w-[288px]">
+        <!-- <div class="relative h-10 w-full min-w-[288px]">
           <input
+            @click="emit('modal-close')"
             v-model="searchString"
             type="search"
             class="peer h-full w-full rounded-full border border-slate-500 bg-transparent px-3 py-2.5 pr-20 font-sans text-sm font-normal !text-black outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-slate-700 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
@@ -21,16 +22,16 @@
           />
         </div>
         <ul
-          v-if="searchResults.length"
-          class="w-full rounded-xl bg-white border border-gray-300 px-4 py-2 space-y-1 absolute z-10 top-12"
+          v-if="searchResults.length && props.isOpen"
+          class="w-full rounded-xl bg-white border border-gray-300 px-4 py-2 space-y-1 absolute z-10 top-12 shadow-xl"
         >
           <li
             v-for="result in searchResults"
             :key="result.id"
-            @click="findResults(result.content)"
-            class="cursor-pointer hover:bg-gray-100 p-1 rounded-lg px-2"
+            @click="findResults(result.id)"
+            class="cursor-pointer hover:bg-gray-100 p-1 rounded-lg px-2 text-blue-900 font-semibold"
           >
-            {{ result.content }}
+            <div v-html="result.title"></div>
           </li>
         </ul>
         <button
@@ -38,7 +39,12 @@
           type="button"
         >
           Search
-        </button>
+        </button> -->
+        <SearchComponent
+          :isOpen="isModalOpened"
+          @modal-open="openModal"
+          @modal-close="closeModal"
+        />
       </div>
       <div class="col-span-4 flex justify-end gap-1">
         <div class="flex justify-end items-center object-fill">
@@ -63,7 +69,7 @@
               </svg>
             </span>
           </button>
-          <button
+          <!-- <button
             v-if="mode === 'dark'"
             @click="handleChangeMode('light')"
             class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-700 transition-all hover:bg-white/10 active:bg-white/30 hover:text-black disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -81,8 +87,8 @@
                 />
               </svg>
             </span>
-          </button>
-          <button
+          </button> -->
+          <!-- <button
             class="relative ms-5 me-10 h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-700 transition-all hover:bg-white/10 active:bg-white/30 hover:text-black disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             type="button"
           >
@@ -100,7 +106,7 @@
                 />
               </svg>
             </span>
-          </button>
+          </button> -->
           <img
             @click="handleShowUserOption"
             src="@/assets/default-avatar.jpg"
@@ -167,8 +173,19 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { apiLogOut } from '@/apis/auth.api'
+import SearchComponent from './SearchComponent.vue'
 
 const router = useRouter()
+
+const isModalOpened = ref(false)
+
+const openModal = () => {
+  isModalOpened.value = true
+}
+const closeModal = () => {
+  isModalOpened.value = false
+}
+
 const showUserOption = ref(false)
 
 onMounted(() => {
@@ -177,9 +194,6 @@ onMounted(() => {
     router.push('/sign-in')
   }
 })
-
-const searchString = ref('')
-const searchResults = ref([])
 
 const userName = ref()
 const mode = ref('')

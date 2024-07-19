@@ -7,15 +7,15 @@
       </div>
       <div class="col-span-5 flex pt-[100px] px-3 border z-0 bg-white">
         <div class="">
-          <div class="flex items-center border-b">
-            <div class="flex flex-col items-center pr-2 border-r gap-2">
+          <div class="flex items-start border-b pb-2">
+            <div class="flex flex-col items-center pr-2 border-r gap-1 w-32">
               <svg
-                @click="increaseVote"
+                @click="increaseVote(ideaId)"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 :class="
-                  idea.statusVote === 'increse'
+                  idea.vote === 'up'
                     ? 'size-7 text-gray-900 cursor-pointer hover:text-gray-900'
                     : 'size-7 text-gray-400 cursor-pointer hover:text-gray-900'
                 "
@@ -26,14 +26,14 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <div class="px-2 font-medium text-green-900">{{ idea?.totalVote }}</div>
+              <div class="px-2 font-medium text-green-900">{{ idea?.voteCount }}</div>
               <svg
-                @click="decreaseVote"
+                @click="decreaseVote(ideaId)"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 :class="
-                  idea.statusVote === 'decrese'
+                  idea.vote === 'down'
                     ? 'size-7 text-gray-900 cursor-pointer hover:text-gray-900'
                     : 'size-7 text-gray-400 cursor-pointer hover:text-gray-900'
                 "
@@ -45,31 +45,31 @@
                 />
               </svg>
             </div>
-            <div class="pb-3 ps-2">
-              <h1 class="text-3xl font-bold">Top 8 đội hình leo rank thần tốc phiên bản 14.13B</h1>
-              <div class="flex justify-between">
-                <div class="flex items-end mt-2">
+            <div class="flex flex-col items-start ps-2">
+              <div class="!text-3xl !font-bold" v-html="idea?.title"></div>
+              <div class="flex justify-between items-center">
+                <div class="flex items-center mt-2">
                   <img
                     src="@/assets/default-avatar.jpg"
                     alt="avatar"
                     class="w-[2%] aspect-square rounded-full cursor-pointer lg:w-[3%] md:w-[4%] sm:w-[6%] xl:w-[3%]"
                   />
-                  <span class="ms-2 text-[12px] cursor-pointer">{{ idea.author }}</span>
+                  <span class="ms-2 text-[12px] cursor-pointer">{{ idea?.User?.username }}</span>
                   <div class="flex gap-5 ms-5">
-                    <div class="flex items-end text-[12px]">
-                      <i :class="idea?.category?.icon + ' fa-solid text-gray-700'"></i>
-                      <span class="ps-1 ">{{ idea?.category?.title }}</span>
+                    <div class="flex items-center text-[12px]">
+                      <i :class="idea?.Category?.icon + ' fa-solid text-gray-700'"></i>
+                      <span class="ps-1">{{ idea?.Category?.title }}</span>
                     </div>
                     <div class="flex">
-                      <span class="text-[12px] font-thin">{{ idea?.createAt }}</span>
+                      <span class="text-[12px] font-thin">{{ idea?.createdAt }}</span>
                     </div>
                     <div class="flex">
                       <span class="text-[12px] font-thin">{{
-                        `${idea?.totalComment} comments`
+                        `${idea?.commentCount} comments`
                       }}</span>
                     </div>
                     <div class="flex">
-                      <span class="text-[12px] font-thin">{{ `${idea?.totalView} views` }}</span>
+                      <span class="text-[12px] font-thin">{{ `${idea?.viewCount} views` }}</span>
                     </div>
                   </div>
                   <div class=""></div>
@@ -83,7 +83,7 @@
               data-gram="false"
               contenteditable="false"
               readonly="true"
-              v-html="contentHTML"
+              v-html="idea?.content"
             ></div>
           </div>
           <div class="bg-gray-100 p-4 rounded-xl mb-10">
@@ -111,15 +111,28 @@
                 </svg>
               </button>
             </div>
-            <div class="">
-              <CommentComponent />
-              <div class="ms-[3%] lg:ms-[5%] md:ms-[7%] sm:ms-[8%] xl:ms-[3.5%]">
-                <CommentComponent />
+            <div v-for="(comment, index) in idea.comments" :key="index" class="">
+              <CommentComponent
+                :content="comment.content"
+                :author="comment.User.username"
+                :id="comment.id"
+                :ideaId="ideaId"
+                :createdAt="comment.createdAt"
+              />
+              <div
+                v-for="(reply, index) in comment.children"
+                :key="index"
+                class="ms-[3%] lg:ms-[5%] md:ms-[7%] sm:ms-[8%] xl:ms-[3.5%]"
+              >
+                <CommentComponent
+                  :content="reply.content"
+                  :author="reply.User.username"
+                  :id="reply.id"
+                  :ideaId="ideaId"
+                  :createdAt="comment.createdAt"
+                />
               </div>
             </div>
-
-            <CommentComponent />
-            <CommentComponent />
           </div>
         </div>
       </div>
@@ -138,20 +151,19 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { onMounted, ref } from 'vue'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
-const userName = localStorage.getItem('uname')
+const router = useRouter()
 const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const { idea } = storeToRefs(ideaStore)
-const { getIdea, addComment, increaseVote, decreaseVote } = ideaStore
+const { getDetailIdea, addComment, increaseVote, decreaseVote } = ideaStore
 
 onMounted(() => {
-  getIdea(ideaId)
+  getDetailIdea(ideaId)
 })
-const contentHTML = `<pre class="ql-syntax" spellcheck="false">hhjdjfhas </pre><h1>gasdhf</h1><ol><li>dfsgd</li><li>sghfds</li><li>dfsagfd</li></ol><p>sdhdhsdfgsdfggsd</p>
-`
+
 // const handleIncreaseVote = () => {
 //   increaseVote()
 // }
@@ -167,9 +179,10 @@ const handleComment = (event) => {
 }
 
 const commitComment = () => {
-  addComment({ id: '', content: editorRef.value.innerHTML, author: userName, replyFor: '' })
+  addComment(ideaId, { content: editorRef.value.innerHTML })
   const comment = document.querySelector('#comment-input')
   comment.innerHTML = ''
+  router.go()
 }
 </script>
 <style scoped>

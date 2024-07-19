@@ -1,95 +1,79 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { apiGetIdeas } from '@/apis/idea.api'
+import {
+  apiGetDetailIdea,
+  apiCancelVoteIdea,
+  apiVoteDownIdea,
+  apiVoteUpIdea,
+  apiCreateComment
+} from '@/apis/idea.api'
 
 export const useIdeaStore = defineStore('idea', () => {
-  const idea = ref({
-    id: '1',
-    author: 'nguyen van a',
-    title: 'Top 10 doi hinh leo rank than toc mua 14.3B',
-    category: {
-      title: 'work',
-      icon: 'fa-laptop'
-    },
-    totalComment: 500,
-    totalVote: 200,
-    totalView: 1000,
-    description:
-      '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima eligendi autem voluptates quod sint alias vitae numquam mollitia veniam fuga cumque, ullam recusandae! Ex voluptatibus ullam quasi debitis quo? Ratione.Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima eligendi autem voluptates quod sint alias vitae numquam mollitia veniam fuga cumque, ullam recusandae! Ex voluptatibus ullam quasi debitis quo? Ratione.</p>',
-    statusVote: 'increse',
-    createAt: '13/7/2024',
-    comments: [
-      {
-        id: '1',
-        author: 'nguyen van a',
-        content:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima eligendi autem volupt',
-        createAt: '13/7/2024',
-        reply: [
-          {
-            id: '1',
-            author: 'nguyen van b',
-            content:
-              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima eligendi autem volupt',
-            createAt: '13/7/2024',
-            replyFor: 'nguyen van a'
-          },
-          {
-            id: '1',
-            author: 'nguyen van c',
-            content:
-              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima eligendi autem volupt',
-            createAt: '13/7/2024',
-            replyFor: 'nguyen van a'
-          }
-        ]
-      }
-    ]
-  })
+  const idea = ref({})
 
-  async function increaseVote() {
+  async function increaseVote(id) {
     //call api increaseVote
-    if (idea.value.statusVote === 'decrese') {
-      idea.value.totalVote += 1
-      idea.value.statusVote = ''
-    } else if(idea.value.statusVote === '') {
-      idea.value.totalVote += 1
-      idea.value.statusVote = 'increse'
+    console.log(idea.value.vote)
+    if (idea.value.vote === 'down') {
+      apiCancelVoteIdea(id)
+        .then(() => {
+          idea.value.voteCount += 1
+          idea.value.vote = null
+        })
+        .catch((err) => console.log(err))
+    } else if (idea.value.vote === null) {
+      apiVoteUpIdea(id)
+        .then(() => {
+          idea.value.voteCount += 1
+          idea.value.vote = 'up'
+        })
+        .catch((err) => console.log(err))
     } else return
   }
-  async function decreaseVote() {
+  async function decreaseVote(id) {
     //call api decreaseVote
-
-    if (idea.value.statusVote === 'increse') {
-      idea.value.totalVote -= 1
-      idea.value.statusVote = ''
-    } else if( idea.value.statusVote === '') {
-      idea.value.totalVote -= 1
-      idea.value.statusVote = 'decrese'
+    if (idea.value.vote === 'up') {
+      apiCancelVoteIdea(id)
+        .then(() => {
+          idea.value.voteCount -= 1
+          idea.value.vote = null
+        })
+        .catch((err) => console.log(err))
+    } else if (idea.value.vote === null) {
+      apiVoteDownIdea(id)
+        .then(() => {
+          idea.value.voteCount -= 1
+          idea.value.vote = 'down'
+        })
+        .catch((err) => console.log(err))
     } else return
   }
 
-  async function addComment({ ideaId, author, content, createAt, replyFor }) {
-    idea.value.comments.push({
-      id: '1',
-      author: author,
-      content: content,
-      createAt: createAt,
-      replyFor: replyFor
-    })
-
-    getIdea(ideaId)
+  async function addComment( ideaId,  body ) {
+    apiCreateComment(ideaId, body)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => console.log(err))
+    // idea.value.comments.push({
+    //   id: '1',
+    //   author: author,
+    //   content: content,
+    //   createAt: createAt,
+    //   replyFor: replyFor
+    // })
   }
 
   // const getAllCategory = computed(() => category)
-  async function getIdea(id) {
-    try {
-      const response = await apiGetIdeas(id)
-      idea.value = response.data
-    } catch (error) {
-      console.log(error)
-    }
+  async function getDetailIdea(id) {
+    apiGetDetailIdea(id)
+      .then((response) => {
+        idea.value = response.data.data
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
-  return { idea, getIdea, increaseVote, decreaseVote, addComment }
+  return { idea, getDetailIdea, increaseVote, decreaseVote, addComment }
 })

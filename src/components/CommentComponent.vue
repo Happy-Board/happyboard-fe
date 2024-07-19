@@ -2,7 +2,7 @@
   <div>
     <div class="">
       <div>
-        <div id="comment-block" class="comment-level-1 mt-5 flex items-start gap-1">
+        <div id="comment-block" class="comment-level-1 mt-5 flex items-start gap-1 min-w-[50%]">
           <img
             src="@/assets/default-avatar.jpg"
             alt="avatar"
@@ -12,12 +12,8 @@
             <div
               class="comment-input rounded-lg border-0 bg-white border-white focus:border-0 focus:outline-0 px-4 py-2 w-fit"
               contentEditable="false"
-              data-lexical-editor="false"
-              role="textbox"
               spellcheck="false"
-              v-html="
-                '<div><strong>Khaipn2</strong><br>Comment1jasdhfkaskdfhasdkfhasdkfksadhkfhskadfhkjsdasddsfs</div><p>continute</p>'
-              "
+              v-html="`<div><strong>${props.author}</strong><br>${props.content}`"
             ></div>
             <div class="flex gap-3 mt-1">
               <span
@@ -29,7 +25,7 @@
                 class="font-medium text-gray-600 cursor-pointer text-sm mx-2 hover:text-gray-800 hover:underline"
                 >Reply</span
               >
-              <span class="font-medium text-gray-600 text-sm mx-2">30m ago</span>
+              <span class="font-medium text-gray-600 text-[12px] mx-2">{{props.createdAt}}</span>
             </div>
             <div v-if="isOpenReply" class="comment-level-1 mt-5 flex items-start gap-1">
               <img
@@ -40,18 +36,17 @@
               <div class="w-full">
                 <div class="relative input-box">
                   <div
-                    placeholder="Reply to ..."
+                    :placeholder="'Reply to ' + props.author"
                     class="comment-input rounded-lg border-0 bg-white border-white focus:border-0 focus:outline-0 py-2 px-3 pe-11 w-full"
                     contentEditable="true"
-                    tabindex="0"
-                    data-lexical-editor="true"
-                    style="user-select: text; white-space: pre-wrap; word-break: break-word"
-                    role="textbox"
                     spellcheck="false"
                     @keypress="handleComment"
                     ref="editorRef"
                   ></div>
-                  <button @click.prevent.stop="commitComment" class="absolute top-2 right-2 cursor-pointer">
+                  <button
+                    @click.prevent.stop="commitComment"
+                    class="absolute top-2 right-2 cursor-pointer"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -74,7 +69,18 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-
+import { useIdeaStore } from '@/stores/idea.store'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const ideaStore = useIdeaStore()
+const {  addComment } = ideaStore
+const props = defineProps({
+  ideaId: Number,
+  id: Number,
+  content: String,
+  author: String,
+  createdAt: String
+})
 const editorRef = ref()
 
 const handleComment = (event) => {
@@ -86,7 +92,10 @@ const commitComment = (event) => {
   // console.log(
   //   event.target.closest('.input-box').querySelector('.comment-input').innerHTML
   // )
+  const content = `<div><strong>@${props.author}</strong> ${event.target.closest('.input-box').querySelector('.comment-input').innerHTML}`
+  addComment(props.ideaId, {content: content, parentId: props.id})
   event.target.closest('.input-box').querySelector('.comment-input').innerHTML = ''
+  router.go()
 
   // console.log(editorRef.value.innerHTML)
   // const comment = document.querySelector('#comment-input')

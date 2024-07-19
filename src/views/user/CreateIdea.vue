@@ -17,8 +17,8 @@
                 class="relative w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 cursor-pointer focus:ring-gray-500 sm:text-sm sm:leading-6"
               >
                 <span class="flex items-center">
-                  <i :class="selected.icon + ' fa-solid'"></i>
-                  <span class="ml-3 block truncate">{{ selected.title }}</span>
+                  <i :class="selected.icon + ' fa-solid'" v-if="selected.id"></i>
+                  <span :class="selected.id ? 'ml-3 block truncate' : 'block truncate'">{{ selected.title }}</span>
                 </span>
                 <span
                   class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"
@@ -88,14 +88,14 @@
             ></div>
           </div>
           <div class="mb-10">
-            <label class="block text-sm font-medium text-black mb-3" for="description"
-              >Description <span class="text-red-500">*</span></label
+            <label class="block text-sm font-medium text-black mb-3" for="content"
+              >Content <span class="text-red-500">*</span></label
             >
             <QuillEditor
-              id="description"
+              id="content"
               theme="snow"
               toolbar="essential"
-              v-model:content="ideaData.description"
+              v-model:content="ideaData.content"
               contentType="html"
             />
             <!-- <div class="ql-toolbar ql-snow border-0">
@@ -162,7 +162,7 @@ onMounted(() => {
 const ideaData = reactive({
   categoryId: '',
   title: '',
-  description: ''
+  content: ''
 })
 const createIdea = () => {
   const title = document.querySelector('#title').innerHTML
@@ -174,8 +174,8 @@ const createIdea = () => {
   } else if(!ideaData.title){
   notify('warning', 'Title is not empty !')
   return
-  } else if(!ideaData.description){
-  notify('warning', 'Description is not empty !')
+  } else if(!ideaData.content){
+  notify('warning', 'Content is not empty !')
   return
   }
   apiCreateIdea(ideaData).then(() => {
@@ -189,7 +189,6 @@ const createIdea = () => {
   })
 }
 const selected = ref({
-  id: 6,
   title: 'Choose a category for your idea',
   icon: ''
 })

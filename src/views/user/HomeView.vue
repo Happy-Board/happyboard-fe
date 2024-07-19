@@ -5,16 +5,18 @@
       <div class="col-span-2">
         <SidebarComponent active="home" />
       </div>
-      <div class="col-span-5 flex pt-[100px] z-0 bg-white px-8 border">
-        <div class="">
-          <div class="flex mb-5 justify-between items-end">
-            <div class="font-medium text-2xl">{{ `${pageData.total} ideas` }}</div>
+      <div class="col-span-5 flex pt-[100px] z-0 bg-white px-8 border w-full">
+        <div class="flex-1">
+          <div class="min-w-full flex mb-5 justify-between items-end">
+            <div class="font-medium text-2xl">
+              {{ `${searchResults.length === 0 ? pageData.total : searchResults.total} ideas` }}
+            </div>
             <div class="px-1.5 py-1 border border-gray-400 rounded-md flex items-center">
               <button
-                @click="sortIdea('newest')"
+                @click="setTab('newest')"
                 type="button"
                 :class="
-                  sort === 'newest'
+                  tab === 'newest'
                     ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-sm px-2 py-0.5 mx-1'
                     : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-sm px-2 py-0.5 mx-1'
                 "
@@ -22,10 +24,10 @@
                 Newest
               </button>
               <button
-                @click="sortIdea('highest-vote')"
+                @click="setTab('highest-vote')"
                 type="button"
                 :class="
-                  sort === 'highest-vote'
+                  tab === 'highest-vote'
                     ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-sm px-2 py-0.5 mx-1'
                     : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-sm px-2 py-0.5 mx-1'
                 "
@@ -33,10 +35,10 @@
                 Highest vote
               </button>
               <button
-                @click="sortIdea('most-view')"
+                @click="setTab('most-view')"
                 type="button"
                 :class="
-                  sort === 'most-view'
+                  tab === 'most-view'
                     ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-sm px-2 py-0.5 mx-1'
                     : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-sm px-2 py-0.5 mx-1'
                 "
@@ -44,10 +46,10 @@
                 Most view
               </button>
               <button
-                @click="sortIdea('most-comment')"
+                @click="setTab('most-comment')"
                 type="button"
                 :class="
-                  sort === 'most-comment'
+                  tab === 'most-comment'
                     ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-sm px-2 py-0.5 mx-1'
                     : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-sm px-2 py-0.5 mx-1'
                 "
@@ -56,21 +58,45 @@
               </button>
             </div>
           </div>
-          <div v-for="idea in pageData.data" :key="idea.id" class="">
-            <CartIdeaComponent
-              :id="idea.id"
-              :index="pageData.data.indexOf(idea)"
-              :author="idea.author"
-              :category="idea.category"
-              :description="idea.description"
-              :title="idea.title"
-              :totalComment="idea.totalComment"
-              :totalVote="idea.totalVote"
-              :totalView="idea.totalView"
-              :isVoted="idea.isVoted"
-              :createAt="idea.createAt"
-              @vote="handleIncreaseVote"
-              @unvote="handleReduceVote"
+          <div v-if="searchResults.length !== 0" class="">
+            <div v-for="idea in searchResults.ideas" :key="idea.id" class="">
+              <CartIdeaComponent
+                :id="idea.id"
+                :author="idea.User.username"
+                :category="idea.Category"
+                :description="idea.content"
+                :title="idea.title"
+                :totalComment="idea.commentCount"
+                :totalVote="idea.voteCount"
+                :totalView="idea.viewCount"
+                :createdAt="idea.createdAt"
+              />
+            </div>
+            <PaginationComponentVue
+              :totalPage="searchResults.totalPage"
+              :currentPage="searchResults.currentPage"
+            />
+          </div>
+          <div v-else>
+            <div v-for="idea in pageData.ideas" :key="idea.id" class="">
+              <CartIdeaComponent
+                :id="idea.id"
+                :author="idea.User.username"
+                :category="idea.Category"
+                :description="idea.content"
+                :title="idea.title"
+                :totalComment="idea.commentCount"
+                :totalVote="idea.voteCount"
+                :totalView="idea.viewCount"
+                :createdAt="idea.createdAt"
+              />
+            </div>
+            <PaginationComponentVue
+              :totalPage="pageData.totalPage"
+              :currentPage="pageData.currentPage"
+              @nextPage="handleGetNextPage"
+              @prePage="handleGetPrePage"
+              @getPage="handleGetPage"
             />
           </div>
         </div>
@@ -91,35 +117,38 @@ import SuggestIdeaComponent from '@/components/SuggestIdeaComponent.vue'
 import SidebarComponent from '@/components/SidebarComponent.vue'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
+import { useSearchStore } from '@/stores/search.store'
+import PaginationComponentVue from '@/components/PaginationComponent.vue'
 
 const titleIdea = [
   'Top 10 doi hinh leo rank than toc',
   'Top 10 doi hinh leo rank than toc',
   'Top 10 doi hinh leo rank than toc',
   'Top 10 doi hinh leo rank than toc',
-  'Top 10 doi hinh leo rank than toc',
+  'Top 10 doi hinh leo rank than toc'
 ]
+const searchStore = useSearchStore()
+const { searchResults } = storeToRefs(searchStore)
 const homePageStore = useHomePageStore()
-const { pageData } = storeToRefs(homePageStore)
-const { getPageData, increaseVote, reduceVote } = homePageStore
-const query = ''
-const sort = ref('newest')
+const { pageData, tab, currentPage, searchString } = storeToRefs(homePageStore)
+const { getPageData, setCurrentPage, setTab } = homePageStore
 onMounted(() => {
-  getPageData(query)
+  getPageData(searchString.value)
 })
 
-const handleIncreaseVote = (index) => {
-  console.log(index)
-  increaseVote(index)
+const handleGetNextPage = () => {
+  getPageData(`?page=${currentPage.value + 1}`)
+  setCurrentPage(currentPage.value + 1)
 }
 
-const handleReduceVote = (index) => {
-  reduceVote(index)
+const handleGetPrePage = () => {
+  getPageData(`?page=${currentPage.value - 1}`)
+  setCurrentPage(currentPage.value - 1)
 }
-
-const sortIdea = (query) => {
-  sort.value = query
+const handleGetPage = (page) => {
+  getPageData(`?page=${page}`)
+  setCurrentPage(page)
 }
 </script>
 <style scoped></style>

@@ -13,12 +13,12 @@
     </div>
     <div class="col-span-5">
       <div class="title ms-1">
-        <p
+        <div
           @click="viewDetailIdea(props.id)"
-          class="font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit"
+          class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit"
+          v-html="props?.title"
         >
-          {{ props.title }}
-        </p>
+        </div>
       </div>
       <div class="content mt-2 ms-1">
         <!-- <div class="content mt-2 mb-2 ms-1 ql-toolbar ql-snow border-0 pb-2 border-b line-clamp-3">
@@ -40,11 +40,11 @@
           ></div>
         </div>
       </div>
-      <div class="flex flex-row justify-end items-end text-[12px] pt-1">
+      <div class="flex flex-row justify-end items-center text-[12px] pt-1">
         <img
           src="@/assets/default-avatar.jpg"
           alt="avatar"
-          class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3.5%]"
+          class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3%]"
         />
         <span class="ms-2 me-6 font-semibold cursor-pointer">{{ props.author }}</span>
 
@@ -54,7 +54,7 @@
         </div>
 
         <div class="flex">
-          <span class="ms-2 text-[11px]">{{ props.createAt }}</span>
+          <span class="ms-2 text-[11px]">{{ props.createdAt }}</span>
         </div>
         <!-- <div class="vote">
         <button
@@ -99,13 +99,13 @@ const props = defineProps({
   id: String,
   author: String,
   title: String,
-  category: String,
+  category: Object,
   totalComment: Number,
   totalVote: Number,
   totalView: Number,
   description: String,
-  isVoted: Boolean,
-  createAt: String
+  // isVoted: Boolean,
+  createdAt: String
 })
 
 const viewDetailIdea = (id) => {
