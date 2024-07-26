@@ -11,6 +11,8 @@ export const apiVoteDownIdea = async (id) => await axiosInstance.post(`/ideas/${
 export const apiCreateComment = async (id, body) =>
   await axiosInstance.post(`/ideas/${id}/comments`, body)
 
+export const apiGetComment = async (id) => await axiosInstance.get(`/ideas/${id}/comments`)
+
 export const apiCancelVoteIdea = async (id) => await axiosInstance.delete(`/ideas/${id}/cancel`)
 
 export const apiCreateIdea = async (body) => await axiosInstance.post('/ideas', body)

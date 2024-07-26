@@ -9,41 +9,40 @@
         <div class="">
           <div class="flex items-start border-b pb-2">
             <div class="flex flex-col items-center pr-2 border-r gap-1 w-32">
-              <svg
-                @click="increaseVote(ideaId)"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+ 
+                <div class="border border-gray-500 px-2 py-1 rounded-full "
                 :class="
-                  idea.vote === 'up'
-                    ? 'size-7 text-gray-900 cursor-pointer hover:text-gray-900'
-                    : 'size-7 text-gray-400 cursor-pointer hover:text-gray-900'
-                "
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm-.75-4.75a.75.75 0 0 0 1.5 0V8.66l1.95 2.1a.75.75 0 1 0 1.1-1.02l-3.25-3.5a.75.75 0 0 0-1.1 0L6.2 9.74a.75.75 0 1 0 1.1 1.02l1.95-2.1v4.59Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+                      idea.vote === 'up'
+                        ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
+                        : ' text-gray-400 cursor-pointer hover:text-gray-900 hover:bg-blue-100'
+                    ">
+                  <i
+                    @click="increaseVote(ideaId)"
+                    class="fa-solid fa-caret-up fa-xl"
+                    :class="
+                      idea.vote === 'up'
+                        ? ' text-gray-900 cursor-pointer hover:text-gray-900'
+                        : ' text-gray-400 cursor-pointer hover:text-gray-900'
+                    "
+                  ></i>
+                </div>
               <div class="px-2 font-medium text-green-900">{{ idea?.voteCount }}</div>
-              <svg
-                @click="decreaseVote(ideaId)"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                :class="
-                  idea.vote === 'down'
-                    ? 'size-7 text-gray-900 cursor-pointer hover:text-gray-900'
-                    : 'size-7 text-gray-400 cursor-pointer hover:text-gray-900'
-                "
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v4.59L7.3 9.24a.75.75 0 0 0-1.1 1.02l3.25 3.5a.75.75 0 0 0 1.1 0l3.25-3.5a.75.75 0 1 0-1.1-1.02l-1.95 2.1V6.75Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+
+              <div class="px-2 py-1 border border-gray-500 rounded-full" :class="
+                    idea.vote === 'down'
+                      ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
+                      : ' text-gray-900 cursor-pointer hover:text-gray-900 hover:bg-blue-100'
+                  ">
+                <i
+                  @click="decreaseVote(ideaId)"
+                  class="fa-solid fa-caret-down fa-xl"
+                  :class="
+                    idea.vote === 'down'
+                      ? ' text-gray-900 cursor-pointer hover:text-gray-900'
+                      : ' text-gray-900 cursor-pointer hover:text-gray-900'
+                  "
+                ></i>
+              </div>
             </div>
             <div class="flex flex-col items-start ps-2">
               <div class="!text-3xl !font-bold" v-html="idea?.title"></div>
@@ -86,7 +85,7 @@
               v-html="idea?.content"
             ></div>
           </div>
-          <div class="bg-gray-100 p-4 rounded-xl mb-10">
+          <!-- <div class="bg-gray-100 p-4 rounded-xl mb-10">
             <div class="relative">
               <div
                 id="comment-input"
@@ -133,57 +132,49 @@
                 />
               </div>
             </div>
-          </div>
+          </div> -->
+          <CommentBlock :ideaId="ideaId" />
         </div>
       </div>
 
-      <div class="col-span-3">
-        <h1></h1>
-      </div>
+      <div class="col-span-3"></div>
     </div>
   </div>
 </template>
 <script setup>
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import SidebarComponent from '@/components/SidebarComponent.vue'
-import CommentComponent from '@/components/CommentComponent.vue'
+// import CommentComponent from '@/components/CommentComponent.vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
+import CommentBlock from '@/components/CommentBlock.vue'
 
 const route = useRoute()
-const router = useRouter()
+// const router = useRouter()
 const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const { idea } = storeToRefs(ideaStore)
-const { getDetailIdea, addComment, increaseVote, decreaseVote } = ideaStore
+const { getDetailIdea, increaseVote, decreaseVote } = ideaStore
 
 onMounted(() => {
   getDetailIdea(ideaId)
 })
 
-// const handleIncreaseVote = () => {
-//   increaseVote()
+// const editorRef = ref()
+// const handleComment = (event) => {
+//   if (!event.ctrlKey || event.code !== 'Enter') return
+//   commitComment()
 // }
 
-// const handleReduceVote = () => {
-//   reduceVote()
+// const commitComment = () => {
+//   addComment(ideaId, { content: editorRef.value.innerHTML })
+//   const comment = document.querySelector('#comment-input')
+//   comment.innerHTML = ''
+//   router.go()
 // }
-
-const editorRef = ref()
-const handleComment = (event) => {
-  if (!event.ctrlKey || event.code !== 'Enter') return
-  commitComment()
-}
-
-const commitComment = () => {
-  addComment(ideaId, { content: editorRef.value.innerHTML })
-  const comment = document.querySelector('#comment-input')
-  comment.innerHTML = ''
-  router.go()
-}
 </script>
 <style scoped>
 .ql-toolbar {

@@ -42,7 +42,7 @@
       </div>
       <div class="flex flex-row justify-end items-center text-[12px] pt-1">
         <img
-          src="@/assets/default-avatar.jpg"
+          src="../assets/default-avatar.jpg"
           alt="avatar"
           class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3%]"
         />

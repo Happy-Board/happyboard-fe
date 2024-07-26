@@ -13,9 +13,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Create .env file
         run: |
-          echo `VITE_SERVER_URL=http://13.229.87.208:8000/api/v1` >> .env
-          echo "VITE_CLIENT_HOST=172.31.39.242" >> .env
-          echo "VITE_CLIENT_PORT=8888" >> .env
+          echo `VITE_SERVER_URL=${{secrets.VITE_SERVER_URL}}` >> .env
+          echo "VITE_CLIENT_HOST=${{secrets.VITE_CLIENT_HOST}}" >> .env
+          echo "VITE_CLIENT_PORT=${{secrets.VITE_CLIENT_PORT}}" >> .env
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PW }}       
       - name: Build docker image

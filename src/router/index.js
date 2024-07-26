@@ -3,6 +3,7 @@ import SignIn from '@/views/SignIn.vue'
 import CreateIdea from '@/views/user/CreateIdea.vue'
 import HomeView from '@/views/user/HomeView.vue'
 import DetailIdea from '@/views/user/DetailIdea.vue'
+import ProfileView from '@/views/user/ProfileView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -25,6 +26,11 @@ const router = createRouter({
       path: '/idea/:id',
       name: 'detail-idea',
       component: DetailIdea
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView
     },
     // {
     //   path: '/about',

@@ -5,7 +5,10 @@
       <div class="col-span-2">
         <SidebarComponent active="home" />
       </div>
-      <div class="col-span-5 flex pt-[100px] z-0 bg-white px-8 border w-full">
+      <div class="col-span-5  pt-[100px] z-0 bg-white px-8 border w-full">
+        <div class="mb-6">
+          <HotIdea />
+        </div>
         <div class="flex-1">
           <div class="min-w-full flex mb-5 justify-between items-end">
             <div class="font-medium text-2xl">
@@ -120,6 +123,7 @@ import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useSearchStore } from '@/stores/search.store'
 import PaginationComponentVue from '@/components/PaginationComponent.vue'
+import HotIdea from '@/components/HotIdea.vue'
 
 const titleIdea = [
   'Top 10 doi hinh leo rank than toc',
