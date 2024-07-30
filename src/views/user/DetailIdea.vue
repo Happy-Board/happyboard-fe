@@ -14,7 +14,7 @@
                 :class="
                       idea.vote === 'up'
                         ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
-                        : ' text-gray-400 cursor-pointer hover:text-gray-900 hover:bg-blue-100'
+                        : ' text-gray-900  cursor-pointer hover:text-gray-900 hover:bg-blue-100'
                     ">
                   <i
                     @click="increaseVote(ideaId)"
@@ -22,7 +22,7 @@
                     :class="
                       idea.vote === 'up'
                         ? ' text-gray-900 cursor-pointer hover:text-gray-900'
-                        : ' text-gray-400 cursor-pointer hover:text-gray-900'
+                        : ' text-gray-900  cursor-pointer hover:text-gray-900'
                     "
                   ></i>
                 </div>
@@ -137,14 +137,19 @@
         </div>
       </div>
 
-      <div class="col-span-3"></div>
+      <div class="col-span-3 mt-[95px] ms-14">
+          <SuggestIdeaComponent
+            feature="Related ideas"
+            :ideas="relatedIdeas"
+          />
+        </div>
     </div>
   </div>
 </template>
 <script setup>
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import SidebarComponent from '@/components/SidebarComponent.vue'
-// import CommentComponent from '@/components/CommentComponent.vue'
+import SuggestIdeaComponent from '@/components/SuggestIdeaComponent.vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { onMounted } from 'vue'
 import { useIdeaStore } from '@/stores/idea.store'
@@ -156,11 +161,12 @@ const route = useRoute()
 // const router = useRouter()
 const ideaStore = useIdeaStore()
 const ideaId = route.params.id
-const { idea } = storeToRefs(ideaStore)
-const { getDetailIdea, increaseVote, decreaseVote } = ideaStore
+const { idea, relatedIdeas } = storeToRefs(ideaStore)
+const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas } = ideaStore
 
 onMounted(() => {
   getDetailIdea(ideaId)
+  getRelatedIdeas(ideaId)
 })
 
 // const editorRef = ref()

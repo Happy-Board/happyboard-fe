@@ -1,12 +1,12 @@
 <template>
-  <div class="px-2 py-1 mx-2 mb-5 border rounded-lg shadow-md shadow-gray-400">
+  <div class="px-2 py-1 my-3 mx-2 border rounded-lg shadow-md shadow-gray-400 overflow-visible">
+    <i class="fa-solid fa-fire text-red-600 fa-lg absolute top-4 right-1 "></i>
+
     <div class="title ms-1 cursor-grab active:cursor-grabbing ">
       <div
         @click="viewDetailIdea(props.id)"
         class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit line-clamp-1 text-left"
-        v-html="`Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia, veritatis eius? Voluptatem
-    dignissimos dicta vero reprehenderit, dolorem explicabo, quam minus, corporis tenetur similique
-    rem nulla dolores expedita minima sit soluta!`"
+        v-html="props.title"
       ></div>
     </div>
     <div class="content mt-2 ms-1">
@@ -25,29 +25,34 @@
           data-gram="false"
           contenteditable="false"
           readonly="true"
-          v-html="`Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia, veritatis eius? Voluptatem
-    dignissimos dicta vero reprehenderit, dolorem explicabo, quam minus, corporis tenetur similique
-    rem nulla dolores expedita minima sit soluta!`"
+          v-html="props.content"
         ></div>
       </div>
     </div>
-    <div class="flex flex-row justify-start items-center text-[12px] pt-1">
+    <div class="flex flex-row justify-start items-center text-[12px] pt-1 ms-2">
         <img
           src="../assets/default-avatar.jpg"
           alt="avatar"
           class="w-[6%] aspect-square rounded-full cursor-pointer"
         />
-        <span class="ms-2 me-6 font-semibold cursor-pointer">{{ "props.author" }}</span>
+        <span class="ms-1 me-6 font-semibold cursor-pointer text-xs">{{ props.author }}</span>
 
-        <div class="flex ">
-          <i :class="'fa-icons' + ' fa-solid   text-gray-700 fa-sm'"></i>
-        </div>
-        
+      
       </div>
   </div>
 </template>
 <script setup>
-
+import { useRouter } from 'vue-router';
+const props = defineProps({
+  title: String,
+  content: String,
+  author: String,
+  id: Number
+})
+const router = useRouter()
+const viewDetailIdea = (id) => {
+  router.push(`idea/${id}`)
+}
 </script>
 <style scoped>
 .ql-toolbar {

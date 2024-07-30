@@ -1,30 +1,24 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { apiGetIdeas } from '@/apis/idea.api'
+import { apiGetIdeas, apiGetRecentIdeas } from '@/apis/idea.api'
 
 export const useHomePageStore = defineStore('home', () => {
   const pageData = ref({})
   const searchString = ref('')
   const currentPage = ref(1)
   const tab = ref('newest')
-  const query = ref({
-    query: '',
-    tab: 'newest',
-    page: ''
-  })
-
-  async function increaseVote(index) {
-    pageData.value.data[index].totalVote += 1
-    pageData.value.data[index].isVoted = true
-  }
-  async function reduceVote(index) {
-    pageData.value.data[index].totalVote -= 1
-    pageData.value.data[index].isVoted = false
-  }
+  const query = ref()
+  const hotIdeas = ref([])
+  const recentIdeas = ref([])
 
   // const getAllCategory = computed(() => category)
-  async function getPageData(query) {
-    apiGetIdeas(query)
+  async function getPageData() {
+    if (searchString.value !== '') {
+      query.value = `?q=${searchString.value}&page=${currentPage.value}`
+    } else {
+      query.value = `?page=1`
+    }
+    apiGetIdeas(query.value)
       .then((response) => {
         pageData.value = response.data.data
         console.log(pageData.value)
@@ -34,6 +28,25 @@ export const useHomePageStore = defineStore('home', () => {
       })
   }
 
+
+  function getHotIdeas() {
+    //api get hot ideas
+    apiGetIdeas('?option=highvote')
+      .then((response) => {
+        hotIdeas.value = response.data.data.ideas
+      })
+      .catch((err) => console.log(err))
+  }
+
+  async function getRecentIdeas() {
+    apiGetRecentIdeas()
+      .then((response) => {
+        recentIdeas.value = response.data.data
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
   function setCurrentPage(page) {
     currentPage.value = page
   }
@@ -42,19 +55,53 @@ export const useHomePageStore = defineStore('home', () => {
   }
   function setTab(tabSort) {
     tab.value = tabSort
+    if (searchString.value !== '') {
+      query.value = `?q=${searchString.value}&option=${tab.value}`
+    } else {
+      query.value = `?option=${tab.value}&page=1`
+    }
+    apiGetIdeas(query.value)
+      .then((response) => {
+        pageData.value = response.data.data
+        console.log(pageData.value)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+  function loadMore() {
+    console.log('load more')
+    currentPage.value++
+    if (searchString.value !== '') {
+      query.value = `?q=${searchString.value}&page=${currentPage.value}&option=${tab.value}`
+    } else {
+      query.value = `?page=${currentPage.value}`
+    }
+    apiGetIdeas(query.value)
+      .then((response) => {
+        pageData.value.ideas = [...pageData.value.ideas, ...response.data.data.ideas]
+      })
+      .catch((err) => console.log(err))
+  }
+
+  function setCurrentQuery(setCurrentQuery) {
+    query.value = setCurrentQuery
   }
 
   return {
     pageData,
-    query,
     searchString,
     currentPage,
     tab,
+    hotIdeas,
+    recentIdeas,
     getPageData,
-    increaseVote,
-    reduceVote,
     setCurrentPage,
     setSearchString,
-    setTab
+    setTab,
+    loadMore,
+    setCurrentQuery,
+    getHotIdeas,
+    getRecentIdeas
   }
 })

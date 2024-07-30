@@ -15,17 +15,17 @@
               spellcheck="false"
               v-html="`<div><strong>${props.author}</strong><br>${props.content}`"
             ></div>
-            <div class="flex gap-3 mt-1">
+            <div class="flex gap-2 mt-1 text-xs">
               <span
-                class="font-medium text-gray-600 cursor-pointer text-sm mx-2 hover:text-gray-800 hover:underline"
+                class="font-medium text-gray-600 cursor-pointer  mx-1 hover:text-gray-800 hover:underline"
                 >Like</span
               >
               <span
                 @click="handleOpenReply"
-                class="font-medium text-gray-600 cursor-pointer text-sm mx-2 hover:text-gray-800 hover:underline"
+                class="font-medium text-gray-600 cursor-pointer mx-1 hover:text-gray-800 hover:underline"
                 >Reply</span
               >
-              <span class="font-medium text-gray-600 text-[12px] mx-2">{{props.createdAt}}</span>
+              <span class="font-medium text-gray-600 text-[12px] mx-1">{{ props.createdAt }}</span>
             </div>
             <div v-if="isOpenReply" class="comment-level-1 mt-5 flex items-start gap-1">
               <img
@@ -43,10 +43,7 @@
                     @keypress="handleComment"
                     ref="editorRef"
                   ></div>
-                  <span
-                    @click="commitComment"
-                    class="absolute top-2 right-2 cursor-pointer"
-                  >
+                  <span @click="commitComment" class="absolute top-2 right-2 cursor-pointer">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -65,13 +62,23 @@
         </div>
       </div>
     </div>
+    <vue-reactions
+      :model-value="selectedReactions"
+      :reactions="reactions"
+      :storage="storage"
+      has-dropdown
+      @update:modelValue="updateSelectedReactions"
+      @update:storage="updateStorage"
+  />
   </div>
 </template>
 <script setup>
 import { ref } from 'vue'
-import { useIdeaStore } from '@/stores/idea.store'
-const ideaStore = useIdeaStore()
-const {  addComment } = ideaStore
+import { useCommentStore } from '@/stores/comment.store'
+
+
+const commentStore = useCommentStore()
+const { addComment } = commentStore
 const props = defineProps({
   ideaId: Number,
   id: Number,
@@ -87,20 +94,19 @@ const handleComment = (event) => {
 }
 
 const commitComment = (event) => {
-  // console.log(
-  //   event.target.closest('.input-box').querySelector('.comment-input').innerHTML
-  // )
   const content = `<div><strong>@${props.author}</strong> ${event.target.closest('.input-box').querySelector('.comment-input').innerHTML}`
-  addComment(props.ideaId, {content: content, parentId: props.id})
+  addComment(props.ideaId, { content: content, parentId: props.id })
   event.target.closest('.input-box').querySelector('.comment-input').innerHTML = ''
-  // console.log(editorRef.value.innerHTML)
-  // const comment = document.querySelector('#comment-input')
-  // comment.innerHTML = ''
+  handleCloseReply()
 }
 const isOpenReply = ref(false)
 
 const handleOpenReply = () => {
   isOpenReply.value = true
+}
+
+const handleCloseReply = () => {
+  isOpenReply.value = false
 }
 </script>
 <style scoped>
