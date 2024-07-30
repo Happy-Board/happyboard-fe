@@ -48,7 +48,7 @@
       </div>
       <div class="col-span-4 flex justify-end gap-1">
         <div class="flex justify-end items-center object-fill">
-          <button
+          <!-- <button
             v-if="mode === 'light'"
             @click="handleChangeMode('dark')"
             class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-700 transition-all hover:bg-white/10 active:bg-white/30 hover:text-black disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -68,7 +68,7 @@
                 />
               </svg>
             </span>
-          </button>
+          </button> -->
           <!-- <button
             v-if="mode === 'dark'"
             @click="handleChangeMode('light')"
@@ -111,7 +111,7 @@
             @click="handleShowUserOption"
             src="@/assets/default-avatar.jpg"
             alt="avatar"
-            class="w-[5%] aspect-square rounded-full cursor-pointer lg:w-[8%] md:w-[7%] sm:w-[8%] xl:w-[5%]"
+            class="w-[5%] aspect-square rounded-full cursor-pointer lg:w-[8%] md:w-[7%] sm:w-[8%] xl:w-[7%]"
           />
           <span @click="handleShowUserOption" class="ms-2 font-semibold text-lg cursor-pointer"
             >{{ userName }}
@@ -200,10 +200,10 @@ const mode = ref('')
 
 mode.value = localStorage.getItem('mode') || 'light'
 userName.value = localStorage.getItem('uname')
-const handleChangeMode = (newMode) => {
-  mode.value = newMode
-  localStorage.setItem('mode', newMode)
-}
+// const handleChangeMode = (newMode) => {
+//   mode.value = newMode
+//   localStorage.setItem('mode', newMode)
+// }
 
 const handleShowUserOption = () => {
   showUserOption.value = !showUserOption.value

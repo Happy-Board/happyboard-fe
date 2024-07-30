@@ -57,6 +57,7 @@ const target = ref(null)
 onClickOutside(target, () => emit('modal-close'))
 
 const handleShowResultsInHomePage = () => {
+  resetSearchData()
   router.push({ name: 'home', params: { search: `?q=${searchString.value}` } })
 }
 const handleShowDetailIdea = (id) => {

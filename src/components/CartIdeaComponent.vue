@@ -2,13 +2,13 @@
   <div class="grid grid-cols-6 pt-2 pb-4 border-t border-slate-400">
     <div class="col-span-1 flex flex-col gap-1 mt-1.5 mr-3 text-[12px]">
       <div class="flex justify-end font-medium text-gray-900">
-            <span class="font-medium mr-0.5 ">{{ props.totalComment }}</span> comments
+            <span class="font-medium mr-0.5 ">{{ props.totalComment }}</span> {{ props.totalComment === 1 ? 'comment' : 'comments' }}
           </div>
           <div class="flex justify-end font-medium text-green-900">
-            <span class="font-medium mr-0.5">{{ props.totalVote }}</span>votes
+            <span class="font-medium mr-0.5">{{ props.totalVote }}</span>{{ props.totalVote === 1 ? 'vote' : 'votes' }}
           </div>
           <div class="flex justify-end font-medium text-red-900">
-            <span class="font-medium mr-0.5">{{ props.totalView }}</span>views
+            <span class="font-medium mr-0.5">{{ props.totalView }}</span>{{ props.totalView === 1 ? 'view' : 'views' }}
           </div>
     </div>
     <div class="col-span-5">

@@ -17,21 +17,16 @@ export const useCommentStore = defineStore('comment', () => {
     apiCreateComment(ideaId, body)
       .then(() => {
         getAllComments(ideaId)
+        console.log('add comment')
       })
       .catch((err) => console.log(err))
   }
   async function addReplyComment(ideaId, body) {
     apiCreateComment(ideaId, body)
-    getAllComments(ideaId)
-      .then(() => {})
+      .then(() => {
+        getAllComments(ideaId)
+      })
       .catch((err) => console.log(err))
-    // comments.value.push({
-    //   id: '1',
-    //   author: author,
-    //   content: content,
-    //   createAt: createAt,
-    //   replyFor: replyFor
-    // })
   }
 
   return { comments, getAllComments, addComment, addReplyComment }

@@ -5,12 +5,16 @@ import {
   apiCancelVoteIdea,
   apiVoteDownIdea,
   apiVoteUpIdea,
-  apiCreateComment
+  apiGetRelatedIdeas
 } from '@/apis/idea.api'
 
 export const useIdeaStore = defineStore('idea', () => {
   const idea = ref({})
+  const hotIdeas = ref([])
+  const recentIdeas = ref([])
+  const relatedIdeas = ref([])
 
+  
   async function increaseVote(id) {
     //call api increaseVote
     console.log(idea.value.vote)
@@ -49,21 +53,6 @@ export const useIdeaStore = defineStore('idea', () => {
     } else return
   }
 
-  async function addComment( ideaId,  body ) {
-    apiCreateComment(ideaId, body)
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => console.log(err))
-    // idea.value.comments.push({
-    //   id: '1',
-    //   author: author,
-    //   content: content,
-    //   createAt: createAt,
-    //   replyFor: replyFor
-    // })
-  }
-
   // const getAllCategory = computed(() => category)
   async function getDetailIdea(id) {
     apiGetDetailIdea(id)
@@ -75,5 +64,24 @@ export const useIdeaStore = defineStore('idea', () => {
       })
   }
 
-  return { idea, getDetailIdea, increaseVote, decreaseVote, addComment }
+  async function getRelatedIdeas(ideaId) {
+    apiGetRelatedIdeas(ideaId)
+      .then((response) => {
+        relatedIdeas.value = response.data.data
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  return {
+    idea,
+    hotIdeas,
+    recentIdeas,
+    relatedIdeas,
+    getDetailIdea,
+    increaseVote,
+    decreaseVote,
+    getRelatedIdeas
+  }
 })
