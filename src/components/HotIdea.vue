@@ -31,7 +31,6 @@ onMounted(() => {
   getHotIdeas()
   carouselElement.value.addEventListener('wheel', (event) => {
     event.preventDefault()
-    console.log('scroll')
     if (event.deltaY > 0) {
       myCarousel.value.next()
     } else if (event.deltaY < 0) {
