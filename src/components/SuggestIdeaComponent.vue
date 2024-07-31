@@ -5,7 +5,7 @@
       <span class="hover:underline text-sm"><a href="" class="">Sea all</a></span>
     </div>
     <div
-      class="my-2 text-blue-900 text-sm cursor-pointer font-medium hover:underline hover:text-blue-900 hover:font-bold"
+      class="my-2 text-blue-900 text-sm cursor-pointer font-medium hover:underline hover:text-blue-900 hover:font-semibold"
       v-for="(idea, index) in props.ideas"
       :key="index"
       @click="viewDetailIdea(idea.id)"
