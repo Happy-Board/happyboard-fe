@@ -11,8 +11,8 @@ export default ({mode}) => {
   return defineConfig({
   plugins: [vue()],
   server: {
-    host: "172.31.33.195",
-    port: 8888
+    host: process.env.VITE_CLIENT_HOST,
+    port: parseInt(process.env.VITE_CLIENT_PORT)
   },
   resolve: {
     alias: {
