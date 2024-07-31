@@ -17,9 +17,24 @@
             ></div>
             <div class="flex gap-2 mt-1 text-xs">
               <span
-                class="font-medium text-gray-600 cursor-pointer  mx-1 hover:text-gray-800 hover:underline"
-                >Like</span
-              >
+                @mouseover="handleShowReactions"
+                @mouseleave="handleCloseReactions"
+                class="font-medium text-gray-600 cursor-pointer mx-1 hover:text-gray-800 hover:underline relative"
+                ><span v-if="props.react === null" @click="handleCreateReaction('like')"> Like </span>
+                <img v-else
+                  @click="cancelReaction(props?.id, props?.ideaId)"
+                  :src="`/icons/png/${props?.react}.png`"
+                  class="size-4"
+                  alt="" />
+                <ReactionComponent
+                  v-if="isShowReactions"
+                  @mouseleave="closeReactions"
+                  @mouseover="setKeepShowReactions(true)"
+                  :currentReact="props?.react"
+                  @reaction="handleCreateReaction"
+                  @cancelReaction="cancelReaction(props?.id, props?.ideaId)"
+              /></span>
+
               <span
                 @click="handleOpenReply"
                 class="font-medium text-gray-600 cursor-pointer mx-1 hover:text-gray-800 hover:underline"
@@ -37,7 +52,7 @@
                 <div class="relative input-box">
                   <div
                     :placeholder="'Reply to ' + props.author"
-                    class="comment-input rounded-lg border-0 bg-white border-white focus:border-0 focus:outline-0 py-2 px-3 pe-11 w-full"
+                    class="comment-input rounded-lg border-0 bg-white border-white focus:border-0 focus:outline-0 py-1 px-3 pe-11 w-full"
                     contentEditable="true"
                     spellcheck="false"
                     @keypress="handleComment"
@@ -62,31 +77,26 @@
         </div>
       </div>
     </div>
-    <vue-reactions
-      :model-value="selectedReactions"
-      :reactions="reactions"
-      :storage="storage"
-      has-dropdown
-      @update:modelValue="updateSelectedReactions"
-      @update:storage="updateStorage"
-  />
   </div>
 </template>
 <script setup>
 import { ref } from 'vue'
 import { useCommentStore } from '@/stores/comment.store'
-
+import ReactionComponent from './ReactionComponent.vue'
 
 const commentStore = useCommentStore()
-const { addComment } = commentStore
+const { addComment, createReaction, cancelReaction } = commentStore
 const props = defineProps({
   ideaId: Number,
   id: Number,
   content: String,
   author: String,
-  createdAt: String
+  createdAt: String,
+  react: String
 })
 const editorRef = ref()
+const isShowReactions = ref(false)
+const keepReactionsDisplay = ref(false)
 
 const handleComment = (event) => {
   if (!event.ctrlKey || event.code !== 'Enter') return
@@ -108,11 +118,34 @@ const handleOpenReply = () => {
 const handleCloseReply = () => {
   isOpenReply.value = false
 }
+const handleShowReactions = () => {
+  isShowReactions.value = true
+}
+const handleCloseReactions = () => {
+  setTimeout(() => {
+    if (!keepReactionsDisplay.value) {
+      isShowReactions.value = false
+    }
+  }, 200)
+}
+const setKeepShowReactions = (value) => {
+  keepReactionsDisplay.value = value
+}
+
+const closeReactions = () => {
+  setKeepShowReactions(false)
+  handleCloseReactions()
+}
+
+const handleCreateReaction = (reaction) => {
+  createReaction(props.id, { reaction: reaction }, props.ideaId)
+}
 </script>
 <style scoped>
 .comment-input[contentEditable='true']:empty:before {
   content: attr(placeholder);
   color: gray;
   cursor: text;
+  font-size: small;
 }
 </style>
