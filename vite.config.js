@@ -12,7 +12,7 @@ export default ({mode}) => {
   plugins: [vue()],
   server: {
     host: "172.31.33.195",
-    port: 8888
+    port: 9000
   },
   resolve: {
     alias: {
