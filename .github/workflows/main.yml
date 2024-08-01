@@ -32,4 +32,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f happyboard-fe-container
       - name: Run docker container
-        run: docker run -d -it -p 80:80 --rm --name happyboard-fe-container duymt3/happyboard-fe
+        run: docker run -d -it -p 8888:8888 --name happyboard-fe-container duymt3/happyboard-fe
