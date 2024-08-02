@@ -61,7 +61,7 @@
           <div v-if="searchResults.length !== 0" class="">
             <div v-for="idea in searchResults.ideas" :key="idea.id" class="">
               <CartIdeaComponent
-                :id="idea.id"
+                :id="idea.id.toString()"
                 :author="idea.User.username"
                 :category="idea.Category"
                 :description="idea.content"
@@ -79,9 +79,9 @@
             /> -->
           </div>
           <div v-else>
-            <div v-for="idea in pageData?.ideas" :key="idea?.id" class="">
+            <div v-for="idea in pageData" :key="idea?.id" class="">
               <CartIdeaComponent
-                :id="idea.id"
+                :id="idea.id.toString()"
                 :author="idea.User.username"
                 :category="idea.Category"
                 :description="idea.content"
@@ -140,9 +140,9 @@ const searchStore = useSearchStore()
 const { searchResults } = storeToRefs(searchStore)
 const homePageStore = useHomePageStore()
 const { pageData, tab, recentIdeas } = storeToRefs(homePageStore)
-const { getPageData, setTab, loadMore, getRecentIdeas } = homePageStore
+const {  setTab, loadMore, getRecentIdeas } = homePageStore
 onMounted(() => {
-  getPageData()
+  // getPageData()
   getRecentIdeas()
 })
 
