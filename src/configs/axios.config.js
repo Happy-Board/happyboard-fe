@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 export const axiosInstance = axios.create({
-  baseURL: 'http://47.129.21.145:8000/api/v1',
+  baseURL: 'https://duymt.io.vn',
   withCredentials: false
 })
 
