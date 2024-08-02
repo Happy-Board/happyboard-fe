@@ -48,7 +48,6 @@
       </div>
       <div class="col-span-4 flex justify-end gap-1">
         <div class="flex justify-end items-center object-fill">
-          <NotificationComponent />
           <!-- <button
             v-if="mode === 'light'"
             @click="handleChangeMode('dark')"
@@ -175,7 +174,6 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { apiLogOut } from '@/apis/auth.api'
 import SearchComponent from './SearchComponent.vue'
-import NotificationComponent from './NotificationComponent.vue'
 
 const router = useRouter()
 
