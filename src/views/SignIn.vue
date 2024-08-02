@@ -237,11 +237,15 @@
   </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { apiSignIn, apiSignUp } from '@/apis/auth.api'
 import { notify } from '../utils/toast'
+import { requestPermission } from '@/configs/firebase.config'
 
+onMounted(() => {
+  requestPermission()
+})
 const router = useRouter()
 const signInInfo = reactive({
   email: '',

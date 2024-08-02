@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { apiGetIdeas, apiGetRecentIdeas } from '@/apis/idea.api'
+import { convertTime } from '@/utils/convert-time'
 
 export const useHomePageStore = defineStore('home', () => {
   const pageData = ref([])
@@ -27,7 +28,6 @@ export const useHomePageStore = defineStore('home', () => {
         console.log(error)
       })
   }
-
 
   function getHotIdeas() {
     //api get hot ideas
@@ -76,6 +76,9 @@ export const useHomePageStore = defineStore('home', () => {
     }
     apiGetIdeas(query.value)
       .then((response) => {
+        response.data.data.ideas.forEach((idea) => {
+          idea.createdAt = convertTime(idea.createdAt)
+        })
         pageData.value = [...pageData.value, ...response.data.data.ideas]
         currentPage.value++
       })

@@ -13,9 +13,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Create .env file
         run: |
-          echo `VITE_SERVER_URL=https://duymt.io.vn/api/v1` >> .env
+          echo `VITE_SERVER_URL=http://47.129.21.145:8000/api/v1` >> .env
           echo "VITE_CLIENT_HOST=172.31.39.242" >> .env
-          echo "VITE_CLIENT_PORT=9000" >> .env
+          echo "VITE_CLIENT_PORT=8888" >> .env
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PW }}       
       - name: Build docker image
@@ -32,4 +32,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f happyboard-fe-container
       - name: Run docker container
-        run: docker run -d -it -p 8888:8888 --name happyboard-fe-container duymt3/happyboard-fe:latest
+        run: docker run -d -it -p 80:80 --rm --name happyboard-fe-container duymt3/happyboard-fe

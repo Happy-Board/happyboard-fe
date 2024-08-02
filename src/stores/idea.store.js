@@ -7,6 +7,7 @@ import {
   apiVoteUpIdea,
   apiGetRelatedIdeas
 } from '@/apis/idea.api'
+import { convertTime } from '@/utils/convert-time'
 
 export const useIdeaStore = defineStore('idea', () => {
   const idea = ref({})
@@ -14,7 +15,6 @@ export const useIdeaStore = defineStore('idea', () => {
   const recentIdeas = ref([])
   const relatedIdeas = ref([])
 
-  
   async function increaseVote(id) {
     //call api increaseVote
     console.log(idea.value.vote)
@@ -58,6 +58,7 @@ export const useIdeaStore = defineStore('idea', () => {
     apiGetDetailIdea(id)
       .then((response) => {
         idea.value = response.data.data
+        idea.value.createdAt = convertTime(idea.value.createdAt)
       })
       .catch((err) => {
         console.log(err)

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://duymt.io.vn/api/v1',
+  baseURL: "https://duymt.io.vn/api/v1",
   withCredentials: false
 })
 
@@ -17,6 +17,7 @@ axiosInstance.interceptors.request.use(function (config) {
   // })
   config.headers.Authorization = localStorage.getItem('accessToken')
   config.headers['x-client-id'] = localStorage.getItem('uid')
+  config.headers['device-token'] = localStorage.getItem('device-token')
 
   return config
 })
