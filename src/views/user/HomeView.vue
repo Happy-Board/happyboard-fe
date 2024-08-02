@@ -5,8 +5,8 @@
       <div class="col-span-2">
         <SidebarComponent active="home" />
       </div>
-      <div class="col-span-5 pt-[90px] z-0 bg-white px-8 border w-full">
-        <div class="mb-6">
+      <div class="col-span-5 pt-[75px] z-0 bg-white px-8 border w-full">
+        <div class="mb-2">
           <HotIdea />
         </div>
         <div class="flex-1">

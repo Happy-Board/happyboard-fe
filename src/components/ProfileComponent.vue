@@ -34,21 +34,52 @@
       <div class="mt-16">
         <span class="flex font-semibold text-xl justify-center">KhaiPN2</span>
       </div>
+      <div class="bg-blue-100 my-5 mx-8 flex rounded-lg justify-center items-center px-4 py-2 line-clamp-2">
+        Hi, nice to meet you all. I would like to introduce myself. My name is Huynh Ngoc Phuong,
+        and you can call me Mia or Phương for short.
+      </div>
+      <div class="grid grid-cols-2 gap-3 mx-8">
+        <div class="bg-blue-100 px-4 py-2 rounded-lg flex items-center justify-center font-bold">88 idea</div>
+        <div class="bg-blue-100 px-4 py-2 rounded-lg flex items-center justify-center font-bold">1k8 votes</div>
+      </div>
     </div>
-    
   </div>
 </template>
 <script setup>
 import { ref } from 'vue'
+// import AWSS3UploadAshClient from 'aws-s3-upload-ash'
 
 const file = ref()
+// const fileSelected = ref()
+// const config = {
+//   bucketName: 'happyboard-bucket',
+//   dirName: 'media' /* optional - when use: e.g BUCKET_ROOT/dirName/fileName.extesion */,
+//   region: 'ap-southeast-1',
+//   accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
+//   secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
+//   s3Url: 'https://happyboard-bucket.s3.ap-southeast-1.amazonaws.com/images/avatar'
+// }
 const avatarName = ref('default-avatar.jpg')
 const change = (e) => {
+  // fileSelected.value = e.target.files[0]
   console.log(e.target.files[0])
   avatarName.value = e.target.files[0].name
 }
 const upload = () => {
   file.value.click()
 }
+// const handleSendFile = () => {
+//   console.log('send file', this.fileSelected)
+//   let S3CustomClient = new AWSS3UploadAshClient(config)
+//   S3CustomClient.uploadFile(
+//     fileSelected.value,
+//     fileSelected.value.type,
+//     undefined,
+//     fileSelected.value.name,
+//     'public-read'
+//   )
+//     .then((data) => console.log(data))
+//     .catch((err) => console.error(err))
+// }
 </script>
 <style scoped></style>

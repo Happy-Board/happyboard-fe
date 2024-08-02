@@ -15,7 +15,7 @@
               spellcheck="false"
               v-html="`<div><strong>${props.author}</strong><br>${props.content}`"
             ></div>
-            <div class="flex gap-2 mt-1 text-xs">
+            <div class="flex gap-1 mt-1 text-xs">
               <span
                 @mouseover="handleShowReactions"
                 @mouseleave="handleCloseReactions"
@@ -97,6 +97,7 @@ const props = defineProps({
 const editorRef = ref()
 const isShowReactions = ref(false)
 const keepReactionsDisplay = ref(false)
+
 
 const handleComment = (event) => {
   if (!event.ctrlKey || event.code !== 'Enter') return

@@ -9,30 +9,34 @@
         <div class="">
           <div class="flex items-start border-b pb-2">
             <div class="flex flex-col items-center pr-2 border-r gap-1 w-32">
- 
-                <div class="border border-gray-500 px-2 py-1 rounded-full "
+              <div
+                class="border border-gray-500 px-2 py-1 rounded-full"
                 :class="
-                      idea.vote === 'up'
-                        ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
-                        : ' text-gray-900  cursor-pointer hover:text-gray-900 hover:bg-blue-100'
-                    ">
-                  <i
-                    @click="increaseVote(ideaId)"
-                    class="fa-solid fa-caret-up fa-xl"
-                    :class="
-                      idea.vote === 'up'
-                        ? ' text-gray-900 cursor-pointer hover:text-gray-900'
-                        : ' text-gray-900  cursor-pointer hover:text-gray-900'
-                    "
-                  ></i>
-                </div>
+                  idea.vote === 'up'
+                    ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
+                    : ' text-gray-900  cursor-pointer hover:text-gray-900 hover:bg-blue-100'
+                "
+              >
+                <i
+                  @click="increaseVote(ideaId)"
+                  class="fa-solid fa-caret-up fa-xl"
+                  :class="
+                    idea.vote === 'up'
+                      ? ' text-gray-900 cursor-pointer hover:text-gray-900'
+                      : ' text-gray-900  cursor-pointer hover:text-gray-900'
+                  "
+                ></i>
+              </div>
               <div class="px-2 font-medium text-green-900">{{ idea?.voteCount }}</div>
 
-              <div class="px-2 py-1 border border-gray-500 rounded-full" :class="
-                    idea.vote === 'down'
-                      ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
-                      : ' text-gray-900 cursor-pointer hover:text-gray-900 hover:bg-blue-100'
-                  ">
+              <div
+                class="px-2 py-1 border border-gray-500 rounded-full"
+                :class="
+                  idea.vote === 'down'
+                    ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
+                    : ' text-gray-900 cursor-pointer hover:text-gray-900 hover:bg-blue-100'
+                "
+              >
                 <i
                   @click="decreaseVote(ideaId)"
                   class="fa-solid fa-caret-down fa-xl"
@@ -138,11 +142,8 @@
       </div>
 
       <div class="col-span-3 mt-[95px] ms-14">
-          <SuggestIdeaComponent
-            feature="Related ideas"
-            :ideas="relatedIdeas"
-          />
-        </div>
+        <SuggestIdeaComponent feature="Related ideas" :ideas="relatedIdeas" />
+      </div>
     </div>
   </div>
 </template>
@@ -163,6 +164,8 @@ const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const { idea, relatedIdeas } = storeToRefs(ideaStore)
 const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas } = ideaStore
+
+
 
 onMounted(() => {
   getDetailIdea(ideaId)
