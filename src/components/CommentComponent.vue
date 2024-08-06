@@ -15,7 +15,7 @@
               spellcheck="false"
               v-html="`<div><strong>${props.author}</strong><br>${props.content}`"
             ></div>
-            <div class="flex gap-2 mt-1 text-xs">
+            <div class="flex gap-1 mt-1 text-xs">
               <span
                 @mouseover="handleShowReactions"
                 @mouseleave="handleCloseReactions"
@@ -58,7 +58,7 @@
                     @keypress="handleComment"
                     ref="editorRef"
                   ></div>
-                  <span @click="commitComment" class="absolute top-2 right-2 cursor-pointer">
+                  <span @click="commitComment" class="absolute top-1/2  transform -translate-y-1/2 right-2 cursor-pointer">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -97,6 +97,7 @@ const props = defineProps({
 const editorRef = ref()
 const isShowReactions = ref(false)
 const keepReactionsDisplay = ref(false)
+
 
 const handleComment = (event) => {
   if (!event.ctrlKey || event.code !== 'Enter') return

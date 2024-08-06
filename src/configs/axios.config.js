@@ -17,6 +17,7 @@ axiosInstance.interceptors.request.use(function (config) {
   // })
   config.headers.Authorization = localStorage.getItem('accessToken')
   config.headers['x-client-id'] = localStorage.getItem('uid')
+  config.headers['device-token'] = localStorage.getItem('device-token')
 
   return config
 })

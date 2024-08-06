@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { apiGetComment, apiCreateComment } from '@/apis/idea.api'
 import { apiCancelReaction, apiCreateReaction } from '@/apis/comment.api'
+import { convertTime1 } from '@/utils/convert-time'
 
 export const useCommentStore = defineStore('comment', () => {
   const comments = ref()
@@ -10,6 +11,10 @@ export const useCommentStore = defineStore('comment', () => {
     apiGetComment(ideaId)
       .then((response) => {
         comments.value = response.data.data.comments
+        comments.value.map((comment) => {
+          comment.createdAt = convertTime1(comment.createdAt)
+          comment.children.map((c) => (c.createdAt = convertTime1(c.createdAt)))
+        })
       })
       .catch((err) => console.log(err))
   }
@@ -39,7 +44,7 @@ export const useCommentStore = defineStore('comment', () => {
   }
 
   function cancelReaction(commentId, ideaId) {
-    console.log('cancel');
+    console.log('cancel')
     apiCancelReaction(commentId)
       .then(() => {
         getAllComments(ideaId)

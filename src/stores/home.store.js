@@ -1,9 +1,10 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { apiGetIdeas, apiGetRecentIdeas } from '@/apis/idea.api'
+import { convertTime } from '@/utils/convert-time'
 
 export const useHomePageStore = defineStore('home', () => {
-  const pageData = ref({})
+  const pageData = ref([])
   const searchString = ref('')
   const currentPage = ref(1)
   const tab = ref('newest')
@@ -20,14 +21,13 @@ export const useHomePageStore = defineStore('home', () => {
     }
     apiGetIdeas(query.value)
       .then((response) => {
-        pageData.value = response.data.data
+        pageData.value = response.data.data.ideas
         console.log(pageData.value)
       })
       .catch((error) => {
         console.log(error)
       })
   }
-
 
   function getHotIdeas() {
     //api get hot ideas
@@ -62,16 +62,13 @@ export const useHomePageStore = defineStore('home', () => {
     }
     apiGetIdeas(query.value)
       .then((response) => {
-        pageData.value = response.data.data
-        console.log(pageData.value)
+        pageData.value = response.data.data.ideas
       })
       .catch((error) => {
         console.log(error)
       })
   }
   function loadMore() {
-    console.log('load more')
-    currentPage.value++
     if (searchString.value !== '') {
       query.value = `?q=${searchString.value}&page=${currentPage.value}&option=${tab.value}`
     } else {
@@ -79,7 +76,11 @@ export const useHomePageStore = defineStore('home', () => {
     }
     apiGetIdeas(query.value)
       .then((response) => {
-        pageData.value.ideas = [...pageData.value.ideas, ...response.data.data.ideas]
+        response.data.data.ideas.forEach((idea) => {
+          idea.createdAt = convertTime(idea.createdAt)
+        })
+        pageData.value = [...pageData.value, ...response.data.data.ideas]
+        currentPage.value++
       })
       .catch((err) => console.log(err))
   }

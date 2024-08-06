@@ -2,7 +2,7 @@
   <div
     @mouseover="emits('showReactions')"
     @mouseleave="emits('closeReactions')"
-    class="reactions-container flex bg-white w-[210px] px-2 rounded-full py-1 absolute top-[20px] left-[-15px] bottom-[-40px]"
+    class="reactions-container flex bg-white w-[210px] px-2 rounded-full py-1 absolute top-[20px] left-[-15px] bottom-[-40px] z-50"
   >
     <div class="relative flex">
       <img

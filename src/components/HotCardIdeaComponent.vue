@@ -1,11 +1,11 @@
 <template>
-  <div class="px-2 py-1 my-3 mx-2 border rounded-lg shadow-md shadow-gray-400 overflow-visible">
+  <div class="px-2 py-1 my-3 mx-2 border border-gray-300 rounded-lg shadow-md shadow-gray-300 overflow-visible">
     <i class="fa-solid fa-fire text-red-600 fa-lg absolute top-4 right-1 "></i>
 
     <div class="title ms-1 cursor-grab active:cursor-grabbing ">
       <div
         @click="viewDetailIdea(props.id)"
-        class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit line-clamp-1 text-left"
+        class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit !line-clamp-1 text-left"
         v-html="props.title"
       ></div>
     </div>
@@ -19,9 +19,9 @@
             v-html="props.description"
           ></div>
         </div> -->
-      <div class="content mt-2 mb-1 ms-1 border-0 line-clamp-2  cursor-grab active:cursor-grabbing">
+      <div class="content mt-2 mb-1 ms-1 border-0 line-clamp-2 cursor-default active:cursor-grabbing">
         <div
-          class="line-clamp-2 text-sm text-left"
+          class="line-clamp-2 text-sm text-left min-h-[40px]"
           data-gram="false"
           contenteditable="false"
           readonly="true"

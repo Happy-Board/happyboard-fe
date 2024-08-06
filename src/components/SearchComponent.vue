@@ -4,7 +4,7 @@
       @click="emit('modal-open')"
       v-model="searchString"
       type="search"
-      class="peer h-full w-full rounded-full border border-slate-500 bg-transparent px-3 py-2.5 pr-20 font-sans text-sm font-normal !text-black outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-slate-700 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+      class="peer h-full w-full rounded-full border border-slate-500  px-3 py-2.5 pr-20 font-sans text-sm font-normal !text-black outline outline-0 placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-slate-700 focus:outline-0 "
       placeholder="Search author, idea,..."
     />
   </div>
@@ -66,7 +66,7 @@ const handleShowDetailIdea = (id) => {
     console.log(router)
     router.push({ name: 'detail-idea', params: { id: id } })
     router.go()
-  }else{
+  } else {
     router.push({ name: 'detail-idea', params: { id: id } })
   }
 }
