@@ -105,6 +105,8 @@ const ideaId = route.params.id
 const { idea, relatedIdeas } = storeToRefs(ideaStore)
 const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas } = ideaStore
 
+
+
 onMounted(() => {
   getDetailIdea(ideaId)
   getRelatedIdeas(ideaId)
