@@ -13,10 +13,8 @@ export const convertTime = (originTime) => {
 }
 
 export const convertTime1 = (originTime) => {
-  console.log(originTime)
   const endDate = Date.now()
   const startDate = new Date(originTime).getTime()
-  console.log('diff ::: ', endDate - startDate)
   const differenceInMilliseconds = endDate - startDate
   //   const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000)
   const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60))
@@ -31,6 +29,32 @@ export const convertTime1 = (originTime) => {
     return `${differenceInHours}h`
   } else if (differenceInMinutes !== 0) {
     return `${differenceInMinutes}m`
+  } else {
+    return 'now'
+  }
+}
+
+export const convertTime2 = (originTime) => {
+  const endDate = Date.now()
+  const startDate = new Date(originTime).getTime()
+  const differenceInMilliseconds = endDate - startDate
+  //   const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000)
+  const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60))
+  const differenceInHours = Math.floor(differenceInMilliseconds / (1000 * 60 * 60))
+  const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24))
+  // const seconds = String(date.getUTCSeconds()).padStart(2, '0')
+
+  // Format: hh:mm:ss dd/MM/yyyy
+  if (differenceInDays !== 0) {
+    return differenceInDays === 1 ? `${differenceInDays} day ago` : `${differenceInDays} days ago`
+  } else if (differenceInHours !== 0) {
+    return differenceInHours === 1
+      ? `${differenceInHours} hour ago`
+      : `${differenceInHours} hours ago`
+  } else if (differenceInMinutes !== 0) {
+    return differenceInMinutes === 1
+      ? `${differenceInMinutes} minute ago`
+      : `${differenceInMinutes} minutes ago`
   } else {
     return 'now'
   }

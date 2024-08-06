@@ -62,7 +62,7 @@ export const useHomePageStore = defineStore('home', () => {
     }
     apiGetIdeas(query.value)
       .then((response) => {
-        pageData.value = response.data.data
+        pageData.value = response.data.data.ideas
       })
       .catch((error) => {
         console.log(error)
