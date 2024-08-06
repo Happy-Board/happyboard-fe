@@ -15,7 +15,7 @@
       <div class="title ms-1">
         <div
           @click="viewDetailIdea(props.id)"
-          class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit"
+          class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit line-clamp-2"
           v-html="props?.title"
         >
         </div>

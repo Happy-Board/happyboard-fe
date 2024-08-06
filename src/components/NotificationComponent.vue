@@ -1,5 +1,5 @@
 <template>
-  <div class="me-10 relative">
+  <div class="me-10 relative scroll-smooth">
     <svg
       @click="handleOpenNotificationList"
       xmlns="http://www.w3.org/2000/svg"
@@ -19,23 +19,84 @@
     </svg>
     <div
       v-if="numNotification !== 0"
-      class="absolute w-5 h-5 bg-red-700 border border-white p-1 top-[-8px] right-[0] rounded-full"
+      class="absolute w-5 h-5 bg-red-700 border border-white p-1 top-[-8px] right-[-4px] rounded-full"
     >
       <span class="absolute text-white text-xs top-[1px] right-[6px]">{{ numNotification }}</span>
     </div>
     <div
       v-if="isShowNotificationList"
-      class="absolute w-fit min-w-[300px] border border-blue-200 bg-blue-100 shadow-lg shadow-gray-400 py-1 rounded-lg left-1/2 transform -translate-x-1/2 top-9"
+      class="absolute w-fit min-w-[350px] border border-gray-200 bg-white shadow-lg shadow-gray-400 py-1 rounded-lg left-1/2 transform -translate-x-1/2 top-9 max-h-[550px] overflow-y-scroll mb-5"
       ref="notificationList"
     >
-
-      <div class="" v-for="(notification, index) in notifications" :key="index">
-        <div class="my-2 hover:bg-white/60 w-full px-2 pe-4 py-1 cursor-pointer relative line-clamp-1">
+      <div class="ps-3">
+        <p class="font-bold text-xl">Notification</p>
+        <div class="flex gap-1 mt-2 mb-4">
           <div
-            v-if="notification.status === 0"
-            class="absolute w-2 h-2 rounded-full bg-blue-900 bottom-3 right-2"
-          ></div>
-          {{ notification.title }}
+            class="px-2 rounded-lg font-semibold cursor-pointer"
+            :class="typeNotification === 'all' ? 'bg-blue-200' : 'hover:bg-gray-100'"
+            @click="setType('all')"
+          >
+            All
+          </div>
+          <div
+            class="px-2 rounded-lg font-semibold cursor-pointer"
+            :class="typeNotification === 'unread' ? 'bg-blue-200' : 'hover:bg-gray-100'"
+            @click="setType('unread')"
+          >
+            Unread
+          </div>
+        </div>
+      </div>
+      <div v-if="typeNotification === 'all'">
+        <div class="mx-2" v-for="(notification, index) in notifications" :key="index">
+          <div
+            class="flex border items-start my-1 rounded-lg hover:bg-gray-100 w-full ps-3 pe-8 py-1 cursor-pointer relative line-clamp-1"
+            @click="
+              handleOnclickNotification(notification.id, notification.target, notification.status)
+            "
+          >
+            <div
+              v-if="notification.status === 0"
+              class="absolute w-3 aspect-square rounded-full bg-blue-900 top-3 right-2"
+            ></div>
+            <img
+              src="../assets/default-avatar.jpg"
+              class="w-12 aspect-square rounded-full me-2"
+              alt="avatar"
+            />
+            <div class="">
+              <div v-html="notification.title"></div>
+              <div class="text-[10px] font-semibold text-blue-900">
+                {{ notification.createdAt }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="typeNotification === 'unread'">
+        <div class="mx-2" v-for="(notification, index) in unreadNotifications" :key="index">
+          <div
+            class="flex border items-start my-1 rounded-lg hover:bg-gray-100 w-full ps-3 pe-8 py-1 cursor-pointer relative line-clamp-1"
+            @click="
+              handleOnclickNotification(notification.id, notification.target, notification.status)
+            "
+          >
+            <div
+              v-if="notification.status === 0"
+              class="absolute w-3 aspect-square rounded-full bg-blue-900 top-3 right-2"
+            ></div>
+            <img
+              src="../assets/default-avatar.jpg"
+              class="w-12 aspect-square rounded-full me-2"
+              alt="avatar"
+            />
+            <div class="">
+              <div v-html="notification.title"></div>
+              <div class="text-[10px] font-semibold text-blue-900">
+                {{ notification.createdAt }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -48,8 +109,13 @@ import { requestPermission } from '../configs/firebase.config'
 import { getMessaging, onMessage } from 'firebase/messaging'
 import { useNotificationStore } from '@/stores/notification.store'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+import { useIdeaStore } from '@/stores/idea.store'
 
+const ideaStore = useIdeaStore()
+const { getDetailIdea } = ideaStore
 const messaging = getMessaging()
+const router = useRouter()
 onMounted(() => {
   requestPermission()
   onMessage(messaging, (payload) => {
@@ -60,16 +126,31 @@ onMounted(() => {
 
 const notificationStore = useNotificationStore()
 
-const { numNotification, notifications } = storeToRefs(notificationStore)
-const { getNewNotification, getAllNotifications } = notificationStore
+const { numNotification, notifications, unreadNotifications } = storeToRefs(notificationStore)
+const { getNewNotification, getAllNotifications, getUnreadNotifications, markNotificationReaded } =
+  notificationStore
 const isShowNotificationList = ref(false)
 const notificationList = ref(null)
 const check = ref(false)
+const typeNotification = ref('all')
+
+const setType = (type) => {
+  typeNotification.value = type
+  if (type === 'unread') {
+    getUnreadNotifications('')
+  }
+}
 
 onMounted(() => {
   getAllNotifications('')
 })
 
+const handleOnclickNotification = (notiId, ideaId, notificationStatus) => {
+  closeNotificationList()
+  markNotificationReaded(notiId, notificationStatus)
+  router.push({ name: 'detail-idea', params: { id: ideaId } })
+  getDetailIdea(ideaId)
+}
 const handleOpenNotificationList = () => {
   getAllNotifications('')
   if (!check.value) {
@@ -88,4 +169,24 @@ onClickOutside(notificationList, () => {
   closeNotificationList()
 })
 </script>
-<style scoped></style>
+<style scoped>
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>

@@ -17,7 +17,6 @@ export const messaging = getMessaging(app);
 export const requestPermission = () => {
     return Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
-            console.log("Notification User Permission Granted");
 
             return getToken(messaging, {
                 vapidKey: "BJq6mv4s8HbHHz6U4ES7BmXnowUiecmzAqN3BFOZI8U1Md1MSQn0tx4PMDEFRIGCl1KPnv87sZ_-W-sG3wMHYvI",
@@ -25,7 +24,6 @@ export const requestPermission = () => {
                 .then((currentToken) => {
                 if (currentToken) {
                     localStorage.setItem('device-token', currentToken)
-                    console.log("Client Token ", currentToken);
                 } else {
                     console.log("Failed to generate the app registration token");
                 }
