@@ -1,7 +1,5 @@
 <template>
-  <div class="col-span-5 flex pt-[100px] px-3 border z-0 bg-white">
-    <div class="">
-      <div class="flex items-start border-b pb-2">
+    <div class="flex items-start border-b pb-2">
         <div class="flex flex-col items-center pr-2 border-r gap-1 w-32">
           <div
             class="border border-gray-500 px-2 py-1 rounded-full"
@@ -81,52 +79,25 @@
           v-html="idea?.content"
         ></div>
       </div>
-      <CommentBlock :ideaId="ideaId" />
-    </div>
-  </div>
-
-  <div class="col-span-3 mt-[95px] ms-14">
-    <SuggestIdeaComponent feature="Related ideas" :ideas="relatedIdeas" />
-  </div>
 </template>
 <script setup>
-import SuggestIdeaComponent from '@/components/SuggestIdeaComponent.vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { onMounted } from 'vue'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import CommentBlock from '@/components/CommentBlock.vue'
 
 const route = useRoute()
-// const router = useRouter()
 const ideaStore = useIdeaStore()
 const ideaId = route.params.id
-const { idea, relatedIdeas } = storeToRefs(ideaStore)
+const { idea } = storeToRefs(ideaStore)
 const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas } = ideaStore
 
+await getDetailIdea(ideaId)
+await getRelatedIdeas(ideaId)
 
-
-onMounted(() => {
-  getDetailIdea(ideaId)
-  getRelatedIdeas(ideaId)
-})
-
-// const editorRef = ref()
-// const handleComment = (event) => {
-//   if (!event.ctrlKey || event.code !== 'Enter') return
-//   commitComment()
-// }
-
-// const commitComment = () => {
-//   addComment(ideaId, { content: editorRef.value.innerHTML })
-//   const comment = document.querySelector('#comment-input')
-//   comment.innerHTML = ''
-//   router.go()
-// }
 </script>
 <style scoped>
-.ql-toolbar {
+    .ql-toolbar {
   border: 0 !important;
   border-bottom: 1px solid rgb(218, 218, 218) !important;
 }

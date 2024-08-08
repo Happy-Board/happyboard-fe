@@ -53,7 +53,7 @@
 </template>
 <script setup>
 import CommentComponent from '@/components/CommentComponent.vue'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCommentStore } from '@/stores/comment.store'
 
@@ -64,9 +64,9 @@ const { addComment, getAllComments } = commentStore
 const props = defineProps({
   ideaId: Number
 })
-onMounted(() => {
-  getAllComments(props.ideaId)
-})
+
+ await getAllComments(props.ideaId)
+
 const editorRef = ref()
 const handleComment = (event) => {
   if (!event.ctrlKey || event.code !== 'Enter') return

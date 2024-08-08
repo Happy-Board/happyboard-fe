@@ -2,8 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import SignIn from '@/views/SignIn.vue'
 import CreateIdea from '@/views/user/CreateIdea.vue'
 import HomeView from '@/views/user/HomeView.vue'
-import DetailIdea from '@/views/user/DetailIdea.vue'
+import DetailIdeaView from '@/views/user/DetailIdeaView.vue'
 import ProfileView from '@/views/user/ProfileView.vue'
+import SkeletonView from '@/views/user/SkeletonView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -25,12 +26,17 @@ const router = createRouter({
     {
       path: '/idea/:id',
       name: 'detail-idea',
-      component: DetailIdea
+      component: DetailIdeaView
     },
     {
       path: '/profile',
       name: 'profile',
       component: ProfileView
+    },
+    {
+      path: '/skeleton',
+      name: 'skeleton',
+      component: SkeletonView
     },
     // {
     //   path: '/about',

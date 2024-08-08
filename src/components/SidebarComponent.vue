@@ -77,14 +77,14 @@
           </li>
           <li>
             <router-link
-              to="#"
-              :class="`flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group ${props.active === 'history-activity' ? 'active' : ''}`"
+              to="/skeleton"
+              :class="`flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group ${props.active === 'skeleton' ? 'active' : ''}`"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                :class="`flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 ${props.active === 'history-activity' ? 'active' : ''}`"
+                :class="`flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 ${props.active === 'skeleton' ? 'active' : ''}`"
               >
                 <path
                   fill-rule="evenodd"
@@ -98,7 +98,7 @@
                 />
               </svg>
 
-              <span class="flex-1 ms-3 whitespace-nowrap">History activity</span>
+              <span class="flex-1 ms-3 whitespace-nowrap">Skeleton</span>
             </router-link>
           </li>
         </ul>

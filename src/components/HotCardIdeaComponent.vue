@@ -5,7 +5,7 @@
     <div class="title ms-1 cursor-grab active:cursor-grabbing ">
       <div
         @click="viewDetailIdea(props.id)"
-        class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit !line-clamp-1 text-left"
+        class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit !line-clamp-1 text-left "
         v-html="props.title"
       ></div>
     </div>

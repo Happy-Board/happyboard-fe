@@ -35,7 +35,7 @@
             >
             <div class="flex mt-4 !items-center">
               <button
-                @click="ggLogin"
+                @click.prevent="ggLogin"
                 class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
               >
                 <svg
@@ -139,7 +139,7 @@
             >
             <div class="flex mt-4 !items-center">
               <button
-                @click="ggLogin"
+                @click.prevent="ggLogin"
                 class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
               >
                 <svg
@@ -246,6 +246,10 @@ import { requestPermission } from '@/configs/firebase.config'
 onMounted(() => {
   requestPermission()
 })
+const ggLogin = () => {
+  console.log('gg login')
+  window.open("http://localhost:8000/api/v1/auth/google/", "_self")
+};
 const router = useRouter()
 const signInInfo = reactive({
   email: '',
@@ -335,10 +339,6 @@ const signUp = () => {
       }
     })
 }
-
-const ggLogin = () => {
-  window.open("http://localhost:5000/api/auth/google", "_self");
-};
 
 </script>
 <style scoped>

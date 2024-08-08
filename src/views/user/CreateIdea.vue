@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-5 flex pt-[100px] z-0 bg-white px-5">
+  <div class="col-span-5 flex pt-[100px] z-0 bg-white px-5 min-h-screen">
     <div class="flex flex-col gap-10 w-full">
       <p class="font-semibold text-3xl">Let's create your idea</p>
       <Listbox class="w-2/5" as="div" v-model="selected">

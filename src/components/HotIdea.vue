@@ -12,7 +12,7 @@
     </carousel>
   </div>
 </template>
-<script setup>
+<script async setup>
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide } from 'vue3-carousel'
 import { onMounted, ref } from 'vue'
@@ -27,8 +27,20 @@ const { getHotIdeas } = homeStore
 const carouselElement = ref()
 const myCarousel = ref()
 
+// onMounted(() => {
+//   getHotIdeas()
+//   carouselElement.value.addEventListener('wheel', (event) => {
+//     event.preventDefault()
+//     if (event.deltaY > 0) {
+//       myCarousel.value.next()
+//     } else if (event.deltaY < 0) {
+//       myCarousel.value.prev()
+//     }
+//   })
+// })
+
+await getHotIdeas()
 onMounted(() => {
-  getHotIdeas()
   carouselElement.value.addEventListener('wheel', (event) => {
     event.preventDefault()
     if (event.deltaY > 0) {

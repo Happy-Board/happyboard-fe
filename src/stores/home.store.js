@@ -5,6 +5,7 @@ import { convertTime } from '@/utils/convert-time'
 
 export const useHomePageStore = defineStore('home', () => {
   const pageData = ref([])
+  const pageDataBackup = ref([])
   const searchString = ref('')
   const currentPage = ref(1)
   const tab = ref('newest')
@@ -29,9 +30,9 @@ export const useHomePageStore = defineStore('home', () => {
       })
   }
 
-  function getHotIdeas() {
+  async function getHotIdeas() {
     //api get hot ideas
-    apiGetIdeas('?option=highvote')
+    await apiGetIdeas('?option=highvote')
       .then((response) => {
         hotIdeas.value = response.data.data.ideas
       })
@@ -39,7 +40,7 @@ export const useHomePageStore = defineStore('home', () => {
   }
 
   async function getRecentIdeas() {
-    apiGetRecentIdeas()
+    await apiGetRecentIdeas()
       .then((response) => {
         recentIdeas.value = response.data.data
       })
@@ -68,19 +69,22 @@ export const useHomePageStore = defineStore('home', () => {
         console.log(error)
       })
   }
-  function loadMore() {
+  async function loadMore() {
     if (searchString.value !== '') {
       query.value = `?q=${searchString.value}&page=${currentPage.value}&option=${tab.value}`
     } else {
       query.value = `?page=${currentPage.value}`
     }
-    apiGetIdeas(query.value)
+    await apiGetIdeas(query.value)
       .then((response) => {
         response.data.data.ideas.forEach((idea) => {
           idea.createdAt = convertTime(idea.createdAt)
         })
-        pageData.value = [...pageData.value, ...response.data.data.ideas]
-        currentPage.value++
+        pageData.value = [...pageDataBackup.value, ...response.data.data.ideas]
+        if (response.data.data.ideas.length === 5) {
+          pageDataBackup.value = [...pageDataBackup.value, ...response.data.data.ideas]
+          currentPage.value++
+        }
       })
       .catch((err) => console.log(err))
   }

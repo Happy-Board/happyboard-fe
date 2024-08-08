@@ -1,7 +1,12 @@
 <template>
-  <div class="col-span-5 pt-[75px] z-0 bg-white px-8 border w-full">
-    <div class="mb-2">
-      <HotIdea />
+  <div class="col-span-5 pt-[75px] z-0 bg-white px-8 border w-full min-h-screen">
+    <div class="mb-2 min-h-[136px]">
+      <Suspense>
+        <HotIdea />
+        <template #fallback>
+          <HotIdeaSkeleton />
+        </template>
+      </Suspense>
     </div>
     <div class="flex-1">
       <div class="min-w-full flex mb-2 justify-end items-end">
@@ -52,88 +57,53 @@
           </button>
         </div>
       </div>
-      <div v-if="searchResults.length !== 0" class="">
-        <div v-for="idea in searchResults.ideas" :key="idea.id" class="">
-          <CartIdeaComponent
-            :id="idea.id"
-            :author="idea.User.username"
-            :category="idea.Category"
-            :description="idea.content"
-            :title="idea.title"
-            :totalComment="idea.commentCount"
-            :totalVote="idea.voteCount"
-            :totalView="idea.viewCount"
-            :createdAt="idea.createdAt"
-          />
-        </div>
-        <InfiniteLoading @infinite="loadMore" />
-      </div>
-      <div v-else>
-        <div v-for="idea in pageData" :key="idea?.id" class="">
-          <CartIdeaComponent
-            :id="idea.id"
-            :author="idea.User.username"
-            :category="idea.Category"
-            :description="idea.content"
-            :title="idea.title"
-            :totalComment="idea.commentCount"
-            :totalVote="idea.voteCount"
-            :totalView="idea.viewCount"
-            :createdAt="idea.createdAt"
-          />
-        </div>
-        <InfiniteLoading @infinite="loadMore" />
-      </div>
+      <Suspense>
+        <ListIdea />
+
+        <template #fallback>
+          <ListIdeaSkeleton />
+        </template>
+      </Suspense>
     </div>
   </div>
+
   <div class="col-span-3">
     <div class="col-span-3 mt-[95px] ms-14">
-      <SuggestIdeaComponent feature="Recently ideas" :titleIdeas="titleIdea" :ideas="recentIdeas" />
-      <SuggestIdeaComponent feature="History activity" :ideas="titleIdea" />
+      <Suspense>
+        <div>
+          <SuggestIdeaComponent
+            feature="Recently ideas"
+            :titleIdeas="titleIdea"
+            :ideas="recentIdeas"
+          />
+        </div>
+        <template #fallback>
+          <SuggestIdeaSkeleton />
+        </template>
+      </Suspense>
+
+      <!-- <SuggestIdeaComponent feature="History activity" :ideas="titleIdea" /> -->
     </div>
   </div>
 </template>
 <script setup>
-import CartIdeaComponent from '@/components/CartIdeaComponent.vue'
-import SuggestIdeaComponent from '@/components/SuggestIdeaComponent.vue'
+import { defineAsyncComponent } from 'vue'
+import SuggestIdeaSkeleton from '@/components/Skeletons/SuggestIdeaSkeleton.vue'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
-import { useSearchStore } from '@/stores/search.store'
-// import PaginationComponentVue from '@/components/PaginationComponent.vue'
-import HotIdea from '@/components/HotIdea.vue'
-import InfiniteLoading from 'v3-infinite-loading'
+import ListIdeaSkeleton from '@/components/Skeletons/ListIdeaSkeleton.vue'
+import HotIdeaSkeleton from '@/components/Skeletons/HotIdeaSkeleton.vue'
+const HotIdea = defineAsyncComponent(() => import('@/components/HotIdea.vue'))
+const SuggestIdeaComponent = defineAsyncComponent(
+  () => import('@/components/SuggestIdeaComponent.vue')
+)
+const ListIdea = defineAsyncComponent(() => import('@/components/ListIdea.vue'))
 
-const titleIdea = [
-  'Top 10 doi hinh leo rank than toc',
-  'Top 10 doi hinh leo rank than toc',
-  'Top 10 doi hinh leo rank than toc',
-  'Top 10 doi hinh leo rank than toc',
-  'Top 10 doi hinh leo rank than toc'
-]
-const searchStore = useSearchStore()
-const { searchResults } = storeToRefs(searchStore)
 const homePageStore = useHomePageStore()
-const { pageData, tab, recentIdeas } = storeToRefs(homePageStore)
-const { setTab, loadMore, getRecentIdeas } = homePageStore
-onMounted(() => {
-  // getPageData()
-  getRecentIdeas()
-})
+const { tab, recentIdeas } = storeToRefs(homePageStore)
+const { setTab } = homePageStore
 
-// const handleGetNextPage = () => {
-//   getPageData(`?page=${currentPage.value + 1}`)
-//   setCurrentPage(currentPage.value + 1)
-// }
 
-// const handleGetPrePage = () => {
-//   getPageData(`?page=${currentPage.value - 1}`)
-//   setCurrentPage(currentPage.value - 1)
-// }
-// const handleGetPage = (page) => {
-//   getPageData(`?page=${page}`)
-//   setCurrentPage(page)
-// }
 </script>
 <style>
 .container.spinner {
