@@ -4,6 +4,6 @@
   </div>
 </template>
 <script setup>
-import ProfileComponentVue from "@/components/ProfileComponent.vue";
+import ProfileComponentVue from "@/components/CardProfile.vue";
 </script>
 <style scoped></style>
