@@ -3,8 +3,8 @@ import SignIn from '@/views/SignIn.vue'
 import CreateIdea from '@/views/user/CreateIdea.vue'
 import HomeView from '@/views/user/HomeView.vue'
 import DetailIdeaView from '@/views/user/DetailIdeaView.vue'
-import ProfileView from '@/views/user/ProfileView.vue'
 import SkeletonView from '@/views/user/SkeletonView.vue'
+import CardProfile from '@/components/CardProfile.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -31,13 +31,18 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: ProfileView
+      component: CardProfile
     },
     {
       path: '/skeleton',
       name: 'skeleton',
       component: SkeletonView
     },
+    // {
+    //   path: '/my-board',
+    //   name: 'my-board',
+    //   component: MyBoardView
+    // },
     // {
     //   path: '/about',
     //   name: 'about',
