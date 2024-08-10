@@ -4,10 +4,11 @@ on:
   push: 
     branches:
       - main
+      - khaipn2
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v4 
