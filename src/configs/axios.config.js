@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_URL ? import.meta.env.VITE_SERVER_URL ; "https://duymt.io.vn/api/v1",
+  baseURL: import.meta.env.VITE_SERVER_URL ? import.meta.env.VITE_SERVER_URL : "https://duymt.io.vn/api/v1",
   withCredentials: false
 })
 
