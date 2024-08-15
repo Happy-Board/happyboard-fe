@@ -1,7 +1,7 @@
 <template>
-  <div class="col-span-5 flex pt-[90px] z-0 bg-white px-5 min-h-screen">
+  <div class="col-span-5 flex z-0 bg-white px-5 min-h-screen">
     <div class="flex flex-col gap-5 w-full">
-      <p class="font-semibold text-3xl">Let's create your idea</p>
+      <p class="font-semibold text-3xl">Edit your idea</p>
       <Listbox class="w-2/5" as="div" v-model="selected">
         <ListboxLabel class="block text-sm font-medium leading-6 text-black"
           >Category <span class="text-red-500">*</span></ListboxLabel
@@ -91,11 +91,10 @@
           v-model:content="ideaData.content"
           contentType="html"
         />
-
       </div>
       <div class="my-10 flex justify-end">
         <button
-        @click.prevent="saveIdea"
+          @click.prevent="saveIdea"
           type="button"
           class="text-black bg-gray-200 border border-gray-400 focus:outline-none hover:bg-blue-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
@@ -130,22 +129,37 @@ import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import { useUserStore } from '@/stores/user.store'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const ideaId = route.params.id
+const type = route.params.type
 
 const router = useRouter()
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
 const { getAllCategory } = categoryStore
 
-console.log(categories.value)
+const userStore = useUserStore()
+const { ideaToEdit } = storeToRefs(userStore)
+const { getDetailDraftIdea, getDetailReleaseIdea } = userStore
 
 onMounted(() => {
   getAllCategory()
+  document.querySelector('#title').innerHTML = ideaToEdit.value.title
 })
 
+if(type === 'draft')
+await getDetailDraftIdea(ideaId)
+
+if(type === 'release')
+await getDetailReleaseIdea(ideaId)
+
 const ideaData = reactive({
-  categoryId: '',
-  title: '',
-  content: ''
+  categoryId: ideaToEdit.value.Category.id,
+  title: ideaToEdit.value.title,
+  content: ideaToEdit.value.content
 })
 
 const saveIdea = () => {
@@ -155,7 +169,8 @@ const saveIdea = () => {
     notify('warning', 'Nothing to save')
     return
   }
-  apiSaveIdea(ideaData).then(() => {
+  apiSaveIdea(ideaData)
+    .then(() => {
       notify('success', 'Your idea has been saved!')
       setTimeout(() => {
         router.push('/')
@@ -193,9 +208,20 @@ const createIdea = () => {
     })
 }
 const selected = ref({
-  title: 'Choose a category for your idea',
-  icon: ''
+  id: ideaToEdit.value.Category.id,
+  title: ideaToEdit.value.Category.title,
+  icon: ideaToEdit.value.Category.icon
 })
+// watch(ideaToEdit.value, async () => {
+//   selected.value = {
+//     title: ideaToEdit.Category.title,
+//     icon: ideaToEdit.Category.icon
+//   }
+//   console.log('ideaToEdit change')
+//   ideaData.title = ideaToEdit.title
+//   ideaData.content = ideaToEdit.content
+// })
+
 watch(selected, async () => {
   ideaData.categoryId = selected.value.id
 })

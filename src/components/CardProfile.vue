@@ -1,6 +1,6 @@
 <template>
-  <div class="w-screen h-screen bg-gray-200/10 flex justify-center items-center pt-24">
-    <div class="bg-white rounded-lg relative w-[35%] h-[50%] shadow-xl">
+  <div class=" bg-gray-200/10 flex justify-center items-center pt-24">
+    <div class="bg-white rounded-lg relative w-[50%] h-[50%] shadow-xl">
       <div
         class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full w-28 overflow-hidden border border-gray-300 shadow-md"
       >

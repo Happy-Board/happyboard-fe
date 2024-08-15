@@ -5,6 +5,10 @@ import HomeView from '@/views/user/HomeView.vue'
 import DetailIdeaView from '@/views/user/DetailIdeaView.vue'
 import SkeletonView from '@/views/user/SkeletonView.vue'
 import CardProfile from '@/components/CardProfile.vue'
+import MyBoardView from '@/views/user/MyBoardView.vue'
+import EditIdea from '@/components/EditIdea.vue'
+import MyIdea from '@/components/MyIdea.vue'
+import MyHistoryActivity from '@/components/MyHistoryActivity.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -38,11 +42,16 @@ const router = createRouter({
       name: 'skeleton',
       component: SkeletonView
     },
-    // {
-    //   path: '/my-board',
-    //   name: 'my-board',
-    //   component: MyBoardView
-    // },
+    {
+      path: '/my-board',
+      name: 'my-board',
+      component: MyBoardView,
+      children: [
+        { path: 'edit/:type/:id', name: 'edit', component: EditIdea },
+        { path: '', name: 'my-board-ideas', component: MyIdea },
+        { path: 'history', name: 'history', component: MyHistoryActivity }
+      ]
+    }
     // {
     //   path: '/about',
     //   name: 'about',
