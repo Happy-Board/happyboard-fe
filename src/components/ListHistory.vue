@@ -9,12 +9,11 @@
           <div class="font-semibold me-5">{{ convertHistoryCode(activity.type) }}</div>
           <div class="flex" v-if="activity.contentComment !== null">
             <div v-html="`(`"></div>
-            <div class="line-clamp-1 max-w-[45%]" v-html="activity.contentComment"></div>
+            <div class="line-clamp-1 text-gray-600 font-semibold" v-html="activity.contentComment"></div>
             <div v-html="`)`"></div>
           </div>
         </div>
         <div
-          v-if="activity.contentComment === null"
           class="font-bold text-lg text-blue-900 w-fit line-clamp-1 max-w-[90%]"
           v-html="activity.contentIdea"
         ></div>
