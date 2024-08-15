@@ -2,6 +2,8 @@ import { axiosInstance } from '@/configs/axios.config'
 
 export const apiGetIdeas = async (url) => await axiosInstance.get(`/ideas${url}`)
 
+export const apiGetDetailDraftIdeas = async (id) => await axiosInstance.get(`/ideas/draft/${id}`)
+
 export const apiGetRecentIdeas = async () => await axiosInstance.get(`/ideas/recent`)
 
 export const apiGetRelatedIdeas = async (ideaId) => await axiosInstance.get(`/ideas/similar?id=${ideaId}`)
@@ -21,6 +23,6 @@ export const apiCancelVoteIdea = async (id) => await axiosInstance.delete(`/idea
 
 export const apiCreateIdea = async (body) => await axiosInstance.post('/ideas', body)
 
-export const apiSaveIdea = async (body) => await axiosInstance.post('/ideas/save', body)
+export const apiSaveIdea = async (body) => await axiosInstance.post('/ideas/drafted', body)
 
 

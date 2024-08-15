@@ -5,7 +5,7 @@
     <ListIdea /> -->
     <!-- <CommentSkeleton />
     <NotificationSkeleton /> -->
-    <DetailIdeaSkeleton />
+    <EditIdeaSkeleton />
   </div>
   <div class="col-span-3">
     <div class="col-span-3 mt-[95px] ms-14">
@@ -14,12 +14,22 @@
   </div>
 </template>
 <script setup>
+import { useUserStore } from '@/stores/user.store';
 // import HotIdeaSkeleton from '@/components/Skeletons/HotIdeaSkeleton.vue'
 import SuggestIdeaSkeleton from '@/components/Skeletons/SuggestIdeaSkeleton.vue'
 // import CardIdeaSkeleton from '@/components/Skeletons/CardIdeaSkeleton.vue'
 // import CommentSkeleton from '@/components/Skeletons/CommentSkeleton.vue'
 // import NotificationSkeleton from '@/components/Skeletons/NotificationSkeleton.vue'
 // import ListIdea from '@/components/ListIdea.vue'
-import DetailIdeaSkeleton from '@/components/Skeletons/DetailIdeaSkeleton.vue'
+// import DetailIdeaSkeleton from '@/components/Skeletons/DetailIdeaSkeleton.vue'
+// import ListNotification from '@/components/ListNotification.vue'
+import EditIdeaSkeleton from '@/components/Skeletons/EditIdeaSkeleton.vue';
+
+const userStore = useUserStore()
+const { getMyIdeas, getMyHistoryActivities } = userStore
+
+getMyIdeas()
+getMyHistoryActivities()
+
 </script>
 <style scoped></style>

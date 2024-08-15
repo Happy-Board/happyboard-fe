@@ -1,5 +1,5 @@
 <template>
-  <div v-if="searchResults.length !== 0" class="w-full">
+  <!-- <div v-if="searchResults.length !== 0" class="w-full">
     <div v-for="idea in searchResults.ideas" :key="idea.id" class="w-full">
       <CartIdeaComponent
         :id="idea.id"
@@ -14,8 +14,9 @@
       />
     </div>
     <InfiniteLoading @infinite="loadMore" />
-  </div>
-  <div v-else class="w-full">
+  </div> -->
+  <NotFoundData v-if="pageData.length === 0" />
+  <div class="w-full">
     <div v-for="idea in pageData" :key="idea?.id" class="w-full">
       <CartIdeaComponent
         :id="idea.id"
@@ -27,6 +28,7 @@
         :totalVote="idea.voteCount"
         :totalView="idea.viewCount"
         :createdAt="idea.createdAt"
+        :isDraft="idea.isDrafted"
       />
     </div>
     <InfiniteLoading @infinite="loadMore" />
@@ -36,11 +38,12 @@
 import InfiniteLoading from 'v3-infinite-loading'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
-import { useSearchStore } from '@/stores/search.store'
+// import { useSearchStore } from '@/stores/search.store'
 import CartIdeaComponent from './CartIdeaComponent.vue'
+import NotFoundData from './NotFoundData.vue';
 
-const searchStore = useSearchStore()
-const { searchResults } = storeToRefs(searchStore)
+// const searchStore = useSearchStore()
+// const { searchResults } = storeToRefs(searchStore)
 const homePageStore = useHomePageStore()
 const { pageData } = storeToRefs(homePageStore)
 const { loadMore } = homePageStore

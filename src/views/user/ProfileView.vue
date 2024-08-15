@@ -1,9 +1,9 @@
 <template>
   <div>
-    <ProfileComponentVue />
+    <CardProfile />
   </div>
 </template>
 <script setup>
-import ProfileComponentVue from "@/components/CardProfile.vue";
+import CardProfile from "@/components/CardProfile.vue";
 </script>
 <style scoped></style>

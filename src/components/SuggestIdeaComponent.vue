@@ -5,12 +5,13 @@
       <span class="hover:underline text-sm"><a href="" class="">Sea all</a></span>
     </div>
     <div
-      class="my-2 flex text-blue-900 text-sm cursor-pointer font-medium hover:underline hover:text-blue-900 hover:font-semibold"
+      class="my-2 grid grid-cols-10 gap-1 text-blue-900 text-sm cursor-pointer font-medium hover:underline hover:text-blue-900 hover:font-semibold"
       v-for="(idea, index) in props.ideas"
       :key="index"
       @click="viewDetailIdea(idea.id)"
     >
-      <div class="line-clamp-2">{{ idea.title }}</div>
+      <div class="col-span-1"><i :class="idea.Category.icon + ' fa-solid text-black'"></i></div>
+      <div class="col-span-9 line-clamp-1">{{ idea.title }}</div>
     </div>
   </div>
 </template>
