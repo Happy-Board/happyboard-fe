@@ -27,12 +27,12 @@ export const useUserStore = defineStore('user', () => {
       .catch((err) => console.log(err))
   }
 
-  async function updateProfile() {
-    await apiUpdateProfile()
-      .then((response) => {
-        profile.value = response.data.data
-      })
-      .catch((err) => console.log(err))
+  function updateProfileState(newProfile) {
+    profile.value = newProfile
+  }
+
+  async function updateProfile(formData) {
+    return await apiUpdateProfile(formData)
   }
 
   async function getMyIdeas() {
@@ -90,32 +90,28 @@ export const useUserStore = defineStore('user', () => {
 
   async function getDetailDraftIdea(id) {
     await apiGetMyDraftIdeaById(id)
-    .then((response) => {
-      ideaToEdit.value = response.data.data
-      console.log(ideaToEdit.value)
+      .then((response) => {
+        ideaToEdit.value = response.data.data
+        console.log(ideaToEdit.value)
       })
       .catch((err) => console.log(err))
-
   }
   async function getDetailReleaseIdea(id) {
     await apiGetDetailIdea(id)
-    .then((response) => {
-      ideaToEdit.value = response.data.data
-      console.log(ideaToEdit.value)
+      .then((response) => {
+        ideaToEdit.value = response.data.data
+        console.log(ideaToEdit.value)
       })
       .catch((err) => console.log(err))
-
   }
   async function getDetailHideIdea(id) {
     await apiGetMyHideIdeaById(id)
-    .then((response) => {
-      ideaToEdit.value = response.data.data
-      console.log(response.data.data)
+      .then((response) => {
+        ideaToEdit.value = response.data.data
+        console.log(response.data.data)
       })
       .catch((err) => console.log(err))
-
   }
-
 
   return {
     profile,
@@ -131,6 +127,7 @@ export const useUserStore = defineStore('user', () => {
     getMyDraftIdeas,
     getDetailDraftIdea,
     getDetailHideIdea,
-    getDetailReleaseIdea
+    getDetailReleaseIdea,
+    updateProfileState
   }
 })

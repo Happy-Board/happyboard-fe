@@ -21,7 +21,7 @@
           class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit line-clamp-2"
           v-html="props?.title"
         ></div>
-        <div v-if="props.author === userName" class="dropdown h-[30px]">
+        <!-- <div v-if="props.author === userName" class="dropdown h-[30px]">
           <button
             class="dropbtn px-2 aspect-square rounded-full bg-gray-50 hover:bg-gray-200 font-medium"
           >
@@ -31,7 +31,14 @@
             <p @click="handleEdit">Edit</p>
             <p @click="handleDelete">Delete</p>
           </div>
-        </div>
+        </div> -->
+        <OptionComponent
+          v-if="props.author === profile.username"
+          :target="'idea'"
+          :targetId="props.id"
+          @edit="handleEdit"
+          @delete="handleDelete"
+        />
       </div>
       <div class="content mt-2 ms-1">
         <div class="content mt-2 mb-1 ms-1 border-0 line-clamp-3">
@@ -46,7 +53,7 @@
       </div>
       <div class="flex flex-row justify-end items-center text-[12px] pt-1">
         <img
-          src="../assets/default-avatar.jpg"
+          :src="avatarURL"
           alt="avatar"
           class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3%]"
         />
@@ -55,10 +62,10 @@
         <div class="flex relative">
           <i
             :class="
-              props.category.icon + ' fa-solid absolute left-[-12px] bottom-[2px] text-gray-700'
+              props?.category?.icon + ' fa-solid absolute left-[-12px] bottom-[2px] text-gray-700'
             "
           ></i>
-          <span class="ps-1">{{ props.category.title }}</span>
+          <span class="ps-1">{{ props?.category?.title }}</span>
         </div>
 
         <div class="flex">
@@ -71,6 +78,13 @@
 <script setup>
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useRouter } from 'vue-router'
+import OptionComponent from './OptionComponent.vue'
+import { useUserStore } from '@/stores/user.store';
+import { storeToRefs } from 'pinia';
+
+
+const userStore = useUserStore()
+const { profile } = storeToRefs(userStore)
 // import { defineEmits } from 'vue'
 
 // const emits = defineEmits(['vote', 'unvote'])
@@ -81,7 +95,6 @@ import { useRouter } from 'vue-router'
 // const unvote = () => {
 //   emits('unvote', props.index)
 // }
-const userName = localStorage.getItem('uname')
 const router = useRouter()
 const props = defineProps({
   index: Number,
@@ -95,8 +108,11 @@ const props = defineProps({
   description: String,
   createdAt: String,
   isPublish: Boolean,
-  isDraft: Boolean
+  isDraft: Boolean,
+  avatar: String
 })
+
+const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
 
 const handleEdit = () => {
   router.push({ name: 'edit', params: { type: props.isDraft ? 'draft' : 'release', id: props.id } })
@@ -117,35 +133,5 @@ const viewDetailIdea = (id) => {
 
 .ql-editor {
   padding: 0 !important;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  right: 0;
-}
-
-.dropdown-content p {
-  color: black;
-  padding: 2px 10px;
-  text-decoration: none;
-  display: block;
-  cursor: pointer;
-}
-
-.dropdown-content p:hover {
-  background-color: #ddd;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
 }
 </style>

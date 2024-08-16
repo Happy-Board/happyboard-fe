@@ -4,11 +4,12 @@ import CreateIdea from '@/views/user/CreateIdea.vue'
 import HomeView from '@/views/user/HomeView.vue'
 import DetailIdeaView from '@/views/user/DetailIdeaView.vue'
 import SkeletonView from '@/views/user/SkeletonView.vue'
-import CardProfile from '@/components/CardProfile.vue'
 import MyBoardView from '@/views/user/MyBoardView.vue'
 import EditIdea from '@/components/EditIdea.vue'
 import MyIdea from '@/components/MyIdea.vue'
 import MyHistoryActivity from '@/components/MyHistoryActivity.vue'
+import ProfileView from '@/views/user/ProfileView.vue'
+import ResetPassword from '@/views/user/ResetPassword.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -35,12 +36,17 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: CardProfile
+      component: ProfileView
     },
     {
       path: '/skeleton',
       name: 'skeleton',
       component: SkeletonView
+    },
+    {
+      path: '/reset-password/:token',
+      name: 'reset-password',
+      component: ResetPassword
     },
     {
       path: '/my-board',

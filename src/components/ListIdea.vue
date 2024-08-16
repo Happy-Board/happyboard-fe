@@ -21,7 +21,7 @@
       <CartIdeaComponent
         :id="idea.id"
         :author="idea.User.username"
-        :category="idea.Category"
+        :category="idea?.Category"
         :description="idea.content"
         :title="idea.title"
         :totalComment="idea.commentCount"
@@ -29,6 +29,7 @@
         :totalView="idea.viewCount"
         :createdAt="idea.createdAt"
         :isDraft="idea.isDrafted"
+        :avatar="idea.User.avatar"
       />
     </div>
     <InfiniteLoading @infinite="loadMore" />

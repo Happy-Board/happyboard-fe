@@ -25,7 +25,6 @@ export const useNotificationStore = defineStore('notification', () => {
       })
       numNotification.value = count.value
       count.value = 0
-      console.log('done get all')
     })
   }
 

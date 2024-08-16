@@ -7,6 +7,7 @@
           :content="idea.content"
           :author="idea?.User?.username"
           :title="idea.title"
+          :avatar="idea?.User.avatar"
         />
       </slide>
     </carousel>

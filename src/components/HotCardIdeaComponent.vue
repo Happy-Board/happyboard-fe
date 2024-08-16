@@ -31,7 +31,7 @@
     </div>
     <div class="flex flex-row justify-start items-center text-[12px] pt-1 ms-2">
         <img
-          src="../assets/default-avatar.jpg"
+          :src="avatarURL"
           alt="avatar"
           class="w-[6%] aspect-square rounded-full cursor-pointer"
         />
@@ -47,8 +47,11 @@ const props = defineProps({
   title: String,
   content: String,
   author: String,
-  id: Number
+  id: Number,
+  avatar: String
 })
+
+const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
 const router = useRouter()
 const viewDetailIdea = (id) => {
   router.push(`idea/${id}`)
