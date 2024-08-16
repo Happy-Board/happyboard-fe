@@ -46,7 +46,7 @@
         <div class="flex items-center mt-2">
           <img
             :src="
-              idea?.User?.avatar === '' ? 'avatar/default-avatar.jpg' : idea?.User?.avatar
+              idea?.User?.avatar === '' ? '/avatar/default-avatar.jpg' : idea?.User?.avatar
             "
             alt="avatar"
             class="w-[2%] aspect-square rounded-full cursor-pointer lg:w-[3%] md:w-[4%] sm:w-[6%] xl:w-[3%]"

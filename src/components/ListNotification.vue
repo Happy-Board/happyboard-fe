@@ -11,7 +11,7 @@
         class="absolute w-3 aspect-square rounded-full bg-blue-900 top-3 right-2"
       ></div>
       <img
-        :src="notification.fromUser.avatar === '' ? 'avatar/default-avatar.jpg': notification.fromUser.avatar "
+        :src="notification.fromUser.avatar === '' ? '/avatar/default-avatar.jpg': notification.fromUser.avatar "
         class="w-12 aspect-square rounded-full me-2"
         alt="avatar"
       />
