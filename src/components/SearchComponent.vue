@@ -2,10 +2,10 @@
   <div class="relative h-10 w-full min-w-[288px]">
     <input
       @click="emit('modal-open')"
-      v-model="searchString"
+      v-model="search"
       type="search"
-      class="peer h-full w-full rounded-full border border-slate-500  px-3 py-2.5 pr-20 font-sans text-sm font-normal !text-black outline outline-0 placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-slate-700 focus:outline-0 "
-      placeholder="Search author, idea,..."
+      class="peer h-full w-full rounded-full border border-slate-500 px-3 py-2.5 pr-20 font-sans text-sm font-normal !text-black outline outline-0 placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-slate-700 focus:outline-0"
+      placeholder="Search title, idea,..."
     />
   </div>
   <ul
@@ -36,6 +36,7 @@ import { ref, watch } from 'vue'
 import { useSearchStore } from '@/stores/search.store'
 import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
+import { useHomePageStore } from '@/stores/home.store'
 
 const router = useRouter()
 const route = useRoute()
@@ -44,26 +45,32 @@ const props = defineProps({
 })
 
 const searchStore = useSearchStore()
-
+const homePageStore = useHomePageStore()
+const { setSearchString, loadMore } = homePageStore
 const { searchData } = storeToRefs(searchStore)
 const { getAllResults, resetSearchData } = searchStore
 const emit = defineEmits(['modal-close', 'modal-open'])
-const searchString = ref('')
+const search = ref('')
 
-watch(searchString, () => {
-  getAllResults(`?q=${searchString.value}`)
+watch(search, () => {
+  getAllResults(`?q=${search.value}`)
 })
 const target = ref(null)
 onClickOutside(target, () => emit('modal-close'))
 
 const handleShowResultsInHomePage = () => {
   resetSearchData()
-  router.push({ name: 'home', params: { search: `?q=${searchString.value}` } })
+  setSearchString(search.value)
+  setTimeout(() => {
+    if(route.path === '/'){
+      loadMore()
+    }
+    router.push({ name: 'home' })
+  }, 500)
 }
 const handleShowDetailIdea = (id) => {
   resetSearchData()
   if (route.path.includes('idea')) {
-    console.log(router)
     router.push({ name: 'detail-idea', params: { id: id } })
     router.go()
   } else {

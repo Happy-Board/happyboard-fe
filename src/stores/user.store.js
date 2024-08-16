@@ -45,47 +45,47 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function getMyHideIdeas() {
-    await apiGetMyHideIdeas()
+    return await apiGetMyHideIdeas()
       .then((response) => {
         response.data.data.ideas.forEach((idea) => {
           idea.createdAt = convertTime(idea.createdAt)
         })
         myIdeas.value = response.data.data.ideas
       })
-      .catch((err) => console.log(err))
+   
   }
 
   async function getMyPublishIdeas() {
-    await apiGetMyPublishIdeas()
+    return await apiGetMyPublishIdeas()
       .then((response) => {
         response.data.data.ideas.forEach((idea) => {
           idea.createdAt = convertTime(idea.createdAt)
         })
         myIdeas.value = response.data.data.ideas
       })
-      .catch((err) => console.log(err))
+
   }
 
   async function getMyDraftIdeas() {
-    await apiGetMyDraftIdeas()
+    return await apiGetMyDraftIdeas()
       .then((response) => {
         response.data.data.ideas.forEach((idea) => {
           idea.createdAt = convertTime(idea.createdAt)
         })
         myIdeas.value = response.data.data.ideas
       })
-      .catch((err) => console.log(err))
+
   }
 
   async function getMyHistoryActivities() {
-    await apiGetMyHistoryActivities()
+    return await apiGetMyHistoryActivities()
       .then((response) => {
         response.data.data.forEach((history) => {
           history.createdAt = convertTime(history.createdAt)
         })
         historyActivities.value = response.data.data
       })
-      .catch((err) => console.log(err))
+
   }
 
   async function getDetailDraftIdea(id) {

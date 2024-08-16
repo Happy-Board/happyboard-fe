@@ -26,9 +26,11 @@ import { storeToRefs } from 'pinia'
 // import { useSearchStore } from '@/stores/search.store'
 import CartIdeaComponent from './CartIdeaComponent.vue'
 import NotFoundData from './NotFoundData.vue'
+import { useRouter } from 'vue-router'
 
 // const searchStore = useSearchStore()
 // const { searchResults } = storeToRefs(searchStore)
+const router = useRouter()
 const userStore = useUserStore()
 const { myIdeas } = storeToRefs(userStore)
 const { getMyPublishIdeas, getMyDraftIdeas, getMyHideIdeas } = userStore
@@ -38,13 +40,25 @@ const props = defineProps({
 })
 
 if (props.tab === 'publish') {
-  await getMyPublishIdeas()
+  await getMyPublishIdeas().catch((error) => {
+    if (error.response.status === 401) {
+      router.push({ name: 'sign-in' })
+    }
+  })
 }
 if (props.tab === 'hide') {
-  await getMyHideIdeas()
+  await getMyHideIdeas().catch((error) => {
+    if (error.response.status === 401) {
+      router.push({ name: 'sign-in' })
+    }
+  })
 }
 if (props.tab === 'draft') {
-  await getMyDraftIdeas()
+  await getMyDraftIdeas().catch((error) => {
+    if (error.response.status === 401) {
+      router.push({ name: 'sign-in' })
+    }
+  })
 }
 </script>
 <style scoped>

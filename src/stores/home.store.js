@@ -2,6 +2,9 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { apiGetIdeas, apiGetRecentIdeas } from '@/apis/idea.api'
 import { convertTime } from '@/utils/convert-time'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 export const useHomePageStore = defineStore('home', () => {
   const pageData = ref([])
@@ -27,6 +30,9 @@ export const useHomePageStore = defineStore('home', () => {
       })
       .catch((error) => {
         console.log(error)
+        if(error.response.status === 401){
+          router.push({ name: 'sign-in' })
+        }
       })
   }
 
@@ -75,7 +81,7 @@ export const useHomePageStore = defineStore('home', () => {
     } else {
       query.value = `?page=${currentPage.value}`
     }
-    await apiGetIdeas(query.value)
+    return await apiGetIdeas(query.value)
       .then((response) => {
         response.data.data.ideas.forEach((idea) => {
           idea.createdAt = convertTime(idea.createdAt)
@@ -86,7 +92,7 @@ export const useHomePageStore = defineStore('home', () => {
           currentPage.value++
         }
       })
-      .catch((err) => console.log(err))
+      
   }
 
   function setCurrentQuery(setCurrentQuery) {
