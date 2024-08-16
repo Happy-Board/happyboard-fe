@@ -86,16 +86,21 @@
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const { idea } = storeToRefs(ideaStore)
 const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas } = ideaStore
 
 await getDetailIdea(ideaId)
-await getRelatedIdeas(ideaId)
+await getRelatedIdeas(ideaId).catch(error => {
+  if(error.response.status === 401){
+          router.push({ name: 'sign-in' })
+        }
+})
 </script>
 <style scoped>
 .ql-toolbar {

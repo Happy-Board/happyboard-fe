@@ -35,8 +35,11 @@ const { getMyHistoryActivities } = userStore
 
 const router = useRouter()
 
-await getMyHistoryActivities()
-
+await getMyHistoryActivities().catch(error => {
+  if(error.response.status === 401){
+          router.push({ name: 'sign-in' })
+        }
+})
 const handleShowAction = (ideaId) => {
   router.push({ name: 'detail-idea', params: { id: ideaId } })
 }

@@ -150,11 +150,9 @@ onMounted(() => {
   document.querySelector('#title').innerHTML = ideaToEdit.value.title
 })
 
-if(type === 'draft')
-await getDetailDraftIdea(ideaId)
+if (type === 'draft') await getDetailDraftIdea(ideaId)
 
-if(type === 'release')
-await getDetailReleaseIdea(ideaId)
+if (type === 'release') await getDetailReleaseIdea(ideaId)
 
 const ideaData = reactive({
   categoryId: ideaToEdit.value.Category.id,
@@ -202,9 +200,13 @@ const createIdea = () => {
         router.push('/')
       }, 1000)
     })
-    .catch((err) => {
-      console.log(err)
+    .catch((error) => {
+      console.log(error)
       notify('error', 'Create idea failed, some thing went wrong !')
+
+      if (error.response.status === 403) {
+        notify('warning', `You don't have permision !`)
+      }
     })
 }
 const selected = ref({

@@ -16,7 +16,7 @@ export const useNotificationStore = defineStore('notification', () => {
     if (noti.type === 'NC01') return `<strong>${noti.fromUser.username}</strong> đã react cho một comment của bạn`
   }
   async function getAllNotifications() {
-    await apiGetNotifications().then((res) => {
+    return await apiGetNotifications().then((res) => {
       notifications.value = res.data.data
       notifications.value.forEach((item) => {
         item['title'] = handleNotification(item)
@@ -29,7 +29,7 @@ export const useNotificationStore = defineStore('notification', () => {
   }
 
  async function getUnreadNotifications() {
-    await apiGetUnreadNotifications().then((res) => {
+    return await apiGetUnreadNotifications().then((res) => {
       notifications.value = res.data.data
       notifications.value.forEach((item) => {
         item['title'] = handleNotification(item)

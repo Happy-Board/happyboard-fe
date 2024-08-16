@@ -42,14 +42,20 @@ import { storeToRefs } from 'pinia'
 // import { useSearchStore } from '@/stores/search.store'
 import CartIdeaComponent from './CartIdeaComponent.vue'
 import NotFoundData from './NotFoundData.vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 // const searchStore = useSearchStore()
 // const { searchResults } = storeToRefs(searchStore)
 const homePageStore = useHomePageStore()
 const { pageData } = storeToRefs(homePageStore)
 const { loadMore } = homePageStore
 
-await loadMore()
+await loadMore().catch(error => {
+  if(error.response.status === 401){
+          router.push({ name: 'sign-in' })
+        }
+})
 
 </script>
 <style scoped>

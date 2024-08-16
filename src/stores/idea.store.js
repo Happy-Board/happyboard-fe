@@ -66,13 +66,11 @@ export const useIdeaStore = defineStore('idea', () => {
   }
 
   async function getRelatedIdeas(ideaId) {
-    apiGetRelatedIdeas(ideaId)
+    return await apiGetRelatedIdeas(ideaId)
       .then((response) => {
         relatedIdeas.value = response.data.data
       })
-      .catch((err) => {
-        console.log(err)
-      })
+      
   }
 
   return {

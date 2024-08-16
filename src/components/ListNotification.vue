@@ -11,7 +11,7 @@
         class="absolute w-3 aspect-square rounded-full bg-blue-900 top-3 right-2"
       ></div>
       <img
-        src="../assets/default-avatar.jpg"
+        :src="notification.fromUser.avatar === '' ? 'avatar/default-avatar.jpg': notification.fromUser.avatar "
         class="w-12 aspect-square rounded-full me-2"
         alt="avatar"
       />
@@ -32,6 +32,8 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import NotificationNotFound from './NotificationNotFound.vue'
 
+
+
 const router = useRouter()
 const ideaStore = useIdeaStore()
 const { getDetailIdea } = ideaStore
@@ -41,16 +43,25 @@ const { notifications } = storeToRefs(notificationStore)
 const { getAllNotifications, getUnreadNotifications, markNotificationReaded } = notificationStore
 
 const props = defineProps({
-  type: String
+  type: String,
+  avatar: String
 })
 const emits = defineEmits(['closeNotification'])
 
 if (props.type === 'all') {
   console.log(props.type)
-  await getAllNotifications()
+  await getAllNotifications().catch(error => {
+  if(error.response.status === 401){
+          router.push({ name: 'sign-in' })
+        }
+})
 } else if (props.type === 'unread') {
   console.log(props.type)
-  await getUnreadNotifications()
+  await getUnreadNotifications().catch(error => {
+  if(error.response.status === 401){
+          router.push({ name: 'sign-in' })
+        }
+})
 }
 
 const handleOnclickNotification = (notiId, ideaId, notificationStatus) => {
