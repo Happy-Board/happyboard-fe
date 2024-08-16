@@ -33,6 +33,7 @@
         :ideaId="props?.ideaId"
         :createdAt="comment?.createdAt"
         :react="comment?.reaction"
+        :avatar="comment?.User?.avatar"
       />
       <div
         v-for="(reply, index) in comment?.children"
@@ -46,6 +47,7 @@
           :ideaId="props?.ideaId"
           :createdAt="reply?.createdAt"
           :react="reply?.reaction"
+          :avatar="reply?.User?.avatar"
         />
       </div>
     </div>
@@ -65,7 +67,7 @@ const props = defineProps({
   ideaId: Number
 })
 
- await getAllComments(props.ideaId)
+await getAllComments(props.ideaId)
 
 const editorRef = ref()
 const handleComment = (event) => {

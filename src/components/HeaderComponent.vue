@@ -109,14 +109,14 @@
             </span>
           </button> -->
           <img
-            @click="handleShowUserOption"
-            src="@/assets/default-avatar.jpg"
+            @click="openUserOption"
+            :src="profile.avatar"
             alt="avatar"
             class="w-[5%] aspect-square rounded-full cursor-pointer lg:w-[8%] md:w-[7%] sm:w-[8%] xl:w-[7%]"
           />
-          <span @click="handleShowUserOption" class="ms-2 font-semibold text-lg cursor-pointer"
-            >{{ userName }}
-            <div
+          <span @click="openUserOption" class="ms-2 font-semibold text-lg cursor-pointer"
+            >{{ profile.username }}
+            <!-- <div
               class="absolute top-16 right-4 bg-white text-sm rounded-lg border p-2"
               v-if="showUserOption"
             >
@@ -163,7 +163,8 @@
                   <span class="flex-1 ms-3 whitespace-nowrap">Sign out</span>
                 </div>
               </div>
-            </div>
+            </div> -->
+            <PopUpUserOption v-if="showUserOption" @logout="handleLogout" @closeUserOption="closeUserOption" />
           </span>
         </div>
       </div>
@@ -176,6 +177,16 @@ import { useRouter } from 'vue-router'
 import { apiLogOut } from '@/apis/auth.api'
 import SearchComponent from './SearchComponent.vue'
 import NotificationComponent from './NotificationComponent.vue'
+import { useUserStore } from '@/stores/user.store'
+import { storeToRefs } from 'pinia'
+import PopUpUserOption from './PopUpUserOption.vue'
+
+const userStore = useUserStore()
+const { profile } = storeToRefs(userStore)
+const { getProfile } = userStore
+
+
+await getProfile()
 
 const router = useRouter()
 
@@ -192,30 +203,33 @@ const showUserOption = ref(false)
 
 onMounted(() => {
   const isLoggedIn = localStorage.getItem('isLoggedIn')
-  if (!isLoggedIn || isLoggedIn !== 'true') {
+  const cookies = document.cookie.split('; ')
+  if ((!isLoggedIn && cookies.length === 0) || (isLoggedIn !== 'true' && cookies.length === 0)) {
     router.push('/sign-in')
   }
 })
 
-const userName = ref()
-const mode = ref('')
+// const userName = ref()
+// const mode = ref('')
 
-mode.value = localStorage.getItem('mode') || 'light'
-userName.value = localStorage.getItem('uname')
+// mode.value = localStorage.getItem('mode') || 'light'
+// userName.value = localStorage.getItem('uname')
 // const handleChangeMode = (newMode) => {
 //   mode.value = newMode
 //   localStorage.setItem('mode', newMode)
 // }
 
-const handleShowUserOption = () => {
+const openUserOption = () => {
   showUserOption.value = !showUserOption.value
+}
+const closeUserOption = () => {
+  showUserOption.value = false
 }
 
 const handleLogout = () => {
-  localStorage.removeItem('isLoggedIn')
-  localStorage.removeItem('uname')
   apiLogOut()
     .then(() => {
+      localStorage.clear()
       router.push('/sign-in')
     })
     .catch((err) => console.log(err))

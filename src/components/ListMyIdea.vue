@@ -13,6 +13,7 @@
         :totalView="idea.viewCount"
         :createdAt="idea.createdAt"
         :isDraft="idea.isDrafted"
+        :avatar="idea.User.avatar"
       />
     </div>
     <InfiniteLoading @infinite="loadMore" />

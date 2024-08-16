@@ -1,84 +1,86 @@
 <template>
-    <div class="flex items-start border-b pb-2">
-        <div class="flex flex-col items-center pr-2 border-r gap-1 w-32">
-          <div
-            class="border border-gray-500 px-2 py-1 rounded-full"
-            :class="
-              idea.vote === 'up'
-                ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
-                : ' text-gray-900  cursor-pointer hover:text-gray-900 hover:bg-blue-100'
-            "
-          >
-            <i
-              @click="increaseVote(ideaId)"
-              class="fa-solid fa-caret-up fa-xl"
-              :class="
-                idea.vote === 'up'
-                  ? ' text-gray-900 cursor-pointer hover:text-gray-900'
-                  : ' text-gray-900  cursor-pointer hover:text-gray-900'
-              "
-            ></i>
-          </div>
-          <div class="px-2 font-medium text-green-900">{{ idea?.voteCount }}</div>
+  <div class="flex items-start border-b pb-2">
+    <div class="flex flex-col items-center pr-2 border-r gap-1 w-32">
+      <div
+        class="border border-gray-500 px-2 py-1 rounded-full"
+        :class="
+          idea.vote === 'up'
+            ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
+            : ' text-gray-900  cursor-pointer hover:text-gray-900 hover:bg-blue-100'
+        "
+      >
+        <i
+          @click="increaseVote(ideaId)"
+          class="fa-solid fa-caret-up fa-xl"
+          :class="
+            idea.vote === 'up'
+              ? ' text-gray-900 cursor-pointer hover:text-gray-900'
+              : ' text-gray-900  cursor-pointer hover:text-gray-900'
+          "
+        ></i>
+      </div>
+      <div class="px-2 font-medium text-green-900">{{ idea?.voteCount }}</div>
 
-          <div
-            class="px-2 py-1 border border-gray-500 rounded-full"
-            :class="
-              idea.vote === 'down'
-                ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
-                : ' text-gray-900 cursor-pointer hover:text-gray-900 hover:bg-blue-100'
+      <div
+        class="px-2 py-1 border border-gray-500 rounded-full"
+        :class="
+          idea.vote === 'down'
+            ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
+            : ' text-gray-900 cursor-pointer hover:text-gray-900 hover:bg-blue-100'
+        "
+      >
+        <i
+          @click="decreaseVote(ideaId)"
+          class="fa-solid fa-caret-down fa-xl"
+          :class="
+            idea.vote === 'down'
+              ? ' text-gray-900 cursor-pointer hover:text-gray-900'
+              : ' text-gray-900 cursor-pointer hover:text-gray-900'
+          "
+        ></i>
+      </div>
+    </div>
+    <div class="flex flex-col items-start ps-2">
+      <div class="!text-3xl !font-bold" v-html="idea?.title"></div>
+      <div class="flex justify-between items-center">
+        <div class="flex items-center mt-2">
+          <img
+            :src="
+              idea?.User?.avatar === '' ? 'avatar/default-avatar.jpg' : idea?.User?.avatar
             "
-          >
-            <i
-              @click="decreaseVote(ideaId)"
-              class="fa-solid fa-caret-down fa-xl"
-              :class="
-                idea.vote === 'down'
-                  ? ' text-gray-900 cursor-pointer hover:text-gray-900'
-                  : ' text-gray-900 cursor-pointer hover:text-gray-900'
-              "
-            ></i>
-          </div>
-        </div>
-        <div class="flex flex-col items-start ps-2">
-          <div class="!text-3xl !font-bold" v-html="idea?.title"></div>
-          <div class="flex justify-between items-center">
-            <div class="flex items-center mt-2">
-              <img
-                src="@/assets/default-avatar.jpg"
-                alt="avatar"
-                class="w-[2%] aspect-square rounded-full cursor-pointer lg:w-[3%] md:w-[4%] sm:w-[6%] xl:w-[3%]"
-              />
-              <span class="ms-2 text-[12px] cursor-pointer">{{ idea?.User?.username }}</span>
-              <div class="flex gap-5 ms-5">
-                <div class="flex items-center text-[12px]">
-                  <i :class="idea?.Category?.icon + ' fa-solid text-gray-700'"></i>
-                  <span class="ps-1">{{ idea?.Category?.title }}</span>
-                </div>
-                <div class="flex">
-                  <span class="text-[12px] font-thin">{{ idea?.createdAt }}</span>
-                </div>
-                <div class="flex">
-                  <span class="text-[12px] font-thin">{{ `${idea?.commentCount} comments` }}</span>
-                </div>
-                <div class="flex">
-                  <span class="text-[12px] font-thin">{{ `${idea?.viewCount} views` }}</span>
-                </div>
-              </div>
-              <div class=""></div>
+            alt="avatar"
+            class="w-[2%] aspect-square rounded-full cursor-pointer lg:w-[3%] md:w-[4%] sm:w-[6%] xl:w-[3%]"
+          />
+          <span class="ms-2 text-[12px] cursor-pointer">{{ idea?.User?.username }}</span>
+          <div class="flex gap-5 ms-5">
+            <div class="flex items-center text-[12px]">
+              <i :class="idea?.Category?.icon + ' fa-solid text-gray-700'"></i>
+              <span class="ps-1">{{ idea?.Category?.title }}</span>
+            </div>
+            <div class="flex">
+              <span class="text-[12px] font-thin">{{ idea?.createdAt }}</span>
+            </div>
+            <div class="flex">
+              <span class="text-[12px] font-thin">{{ `${idea?.commentCount} comments` }}</span>
+            </div>
+            <div class="flex">
+              <span class="text-[12px] font-thin">{{ `${idea?.viewCount} views` }}</span>
             </div>
           </div>
+          <div class=""></div>
         </div>
       </div>
-      <div class="ql-toolbar ql-snow border-0 pb-5 border-b mb-3">
-        <div
-          class="ql-editor"
-          data-gram="false"
-          contenteditable="false"
-          readonly="true"
-          v-html="idea?.content"
-        ></div>
-      </div>
+    </div>
+  </div>
+  <div class="ql-toolbar ql-snow border-0 pb-5 border-b mb-3">
+    <div
+      class="ql-editor"
+      data-gram="false"
+      contenteditable="false"
+      readonly="true"
+      v-html="idea?.content"
+    ></div>
+  </div>
 </template>
 <script setup>
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
@@ -94,10 +96,9 @@ const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas } = ideaStore
 
 await getDetailIdea(ideaId)
 await getRelatedIdeas(ideaId)
-
 </script>
 <style scoped>
-    .ql-toolbar {
+.ql-toolbar {
   border: 0 !important;
   border-bottom: 1px solid rgb(218, 218, 218) !important;
 }

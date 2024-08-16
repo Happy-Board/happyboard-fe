@@ -4,24 +4,32 @@
       <div>
         <div id="comment-block" class="comment-level-1 mt-5 flex items-start gap-1 min-w-[50%]">
           <img
-            src="@/assets/default-avatar.jpg"
+            :src="props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar"
             alt="avatar"
             class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3.5%]"
           />
           <div>
-            <div
-              class="comment-input rounded-lg border-0 bg-white border-white focus:border-0 focus:outline-0 px-4 py-2 w-fit"
-              contentEditable="false"
-              spellcheck="false"
-              v-html="`<div><strong>${props.author}</strong><br>${props.content}`"
-            ></div>
+            <div class="relative">
+              <div
+                class="comment-input rounded-lg border-0 bg-white border-white focus:border-0 focus:outline-0 px-4 py-2 w-fit"
+                contentEditable="false"
+                spellcheck="false"
+                v-html="`<div><strong>${props.author}</strong><br>${props.content}`"
+              ></div>
+              <!-- <div class="absolute top-0 -right-10">
+                <OptionComponent target="comment" :target-id="`${props.id}`" @edit="handleEditComment" />
+              </div> -->
+            </div>
             <div class="flex gap-1 mt-1 text-xs">
               <span
                 @mouseover="handleShowReactions"
                 @mouseleave="handleCloseReactions"
                 class="font-medium text-gray-600 cursor-pointer mx-1 hover:text-gray-800 hover:underline relative"
-                ><span v-if="props.react === null" @click="handleCreateReaction('like')"> Like </span>
-                <img v-else
+                ><span v-if="props.react === null" @click="handleCreateReaction('like')">
+                  Like
+                </span>
+                <img
+                  v-else
                   @click="cancelReaction(props?.id, props?.ideaId)"
                   :src="`/icons/png/${props?.react}.png`"
                   class="size-4"
@@ -44,7 +52,7 @@
             </div>
             <div v-if="isOpenReply" class="comment-level-1 mt-5 flex items-start gap-1">
               <img
-                src="@/assets/default-avatar.jpg"
+                :src="profile.avatar"
                 alt="avatar"
                 class="w-[3%] lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3.5%] aspect-square rounded-full cursor-pointer"
               />
@@ -58,7 +66,10 @@
                     @keypress="handleComment"
                     ref="editorRef"
                   ></div>
-                  <span @click="commitComment" class="absolute top-1/2  transform -translate-y-1/2 right-2 cursor-pointer">
+                  <span
+                    @click="commitComment"
+                    class="absolute top-1/2 transform -translate-y-1/2 right-2 cursor-pointer"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -83,7 +94,13 @@
 import { ref } from 'vue'
 import { useCommentStore } from '@/stores/comment.store'
 import ReactionComponent from './ReactionComponent.vue'
+import { useUserStore } from '@/stores/user.store';
+import { storeToRefs } from 'pinia';
+// import OptionComponent from './OptionComponent.vue'
 
+
+const userStore = useUserStore()
+const { profile } = storeToRefs(userStore)
 const commentStore = useCommentStore()
 const { addComment, createReaction, cancelReaction } = commentStore
 const props = defineProps({
@@ -92,17 +109,21 @@ const props = defineProps({
   content: String,
   author: String,
   createdAt: String,
-  react: String
+  react: String,
+  avatar: String
 })
 const editorRef = ref()
 const isShowReactions = ref(false)
 const keepReactionsDisplay = ref(false)
 
-
 const handleComment = (event) => {
   if (!event.ctrlKey || event.code !== 'Enter') return
   commitComment(event)
 }
+
+// const handleEditComment = () => {
+//   //handleEditComment
+// }
 
 const commitComment = (event) => {
   const content = `<div><strong>@${props.author}</strong> ${event.target.closest('.input-box').querySelector('.comment-input').innerHTML}`
