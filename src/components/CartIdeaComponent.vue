@@ -18,7 +18,7 @@
       <div class="title ms-1 flex justify-between">
         <div
           @click="viewDetailIdea(props.id)"
-          class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit line-clamp-2"
+          class="text-wrap me-5 ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer line-clamp-2"
           v-html="props?.title"
         ></div>
         <!-- <div v-if="props.author === userName" class="dropdown h-[30px]">

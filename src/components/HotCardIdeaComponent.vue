@@ -1,5 +1,5 @@
 <template>
-  <div class="px-2 py-1 my-3 mx-2 border border-gray-300 rounded-lg shadow-md shadow-gray-300 overflow-visible">
+  <div class="px-2 py-1 my-3 mx-2 border border-gray-300 rounded-lg shadow-md shadow-gray-300 overflow-hidden">
     <i class="fa-solid fa-fire text-red-600 fa-lg absolute top-4 right-1 "></i>
 
     <div class="title ms-1 cursor-grab active:cursor-grabbing ">
