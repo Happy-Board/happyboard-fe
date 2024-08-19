@@ -55,7 +55,7 @@ export const useIdeaStore = defineStore('idea', () => {
 
   // const getAllCategory = computed(() => category)
   async function getDetailIdea(id) {
-    apiGetDetailIdea(id)
+   await apiGetDetailIdea(id)
       .then((response) => {
         idea.value = response.data.data
         idea.value.createdAt = convertTime(idea.value.createdAt)
@@ -66,13 +66,11 @@ export const useIdeaStore = defineStore('idea', () => {
   }
 
   async function getRelatedIdeas(ideaId) {
-    apiGetRelatedIdeas(ideaId)
+    return await apiGetRelatedIdeas(ideaId)
       .then((response) => {
         relatedIdeas.value = response.data.data
       })
-      .catch((err) => {
-        console.log(err)
-      })
+      
   }
 
   return {

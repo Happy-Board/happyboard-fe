@@ -6,7 +6,7 @@
       <div class="form-container sign-up">
         <form>
           <h1 class="font-bold text-2xl mb-3">Create Account</h1>
-          
+
           <input name="username" type="text" placeholder="Name" v-model="signUpInfo.username" />
           <input name="email" type="email" placeholder="Email" v-model="signUpInfo.email" />
           <input
@@ -35,7 +35,7 @@
             >
             <div class="flex mt-4 !items-center">
               <button
-                @click="ggLogin"
+                @click.prevent="ggLogin"
                 class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
               >
                 <svg
@@ -65,13 +65,11 @@
                 <span class=""> Sign in with google</span>
               </button>
             </div>
-
           </div>
         </form>
       </div>
       <div class="form-container sign-in">
         <form>
-          
           <h1 class="font-bold text-2xl !mb-4">Sign In</h1>
           <!-- <div class="!text-center !w-full !mb-2">
             <div class="flex mt-4 !items-center">
@@ -139,7 +137,7 @@
             >
             <div class="flex mt-4 !items-center">
               <button
-                @click="ggLogin"
+                @click.prevent="ggLogin"
                 class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
               >
                 <svg
@@ -169,7 +167,6 @@
                 <span class=""> Sign in with google</span>
               </button>
             </div>
-
           </div>
         </form>
       </div>
@@ -207,20 +204,30 @@
       class="forget-password absolute flex flex-col items-center justify-center w-full h-full bg-[#5525c43d] z-50"
     >
       <div
-        class="max-w-[50%] bg-[#fff] h-auto rounded-lg shadow-md shadow-black p-5 py-8 text-center relative"
+        class="bg-[#fff] h-auto rounded-lg shadow-md shadow-black !p-5 !py-8 text-center relative"
       >
-        <p class="font-bold text-xl">Enter your Email to get new password.</p>
-        <input
-          class="bg-[#eee] py-2 px-3 w-full focus:outline-0 my-4 rounded-sm"
-          type="email"
-          placeholder="example@gmail.com"
-        />
+        <div v-if="!isSentEmail">
+          <p class="font-bold text-xl">Enter your Email to get new password.</p>
+          <input
+            class="bg-[#eee] !py-2 !px-3 w-full focus:outline-0 !my-4 rounded-sm"
+            type="email"
+            placeholder="example@gmail.com"
+            v-model="emailToGetPassword"
+          />
 
-        <button
-          class="group p-2 py-1 rounded-md overflow-hidden relative bg-[#512da8] before:absolute before:inset-0 before:bg-[#5a27d3] before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
-        >
-          <span class="relative text-white">Get password</span>
-        </button>
+          <button
+            @click="handleForgotPassword"
+            class="group !p-2 py-1 rounded-md overflow-hidden relative bg-gray-500 before:absolute before:inset-0 before:bg-gray-400 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+          >
+            <span class="relative text-white">Get password</span>
+          </button>
+        </div>
+        <div v-if="isSentEmail" class="space-y-5">
+          <p class="font-bold text-xl">
+            We have sent an email to account <span class="">{{ emailToGetPassword }}</span>
+          </p>
+          <p class="font-bold text-xl">Please confirm it to reset your password!</p>
+        </div>
         <svg
           @click="setIsShowForgetPasswordPopUp(false)"
           xmlns="http://www.w3.org/2000/svg"
@@ -242,10 +249,15 @@ import { useRouter } from 'vue-router'
 import { apiSignIn, apiSignUp } from '@/apis/auth.api'
 import { notify } from '../utils/toast'
 import { requestPermission } from '@/configs/firebase.config'
+import { apiForgotPassword } from '@/apis/user.api'
 
 onMounted(() => {
   requestPermission()
 })
+const ggLogin = () => {
+  console.log('gg login')
+  window.open('https://duymt.io.vn/api/v1/auth/google/', '_self')
+}
 const router = useRouter()
 const signInInfo = reactive({
   email: '',
@@ -257,9 +269,27 @@ const signUpInfo = reactive({
   password: '',
   passwordConfirm: ''
 })
-
+const isSentEmail = ref(true)
 const classAdded = ref('')
 const isShowForgetPasswordPopUp = ref(false)
+const emailToGetPassword = ref()
+
+const sendEmailSuccess = () => {
+  isSentEmail.value = true
+}
+
+const handleForgotPassword = () => {
+  apiForgotPassword({ email: emailToGetPassword.value })
+    .then((res) => {
+      sendEmailSuccess()
+      console.log(res)
+    })
+    .catch((err) => console.log(err))
+}
+const setIsShowForgetPasswordPopUp = (value) => {
+  isSentEmail.value = false
+  isShowForgetPasswordPopUp.value = value
+}
 
 const resetInfo = () => {
   signInInfo.email = ''
@@ -335,11 +365,6 @@ const signUp = () => {
       }
     })
 }
-
-const ggLogin = () => {
-  window.open("http://localhost:5000/api/auth/google", "_self");
-};
-
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');

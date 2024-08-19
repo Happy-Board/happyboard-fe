@@ -1,11 +1,11 @@
 <template>
-  <div class="px-2 py-1 my-3 mx-2 border border-gray-300 rounded-lg shadow-md shadow-gray-300 overflow-visible">
+  <div class="px-2 py-1 my-3 mx-2 border border-gray-300 rounded-lg shadow-md shadow-gray-300 overflow-hidden">
     <i class="fa-solid fa-fire text-red-600 fa-lg absolute top-4 right-1 "></i>
 
     <div class="title ms-1 cursor-grab active:cursor-grabbing ">
       <div
         @click="viewDetailIdea(props.id)"
-        class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit !line-clamp-1 text-left"
+        class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit !line-clamp-1 text-left "
         v-html="props.title"
       ></div>
     </div>
@@ -31,7 +31,7 @@
     </div>
     <div class="flex flex-row justify-start items-center text-[12px] pt-1 ms-2">
         <img
-          src="../assets/default-avatar.jpg"
+          :src="avatarURL"
           alt="avatar"
           class="w-[6%] aspect-square rounded-full cursor-pointer"
         />
@@ -47,8 +47,11 @@ const props = defineProps({
   title: String,
   content: String,
   author: String,
-  id: Number
+  id: Number,
+  avatar: String
 })
+
+const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
 const router = useRouter()
 const viewDetailIdea = (id) => {
   router.push(`idea/${id}`)

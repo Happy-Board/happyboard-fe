@@ -7,16 +7,17 @@
     >
       <div class="h-full px-3 pb-4 overflow-y-auto bg-white">
         <ul class="space-y-2 font-medium">
-          <li>
+          <li @click="emits('changePage', 'home')">
             <router-link
               to="/"
-              :class="`flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group ${props.active === 'home' ? 'active' : ''}`"
+              :class="`flex items-center p-2 text-gray-500 rounded-lg hover:bg-gray-100 group`"
+              active-class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group active"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                :class="`flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900  ${props.active === 'home' ? 'active' : ''}`"
+                :class="`flex-shrink-0 w-6 h-6 transition duration-75  group-hover:text-gray-900`"
               >
                 <path
                   d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z"
@@ -26,19 +27,21 @@
                 />
               </svg>
 
-              <span class="ms-3">Home</span>
+              <span class="ms-3 text-gray-900">Home</span>
             </router-link>
           </li>
           <li>
             <router-link
               to="/create-idea"
-              :class="`flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group ${props.active === 'create-idea' ? 'active' : ''}`"
+              :class="`flex items-center p-2 text-gray-500 rounded-lg hover:bg-gray-100 group`"
+              active-class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group active"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                :class="`flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 ${props.active === 'create-idea' ? 'active' : ''}`"
+                :class="`flex-shrink-0 w-6 h-6 transition duration-75 group-hover:text-gray-900`"
+                
               >
                 <path
                   fill-rule="evenodd"
@@ -47,7 +50,7 @@
                 />
               </svg>
 
-              <span class="flex-1 ms-3 whitespace-nowrap">Create idea</span>
+              <span class="flex-1 ms-3 whitespace-nowrap text-gray-900">Create idea</span>
               <!-- <span
                 class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"
                 >Pro</span
@@ -56,14 +59,15 @@
           </li>
           <li>
             <router-link
-              to="#"
-              :class="`flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group ${props.active === 'my-board' ? 'active' : ''}`"
+              to="/my-board"
+              :class="`flex items-center p-2 text-gray-500 rounded-lg hover:bg-gray-100 group`"
+              active-class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group active"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                :class="`flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 ${props.active === 'my-board' ? 'active' : ''}`"
+                :class="`flex-shrink-0 w-6 h-6 transition duration-75 group-hover:text-gray-900 `"
               >
                 <path
                   fill-rule="evenodd"
@@ -72,19 +76,20 @@
                 />
               </svg>
 
-              <span class="flex-1 ms-3 whitespace-nowrap">My board </span>
+              <span class="flex-1 ms-3 whitespace-nowrap text-gray-900">My board </span>
             </router-link>
           </li>
-          <li>
+          <!-- <li>
             <router-link
-              to="#"
-              :class="`flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group ${props.active === 'history-activity' ? 'active' : ''}`"
+              to="/skeleton"
+              :class="`flex items-center p-2 text-gray-500 rounded-lg hover:bg-gray-100 group`"
+              active-class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group active"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                :class="`flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 ${props.active === 'history-activity' ? 'active' : ''}`"
+                :class="`flex-shrink-0 w-6 h-6 transition duration-75 group-hover:text-gray-900`"
               >
                 <path
                   fill-rule="evenodd"
@@ -98,23 +103,15 @@
                 />
               </svg>
 
-              <span class="flex-1 ms-3 whitespace-nowrap">History activity</span>
+              <span class="flex-1 ms-3 whitespace-nowrap text-gray-900">Skeleton</span>
             </router-link>
-          </li>
+          </li> -->
         </ul>
       </div>
     </aside>
   </div>
 </template>
 <script setup>
-import { defineProps } from 'vue'
-// import { useRoute, useRouter } from 'vue-router'
-
-// const router = useRouter()
-// const route = useRoute()
-const props = defineProps({
-  active: String
-})
 </script>
 <style scoped>
 .active {

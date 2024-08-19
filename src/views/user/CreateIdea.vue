@@ -1,6 +1,6 @@
 <template>
-  <div class="col-span-5 flex pt-[100px] z-0 bg-white px-5">
-    <div class="flex flex-col gap-10 w-full">
+  <div class="col-span-5 flex pt-[90px] z-0 bg-white px-5 min-h-screen">
+    <div class="flex flex-col gap-5 w-full">
       <p class="font-semibold text-3xl">Let's create your idea</p>
       <Listbox class="w-2/5" as="div" v-model="selected">
         <ListboxLabel class="block text-sm font-medium leading-6 text-black"
@@ -91,17 +91,11 @@
           v-model:content="ideaData.content"
           contentType="html"
         />
-        <!-- <div class="ql-toolbar ql-snow border-0">
-              <div
-                class="ql-editor"
-                data-gram="false"
-                contenteditable="true"
-                v-html="contentHTML"
-              ></div>
-            </div> -->
+
       </div>
       <div class="my-10 flex justify-end">
         <button
+        @click.prevent="saveIdea"
           type="button"
           class="text-black bg-gray-200 border border-gray-400 focus:outline-none hover:bg-blue-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
@@ -131,7 +125,7 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { apiCreateIdea } from '@/apis/idea.api'
+import { apiCreateIdea, apiSaveIdea } from '@/apis/idea.api'
 import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import { toast } from 'vue3-toastify'
@@ -153,6 +147,25 @@ const ideaData = reactive({
   title: '',
   content: ''
 })
+
+const saveIdea = () => {
+  const title = document.querySelector('#title').innerHTML
+  ideaData.title = title
+  if (!ideaData.categoryId && !ideaData.title && !ideaData.content) {
+    notify('warning', 'Nothing to save')
+    return
+  }
+  apiSaveIdea(ideaData).then(() => {
+      notify('success', 'Your idea has been saved!')
+      setTimeout(() => {
+        router.push('/')
+      }, 1000)
+    })
+    .catch((err) => {
+      console.log(err)
+      notify('error', 'Save idea failed, some thing went wrong !')
+    })
+}
 const createIdea = () => {
   const title = document.querySelector('#title').innerHTML
   ideaData.title = title

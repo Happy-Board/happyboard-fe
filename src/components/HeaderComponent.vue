@@ -109,61 +109,14 @@
             </span>
           </button> -->
           <img
-            @click="handleShowUserOption"
-            src="@/assets/default-avatar.jpg"
+            @click="openUserOption"
+            :src="!profile.avatar ? 'avatar/default-avatar.jpg': profile.avatar "
             alt="avatar"
             class="w-[5%] aspect-square rounded-full cursor-pointer lg:w-[8%] md:w-[7%] sm:w-[8%] xl:w-[7%]"
           />
-          <span @click="handleShowUserOption" class="ms-2 font-semibold text-lg cursor-pointer"
-            >{{ userName }}
-            <div
-              class="absolute top-16 right-4 bg-white text-sm rounded-lg border p-2"
-              v-if="showUserOption"
-            >
-              <div>
-                <router-link
-                  to="#"
-                  class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M4.5 3.75a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V6.75a3 3 0 0 0-3-3h-15Zm4.125 3a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Zm-3.873 8.703a4.126 4.126 0 0 1 7.746 0 .75.75 0 0 1-.351.92 7.47 7.47 0 0 1-3.522.877 7.47 7.47 0 0 1-3.522-.877.75.75 0 0 1-.351-.92ZM15 8.25a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 0-1.5H15ZM14.25 12a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H15a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 0-1.5H15Z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-
-                  <span class="flex-1 ms-3 whitespace-nowrap">Profile</span>
-                </router-link>
-              </div>
-              <div>
-                <div
-                  @click="handleLogout"
-                  to=""
-                  class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-
-                  <span class="flex-1 ms-3 whitespace-nowrap">Sign out</span>
-                </div>
-              </div>
-            </div>
+          <span @click="openUserOption" class="ms-2 font-semibold text-lg cursor-pointer"
+            >{{ profile.username }}
+            <PopUpUserOption v-if="showUserOption" @logout="handleLogout" @closeUserOption="closeUserOption" />
           </span>
         </div>
       </div>
@@ -176,6 +129,16 @@ import { useRouter } from 'vue-router'
 import { apiLogOut } from '@/apis/auth.api'
 import SearchComponent from './SearchComponent.vue'
 import NotificationComponent from './NotificationComponent.vue'
+import { useUserStore } from '@/stores/user.store'
+import { storeToRefs } from 'pinia'
+import PopUpUserOption from './PopUpUserOption.vue'
+
+const userStore = useUserStore()
+const { profile } = storeToRefs(userStore)
+const { getProfile } = userStore
+
+
+await getProfile()
 
 const router = useRouter()
 
@@ -183,6 +146,7 @@ const isModalOpened = ref(false)
 
 const openModal = () => {
   isModalOpened.value = true
+  console.log(profile.value)
 }
 const closeModal = () => {
   isModalOpened.value = false
@@ -192,30 +156,33 @@ const showUserOption = ref(false)
 
 onMounted(() => {
   const isLoggedIn = localStorage.getItem('isLoggedIn')
-  if (!isLoggedIn || isLoggedIn !== 'true') {
+  const cookies = document.cookie.split('; ')
+  if ((!isLoggedIn && cookies.length === 0) || (isLoggedIn !== 'true' && cookies.length === 0)) {
     router.push('/sign-in')
   }
 })
 
-const userName = ref()
-const mode = ref('')
+// const userName = ref()
+// const mode = ref('')
 
-mode.value = localStorage.getItem('mode') || 'light'
-userName.value = localStorage.getItem('uname')
+// mode.value = localStorage.getItem('mode') || 'light'
+// userName.value = localStorage.getItem('uname')
 // const handleChangeMode = (newMode) => {
 //   mode.value = newMode
 //   localStorage.setItem('mode', newMode)
 // }
 
-const handleShowUserOption = () => {
+const openUserOption = () => {
   showUserOption.value = !showUserOption.value
+}
+const closeUserOption = () => {
+  showUserOption.value = false
 }
 
 const handleLogout = () => {
-  localStorage.removeItem('isLoggedIn')
-  localStorage.removeItem('uname')
   apiLogOut()
     .then(() => {
+      localStorage.clear()
       router.push('/sign-in')
     })
     .catch((err) => console.log(err))

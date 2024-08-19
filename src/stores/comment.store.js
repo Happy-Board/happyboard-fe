@@ -7,8 +7,8 @@ import { convertTime1 } from '@/utils/convert-time'
 export const useCommentStore = defineStore('comment', () => {
   const comments = ref()
   // const getAllCategory = computed(() => category)
-  function getAllComments(ideaId) {
-    apiGetComment(ideaId)
+  async function getAllComments(ideaId) {
+    await apiGetComment(ideaId)
       .then((response) => {
         comments.value = response.data.data.comments
         comments.value.map((comment) => {

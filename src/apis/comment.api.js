@@ -7,3 +7,7 @@ export const apiCreateComment = async (body, ideaId ) => await axiosInstance.pos
 export const apiCreateReaction = async (body, commentId ) => await axiosInstance.post(`/comments/${commentId}/reaction`, body)
 
 export const apiCancelReaction = async ( commentId ) => await axiosInstance.post(`/comments/${commentId}/cancel`)
+
+export const apiDeleteComment = async ( commentId ) => await axiosInstance.delete(`/comments/${commentId}/cancel`)
+
+export const apiUpdateComment = async ( commentId ) => await axiosInstance.post(`/comments/${commentId}/cancel`)
