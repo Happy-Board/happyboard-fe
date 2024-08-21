@@ -54,7 +54,7 @@
   </div>
 </template>
 <script setup>
-import CommentComponent from '@/components/CommentComponent.vue'
+import CommentComponent from '@/components/comments/CommentComponent.vue'
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCommentStore } from '@/stores/comment.store'

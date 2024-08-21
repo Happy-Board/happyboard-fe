@@ -30,7 +30,7 @@ import { useNotificationStore } from '@/stores/notification.store'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-import NotificationNotFound from './NotificationNotFound.vue'
+import NotificationNotFound from '../notfound-data/NotificationNotFound.vue'
 
 
 

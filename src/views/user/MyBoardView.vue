@@ -7,7 +7,7 @@
   </div>
 </template>
 <script setup>
-import LeftbarComponent from '@/components/LeftbarComponent.vue'
+import LeftbarComponent from '@/components/my-ideas/LeftbarComponent.vue'
 import { onMounted } from 'vue'
 import { useMyBoardStore } from '@/stores/my-board.store'
 import { storeToRefs } from 'pinia'

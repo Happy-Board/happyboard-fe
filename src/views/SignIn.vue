@@ -256,7 +256,7 @@ onMounted(() => {
 })
 const ggLogin = () => {
   console.log('gg login')
-  window.open('https://duymt.io.vn/api/v1/auth/google/', '_self')
+  window.open('http://duymt.io.vn/api/v1/auth/google/callback/', '_self')
 }
 const router = useRouter()
 const signInInfo = reactive({

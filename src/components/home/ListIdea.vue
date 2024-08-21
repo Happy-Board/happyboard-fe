@@ -40,8 +40,8 @@ import InfiniteLoading from 'v3-infinite-loading'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
 // import { useSearchStore } from '@/stores/search.store'
-import CartIdeaComponent from './CartIdeaComponent.vue'
-import NotFoundData from './NotFoundData.vue';
+import CartIdeaComponent from '../idea/CartIdeaComponent.vue'
+import NotFoundData from '../notfound-data/NotFoundData.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
