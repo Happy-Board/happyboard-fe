@@ -41,7 +41,7 @@
       </div>
     </div>
     <div class="flex flex-col items-start ps-2">
-      <div class="!text-3xl !font-bold" v-html="idea?.title"></div>
+      <div class="!text-3xl !font-bold overflow-hidden max-w-[500px]" v-html="idea?.title"></div>
       <div class="flex justify-between items-center">
         <div class="flex items-center mt-2">
           <img

@@ -32,13 +32,13 @@
             <p @click="handleDelete">Delete</p>
           </div>
         </div> -->
-        <OptionComponent
+        <!-- <OptionComponent
           v-if="props.author === profile.username"
           :target="'idea'"
           :targetId="props.id"
           @edit="handleEdit"
           @delete="handleDelete"
-        />
+        /> -->
       </div>
       <div class="content mt-2 ms-1">
         <div class="content mt-2 mb-1 ms-1 border-0 line-clamp-3">
@@ -78,13 +78,12 @@
 <script setup>
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useRouter } from 'vue-router'
-import OptionComponent from './OptionComponent.vue'
-import { useUserStore } from '@/stores/user.store';
-import { storeToRefs } from 'pinia';
+// import { useUserStore } from '@/stores/user.store'
+// import { storeToRefs } from 'pinia';
 
 
-const userStore = useUserStore()
-const { profile } = storeToRefs(userStore)
+// const userStore = useUserStore()
+// const { profile } = storeToRefs(userStore)
 // import { defineEmits } from 'vue'
 
 // const emits = defineEmits(['vote', 'unvote'])
@@ -114,12 +113,12 @@ const props = defineProps({
 
 const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
 
-const handleEdit = () => {
-  router.push({ name: 'edit', params: { type: props.isDraft ? 'draft' : 'release', id: props.id } })
-}
-const handleDelete = () => {
-  console.log('delete')
-}
+// const handleEdit = () => {
+//   router.push({ name: 'edit', params: { type: props.isDraft ? 'draft' : 'release', id: props.id } })
+// }
+// const handleDelete = () => {
+//   console.log('delete')
+// }
 const viewDetailIdea = (id) => {
   router.push(`idea/${id}`)
 }

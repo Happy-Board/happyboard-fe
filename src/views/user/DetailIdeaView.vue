@@ -29,13 +29,13 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import SuggestIdeaSkeleton from '@/components/Skeletons/SuggestIdeaSkeleton.vue'
-import DetailIdeaSkeleton from '@/components/Skeletons/DetailIdeaSkeleton.vue'
-import CommentBlockSkeleton from '@/components/Skeletons/CommentBlockSkeleton.vue'
-const CommentBlock = defineAsyncComponent(() => import('@/components/CommentBlock.vue'))
-const DetailIdea = defineAsyncComponent(() => import('@/components/DetailIdea.vue'))
+import SuggestIdeaSkeleton from '@/components/skeletons/SuggestIdeaSkeleton.vue'
+import DetailIdeaSkeleton from '@/components/skeletons/DetailIdeaSkeleton.vue'
+import CommentBlockSkeleton from '@/components/skeletons/CommentBlockSkeleton.vue'
+const CommentBlock = defineAsyncComponent(() => import('@/components/comments/CommentBlock.vue'))
+const DetailIdea = defineAsyncComponent(() => import('@/components/idea/DetailIdea.vue'))
 const SuggestIdeaComponent = defineAsyncComponent(
-  () => import('@/components/SuggestIdeaComponent.vue')
+  () => import('@/components/home/SuggestIdeaComponent.vue')
 )
 const route = useRoute()
 // const router = useRouter()

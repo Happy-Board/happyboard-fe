@@ -88,16 +88,16 @@
 </template>
 <script setup>
 import { defineAsyncComponent } from 'vue'
-import SuggestIdeaSkeleton from '@/components/Skeletons/SuggestIdeaSkeleton.vue'
+import SuggestIdeaSkeleton from '@/components/skeletons/SuggestIdeaSkeleton.vue'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
-import ListIdeaSkeleton from '@/components/Skeletons/ListIdeaSkeleton.vue'
-import HotIdeaSkeleton from '@/components/Skeletons/HotIdeaSkeleton.vue'
-const HotIdea = defineAsyncComponent(() => import('@/components/HotIdea.vue'))
+import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
+import HotIdeaSkeleton from '@/components/skeletons/HotIdeaSkeleton.vue'
+const HotIdea = defineAsyncComponent(() => import('@/components/hot-ideas/HotIdea.vue'))
 const SuggestIdeaComponent = defineAsyncComponent(
-  () => import('@/components/SuggestIdeaComponent.vue')
+  () => import('@/components/home/SuggestIdeaComponent.vue')
 )
-const ListIdea = defineAsyncComponent(() => import('@/components/ListIdea.vue'))
+const ListIdea = defineAsyncComponent(() => import('@/components/home/ListIdea.vue'))
 
 const homePageStore = useHomePageStore()
 const { tab, recentIdeas } = storeToRefs(homePageStore)

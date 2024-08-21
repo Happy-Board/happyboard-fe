@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown h-[30px]">
     <button
-      class="dropbtn px-2 aspect-square rounded-full bg-gray-50 hover:bg-gray-200 font-medium relative"
+      class="dropbtn px-2 font-bold aspect-square rounded-full bg-gray-50 hover:bg-gray-200 relative"
     >
       ⋯
     </button>

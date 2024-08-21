@@ -27,5 +27,7 @@ export const apiSaveIdea = async (body) => await axiosInstance.post('/ideas/draf
 
 export const apiDeleteIdea = async (id) => await axiosInstance.delete(`/ideas/${id}`)
 
+export const apiUpdateIdea = async (id, body) => await axiosInstance.put(`/ideas/${id}`, body)
+
 
 
