@@ -23,5 +23,15 @@ import { RouterView } from 'vue-router';
 import HeaderComponent from '../home/HeaderComponent.vue';
 import SidebarComponent from '../home/SidebarComponent.vue';
 import HeaderSkeleton from '../skeletons/HeaderSkeleton.vue';
+const ws = new WebSocket(`ws://duymt.io.vn/ws/?userId=${localStorage.getItem('uid')}`);
+
+ws.onopen = () => {
+  console.log("Kết nối được mở trong MainLayout")
+}
+
+ws.onclose = () => {
+  console.log('Ngắt kết nối với websocket server')
+}
+
 </script>
 <style></style>

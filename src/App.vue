@@ -1,7 +1,7 @@
 <script setup>
 import { RouterView } from 'vue-router'
 
-const route = useRoute()
+// const route = useRoute()
 const initializeGA = () => {
   const script = document.createElement('script');
   script.async = true;

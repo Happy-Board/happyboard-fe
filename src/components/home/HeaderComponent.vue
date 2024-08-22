@@ -132,6 +132,8 @@ import NotificationComponent from '../notification/NotificationComponent.vue'
 import { useUserStore } from '@/stores/user.store'
 import { storeToRefs } from 'pinia'
 import PopUpUserOption from './PopUpUserOption.vue'
+const ws = new WebSocket(`ws://duymt.io.vn/ws/?userId=${localStorage.getItem('uid')}`);
+
 
 const userStore = useUserStore()
 const { profile } = storeToRefs(userStore)
@@ -181,7 +183,10 @@ const closeUserOption = () => {
 
 const handleLogout = () => {
   apiLogOut()
-    .then(() => {
+  .then(() => {
+      if (ws.readyState === ws.OPEN){
+        ws.close()
+      }
       localStorage.clear()
       router.push('/sign-in')
     })
