@@ -23,7 +23,7 @@ import { useUserStore } from '@/stores/user.store';
 // import ListIdea from '@/components/ListIdea.vue'
 // import DetailIdeaSkeleton from '@/components/Skeletons/DetailIdeaSkeleton.vue'
 // import ListNotification from '@/components/ListNotification.vue'
-import ProfileSkeleton from '@/components/Skeletons/ProfileSkeleton.vue';
+import ProfileSkeleton from '@/components/skeletons/ProfileSkeleton.vue';
 
 const userStore = useUserStore()
 const { getMyIdeas, getMyHistoryActivities } = userStore

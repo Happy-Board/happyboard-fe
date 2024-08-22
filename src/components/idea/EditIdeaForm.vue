@@ -98,7 +98,7 @@
           type="button"
           class="text-black bg-gray-200 border border-gray-400 focus:outline-none hover:bg-blue-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
-          Save
+          Save Draft
         </button>
         <button
           @click.prevent="createIdea"
@@ -124,7 +124,7 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { apiCreateIdea, apiSaveIdea } from '@/apis/idea.api'
+import { apiCreateIdea, apiSaveIdea, apiUpdateIdea } from '@/apis/idea.api'
 import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import { toast } from 'vue3-toastify'
@@ -167,18 +167,34 @@ const saveIdea = () => {
     notify('warning', 'Nothing to save')
     return
   }
-  apiSaveIdea(ideaData)
-    .then(() => {
-      notify('success', 'Your idea has been saved!')
-      setTimeout(() => {
-        router.push('/')
-      }, 1000)
-    })
-    .catch((err) => {
-      console.log(err)
-      notify('error', 'Save idea failed, some thing went wrong !')
-    })
+  if (route.name === 'edit') {
+    console.log(route.name)
+    apiUpdateIdea(ideaId, ideaData)
+      .then(() => {
+        notify('success', 'Idea saved successfully')
+        setTimeout(() => {
+          router.push({ name: 'my-board' })
+        }, 500)
+      })
+      .catch((error) => {
+        console.error(error)
+        notify('error', 'Save idea failed, some thing went wrong !')
+      })
+  } else {
+    apiSaveIdea(ideaData)
+      .then(() => {
+        notify('success', 'Your idea has been saved!')
+        setTimeout(() => {
+          router.push({ name: 'my-board' })
+        }, 500)
+      })
+      .catch((err) => {
+        console.log(err)
+        notify('error', 'Save idea failed, some thing went wrong !')
+      })
+  }
 }
+
 const createIdea = () => {
   const title = document.querySelector('#title').innerHTML
   ideaData.title = title
@@ -193,21 +209,35 @@ const createIdea = () => {
     notify('warning', 'Content is not empty !')
     return
   }
-  apiCreateIdea(ideaData)
-    .then(() => {
-      notify('success', 'Create idea successfully !')
-      setTimeout(() => {
-        router.push('/')
-      }, 1000)
-    })
-    .catch((error) => {
-      console.log(error)
-      notify('error', 'Create idea failed, some thing went wrong !')
+  if (route.name === 'edit') {
+    apiUpdateIdea(ideaId, { ...ideaData, isPublished: false, isDrafted: false })
+      .then(() => {
+        notify('success', 'Create idea successfully!')
+        setTimeout(() => {
+          router.push({ name: 'my-board' })
+        }, 500)
+      })
+      .catch((error) => {
+        console.error(error)
+        notify('error', 'Create idea failed, some thing went wrong!')
+      })
+  } else {
+    apiCreateIdea(ideaData)
+      .then(() => {
+        notify('success', 'Create idea successfully!')
+        setTimeout(() => {
+          router.push({ name: 'my-board' })
+        }, 500)
+      })
+      .catch((error) => {
+        console.log(error)
+        notify('error', 'Create idea failed, some thing went wrong!')
 
-      if (error.response.status === 403) {
-        notify('warning', `You don't have permision !`)
-      }
-    })
+        if (error.response.status === 403) {
+          notify('warning', `You don't have permision!`)
+        }
+      })
+  }
 }
 const selected = ref({
   id: ideaToEdit.value.Category.id,

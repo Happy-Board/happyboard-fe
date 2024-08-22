@@ -8,6 +8,6 @@
 </template>
 <script setup>
 import EditIdeaForm from './EditIdeaForm.vue';
-import EditIdeaSkeleton from './Skeletons/EditIdeaSkeleton.vue';
+import EditIdeaSkeleton from '../skeletons/EditIdeaSkeleton.vue';
 </script>
 

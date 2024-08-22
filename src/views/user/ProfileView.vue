@@ -10,6 +10,6 @@
 </template>
 <script setup>
 import ProfileForm from "@/components/ProfileForm.vue";
-import ProfileSkeleton from "@/components/Skeletons/ProfileSkeleton.vue";
+import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton.vue";
 </script>
 <style scoped></style>

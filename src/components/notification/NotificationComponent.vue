@@ -127,12 +127,12 @@
 <script setup>
 import { onClickOutside } from '@vueuse/core'
 import { onMounted, ref } from 'vue'
-import { requestPermission } from '../configs/firebase.config'
+import { requestPermission } from '../../configs/firebase.config'
 import { getMessaging, onMessage } from 'firebase/messaging'
 import { useNotificationStore } from '@/stores/notification.store'
 import { storeToRefs } from 'pinia'
 import ListNotification from './ListNotification.vue'
-import NotificationSkeleton from './Skeletons/NotificationSkeleton.vue'
+import NotificationSkeleton from '../skeletons/NotificationSkeleton.vue'
 
 const messaging = getMessaging()
 onMounted(() => {
