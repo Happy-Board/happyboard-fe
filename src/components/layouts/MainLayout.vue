@@ -23,15 +23,48 @@ import { RouterView } from 'vue-router';
 import HeaderComponent from '../home/HeaderComponent.vue';
 import SidebarComponent from '../home/SidebarComponent.vue';
 import HeaderSkeleton from '../skeletons/HeaderSkeleton.vue';
-const ws = new WebSocket(`ws://duymt.io.vn/ws/?userId=${localStorage.getItem('uid')}`);
+// const ws = new WebSocket(`ws://duymt.io.vn/ws/?userId=${localStorage.getItem('uid')}`);
 
-ws.onopen = () => {
-  console.log("Kết nối được mở trong MainLayout")
+// ws.onopen = () => {
+//   console.log("Kết nối được mở trong MainLayout")
+// }
+
+// ws.onclose = () => {
+//   console.log('Ngắt kết nối với websocket server')
+// }
+const connectSocket = () => {
+  const ws = new WebSocket(`ws://duymt.io.vn/ws/?userId=${localStorage.getItem('uid')}`);
+  
+  ws.onopen = () => {
+    console.log('WebSocket connection opened.');
+  };
+  
+  ws.onmessage = (event) => {
+    console.log(`Receive message from server: ${event.data}`);
+  };
+  
+  ws.onclose = (event) => {
+    console.log('WebSocket connection closed!', event);
+    // Thực hiện kết nối lại nếu kết nối bị đóng không phải do ws.close()
+    if (event.wasClean === false) {
+      reconnectWebSocket();
+    }
+  };
+  
+  ws.onerror = (error) => {
+    console.error('WebSocket error:', error);
+    ws.close(); // Đóng kết nối khi có lỗi
+  };
 }
 
-ws.onclose = () => {
-  console.log('Ngắt kết nối với websocket server')
+const reconnectWebSocket = () => {
+  console.log(`Attempting to reconnect WebSocket in ${30000 / 1000} seconds...`);
+  setTimeout(() => {
+    connectSocket();
+  }, 30000 / 1000);
 }
+
+reconnectWebSocket()
 
 </script>
 <style></style>
