@@ -1,13 +1,13 @@
 <template>
   <div
     @click="viewDetailIdea(props.id)"
-    class="px-2 py-1 my-3 mx-2 border border-gray-300 rounded-lg shadow-md shadow-gray-300 overflow-hidden cursor-pointer hover:bg-slate-50"
+    class="px-2 py-1 my-3 mx-2 border border-borderColor rounded-lg shadow-md shadow-gray-300 overflow-hidden cursor-pointer hover:bg-slate-50"
   >
-    <i class="fa-solid fa-fire text-red-600 fa-lg absolute top-4 right-1"></i>
+    <img src="../../../public/animations/fire.gif" class="absolute top-0 right-0 w-7 h-7" alt="">
 
     <div class="title ms-1 me-3 overflow-hidden">
       <div
-        class="ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer w-fit !line-clamp-1 text-left me-2"
+        class="ms-1 font-bold text-xl text-primaryColor hover:text-blue-900 hover:underline cursor-pointer w-fit !line-clamp-1 text-left me-2"
         v-html="props.title"
       ></div>
     </div>
@@ -23,7 +23,7 @@
         </div> -->
       <div class="content mt-2 mb-1 ms-1 border-0 line-clamp-2">
         <div
-          class="line-clamp-2 text-sm text-left min-h-[40px]"
+          class="break-words line-clamp-2 text-sm text-left min-h-[40px]"
           data-gram="false"
           contenteditable="false"
           readonly="true"

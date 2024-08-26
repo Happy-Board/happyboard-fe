@@ -1,18 +1,18 @@
 <template>
     <div
-              class="absolute top-16 right-4 bg-white text-sm rounded-lg border p-2"
+              class="absolute top-16 right-4 bg-white text-sm rounded-lg border border-borderColor p-2"
               ref="target"
             >
               <div>
                 <router-link
                   to="/profile"
-                  class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+                  class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-backgroundColor group"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900"
+                    class="flex-shrink-0 w-5 h-5 text-gray-900"
                   >
                     <path
                       fill-rule="evenodd"
@@ -27,13 +27,13 @@
               <div>
                 <div
                   @click="emits('logout')"
-                  class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+                  class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-backgroundColor group"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900"
+                    class="flex-shrink-0 w-5 h-5 text-gray-900 "
                   >
                     <path
                       fill-rule="evenodd"

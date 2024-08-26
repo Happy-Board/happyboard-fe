@@ -3,11 +3,7 @@ import { defineStore } from 'pinia'
 import {
   apiGetProfile,
   apiUpdateProfile,
-  apiGetMyIdeas,
   apiGetMyHistoryActivities,
-  apiGetMyPublishIdeas,
-  apiGetMyDraftIdeas,
-  apiGetMyHideIdeas,
   apiGetMyDraftIdeaById,
   apiGetMyHideIdeaById
 } from '@/apis/user.api'
@@ -35,53 +31,12 @@ export const useUserStore = defineStore('user', () => {
     return await apiUpdateProfile(formData)
   }
 
-  async function getMyIdeas() {
-    await apiGetMyIdeas()
-      .then((response) => {
-        myIdeas.value = response.data.data.ideas
-        console.log(response.data.data)
-      })
-      .catch((err) => console.log(err))
-  }
-
-  async function getMyHideIdeas() {
-    return await apiGetMyHideIdeas()
-      .then((response) => {
-        response.data.data.ideas.forEach((idea) => {
-          idea.createdAt = convertTime(idea.createdAt)
-        })
-        myIdeas.value = response.data.data.ideas
-      })
-   
-  }
-
-  async function getMyPublishIdeas() {
-    return await apiGetMyPublishIdeas()
-      .then((response) => {
-        response.data.data.ideas.forEach((idea) => {
-          idea.createdAt = convertTime(idea.createdAt)
-        })
-        myIdeas.value = response.data.data.ideas
-      })
-
-  }
-
-  async function getMyDraftIdeas() {
-    return await apiGetMyDraftIdeas()
-      .then((response) => {
-        response.data.data.ideas.forEach((idea) => {
-          idea.createdAt = convertTime(idea.createdAt)
-        })
-        myIdeas.value = response.data.data.ideas
-      })
-
-  }
 
   async function getMyHistoryActivities() {
     return await apiGetMyHistoryActivities()
       .then((response) => {
         response.data.data.forEach((history) => {
-          history.createdAt = convertTime(history.createdAt)
+          history.updatedAt = convertTime(history.updatedAt)
         })
         historyActivities.value = response.data.data
       })
@@ -120,11 +75,7 @@ export const useUserStore = defineStore('user', () => {
     ideaToEdit,
     getProfile,
     updateProfile,
-    getMyIdeas,
     getMyHistoryActivities,
-    getMyHideIdeas,
-    getMyPublishIdeas,
-    getMyDraftIdeas,
     getDetailDraftIdea,
     getDetailHideIdea,
     getDetailReleaseIdea,

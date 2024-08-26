@@ -3,7 +3,7 @@
   <div v-else>
     <div class="mx-2" v-for="(notification, index) in notifications" :key="index">
     <div
-      class="flex border items-start my-1 rounded-lg hover:bg-gray-100 w-full ps-3 pe-8 py-1 cursor-pointer relative line-clamp-1"
+      class="flex border border-borderColor items-start my-1 rounded-lg hover:bg-backgroundColor w-full ps-3 pe-8 py-1 cursor-pointer relative line-clamp-1"
       @click="handleOnclickNotification(notification.id, notification.target, notification.status)"
     >
       <div
@@ -18,7 +18,7 @@
       <div class="">
         <div v-html="notification.title"></div>
         <div class="text-[10px] font-semibold text-blue-900">
-          {{ notification.createdAt }}
+          {{ notification.updatedAt }}
         </div>
       </div>
     </div>

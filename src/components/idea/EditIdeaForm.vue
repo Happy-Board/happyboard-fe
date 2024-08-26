@@ -75,7 +75,7 @@
         <div
           id="title"
           placeholder="Write your title here..."
-          class="comment-input rounded-lg border bg-white border-gray-400 focus:outline-0 py-2 px-3 pe-11 w-full text-sm"
+          class="comment-input rounded-lg border bg-white border-borderColor focus:outline-0 py-2 px-3 pe-11 w-full text-sm"
           contentEditable="true"
           spellcheck="false"
         ></div>
@@ -96,14 +96,14 @@
         <button
           @click.prevent="saveIdea"
           type="button"
-          class="text-black bg-gray-200 border border-gray-400 focus:outline-none hover:bg-blue-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="text-white bg-primaryColor/80 border border-borderColor focus:outline-none hover:bg-blue-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
           Save Draft
         </button>
         <button
           @click.prevent="createIdea"
           type="button"
-          class="text-black bg-gray-200 border border-gray-400 focus:outline-none hover:bg-green-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-green-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
           Create
         </button>
@@ -173,7 +173,8 @@ const saveIdea = () => {
       .then(() => {
         notify('success', 'Idea saved successfully')
         setTimeout(() => {
-          router.push({ name: 'my-board' })
+          router.push({ name: 'my-board-ideas' })
+
         }, 500)
       })
       .catch((error) => {
@@ -185,7 +186,7 @@ const saveIdea = () => {
       .then(() => {
         notify('success', 'Your idea has been saved!')
         setTimeout(() => {
-          router.push({ name: 'my-board' })
+          router.push({ name: 'my-board-ideas' })
         }, 500)
       })
       .catch((err) => {
@@ -214,7 +215,8 @@ const createIdea = () => {
       .then(() => {
         notify('success', 'Create idea successfully!')
         setTimeout(() => {
-          router.push({ name: 'my-board' })
+          router.push({ name: 'my-board-ideas' })
+
         }, 500)
       })
       .catch((error) => {
@@ -226,7 +228,8 @@ const createIdea = () => {
       .then(() => {
         notify('success', 'Create idea successfully!')
         setTimeout(() => {
-          router.push({ name: 'my-board' })
+          router.push({ name: 'my-board-ideas' })
+
         }, 500)
       })
       .catch((error) => {

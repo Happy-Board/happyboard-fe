@@ -5,10 +5,10 @@ export const apiUpdateProfile = async (formData) => {
   await axiosInstance.put(`/profile`, formData)
 }
 
-export const apiGetMyIdeas = async () => await axiosInstance.get(`/ideas/own`)
-export const apiGetMyPublishIdeas = async () => await axiosInstance.get(`/ideas/own/publish`)
-export const apiGetMyHideIdeas = async () => await axiosInstance.get(`/ideas/own/hide`)
-export const apiGetMyDraftIdeas = async () => await axiosInstance.get(`/ideas/own/draft`)
+export const apiGetMyIdeas = async (url) => await axiosInstance.get(`/ideas/own${url}`)
+export const apiGetMyPublishIdeas = async (url) => await axiosInstance.get(`/ideas/own/publish${url}`)
+export const apiGetMyHideIdeas = async (url) => await axiosInstance.get(`/ideas/own/hide${url}`)
+export const apiGetMyDraftIdeas = async (url) => await axiosInstance.get(`/ideas/own/draft${url}`)
 export const apiGetMyDraftIdeaById = async (id) => await axiosInstance.get(`/ideas/own/draft/${id}`)
 export const apiGetMyHideIdeaById = async (id) => await axiosInstance.get(`/ideas/own/hide/${id}`)
 

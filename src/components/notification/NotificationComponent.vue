@@ -1,16 +1,16 @@
 <template>
-  <div class="me-10 relative scroll-smooth">
+  <div class="mx-10 relative scroll-smooth">
     <div
       @click="handleOpenNotificationList"
-      class="p-1  hover:bg-blue-600/20 rounded-full relative"
-      :class="isShowNotificationList === true ? '!bg-blue-600/20' : ''"
+      class="p-1  hover:bg-secondaryColor/20 rounded-full relative"
+      :class="isShowNotificationList === true ? '!bg-secondaryColor/20' : ''"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        class="flex-shrink-0 w-7 h-7 text-gray-900 transition duration-75 hover:text-blue-950 cursor-pointer"
-        :class="isShowNotificationList === true ? '!text-blue-900' : ''"
+        class="flex-shrink-0 w-7 h-7 text-primaryColor transition duration-75 hover:text-secondaryColor cursor-pointer"
+        :class="isShowNotificationList === true ? '!text-secondaryColor' : ''"
       >
         <path
           d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z"
@@ -30,7 +30,7 @@
     </div>
     <div
       v-if="isShowNotificationList"
-      class="absolute w-fit min-w-[350px] border border-gray-200 bg-white shadow-lg shadow-gray-400 py-1 rounded-lg left-1/2 transform -translate-x-1/2 top-10 max-h-[550px] overflow-y-scroll mb-5"
+      class="absolute w-fit min-w-[350px] border border-borderColor bg-white shadow-lg shadow-gray-400 py-1 rounded-lg left-1/2 transform -translate-x-1/2 top-10 max-h-[550px] overflow-y-scroll mb-5"
       ref="notificationList"
     >
       <div class="ps-3">
@@ -38,14 +38,14 @@
         <div class="flex gap-1 mt-2 mb-4">
           <div
             class="px-2 rounded-lg font-semibold cursor-pointer"
-            :class="typeNotification === 'all' ? 'bg-blue-200' : 'hover:bg-gray-100'"
+            :class="typeNotification === 'all' ? 'bg-backgroundButtonColor' : 'hover:bg-backgroundColor'"
             @click="setType('all')"
           >
             All
           </div>
           <div
             class="px-2 rounded-lg font-semibold cursor-pointer"
-            :class="typeNotification === 'unread' ? 'bg-blue-200' : 'hover:bg-gray-100'"
+            :class="typeNotification === 'unread' ? 'bg-backgroundButtonColor' : 'hover:bg-backgroundColor'"
             @click="setType('unread')"
           >
             Unread
@@ -68,59 +68,6 @@
           </template>
         </Suspense>
       </div>
-      <!-- <ListNotification :type="typeNotification" @closeNotification="closeNotificationList" v-if="typeNotification === 'unread'" /> -->
-      <!-- <div v-if="typeNotification === 'all'">
-        <div class="mx-2" v-for="(notification, index) in notifications" :key="index">
-          <div
-            class="flex border items-start my-1 rounded-lg hover:bg-gray-100 w-full ps-3 pe-8 py-1 cursor-pointer relative line-clamp-1"
-            @click="
-              handleOnclickNotification(notification.id, notification.target, notification.status)
-            "
-          >
-            <div
-              v-if="notification.status === 0"
-              class="absolute w-3 aspect-square rounded-full bg-blue-900 top-3 right-2"
-            ></div>
-            <img
-              src="../assets/default-avatar.jpg"
-              class="w-12 aspect-square rounded-full me-2"
-              alt="avatar"
-            />
-            <div class="">
-              <div v-html="notification.title"></div>
-              <div class="text-[10px] font-semibold text-blue-900">
-                {{ notification.createdAt }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-if="typeNotification === 'unread'">
-        <div class="mx-2" v-for="(notification, index) in unreadNotifications" :key="index">
-          <div
-            class="flex border items-start my-1 rounded-lg hover:bg-gray-100 w-full ps-3 pe-8 py-1 cursor-pointer relative line-clamp-1"
-            @click="
-              handleOnclickNotification(notification.id, notification.target, notification.status)
-            "
-          >
-            <div
-              v-if="notification.status === 0"
-              class="absolute w-3 aspect-square rounded-full bg-blue-900 top-3 right-2"
-            ></div>
-            <img
-              src="../assets/default-avatar.jpg"
-              class="w-12 aspect-square rounded-full me-2"
-              alt="avatar"
-            />
-            <div class="">
-              <div v-html="notification.title"></div>
-              <div class="text-[10px] font-semibold text-blue-900">
-                {{ notification.createdAt }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>

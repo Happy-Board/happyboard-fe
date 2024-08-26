@@ -10,7 +10,7 @@
         :totalComment="idea.commentCount"
         :totalVote="idea.voteCount"
         :totalView="idea.viewCount"
-        :createdAt="idea.createdAt"
+        :updatedAt="idea.updatedAt"
       />
     </div>
     <InfiniteLoading @infinite="loadMore" />
@@ -27,7 +27,7 @@
         :totalComment="idea.commentCount"
         :totalVote="idea.voteCount"
         :totalView="idea.viewCount"
-        :createdAt="idea.createdAt"
+        :updatedAt="idea.updatedAt"
         :isDraft="idea.isDrafted"
         :avatar="idea.User.avatar"
       />
@@ -40,9 +40,9 @@ import InfiniteLoading from 'v3-infinite-loading'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
 // import { useSearchStore } from '@/stores/search.store'
-import CartIdeaComponent from '../idea/CartIdeaComponent.vue'
-import NotFoundData from '../notfound-data/NotFoundData.vue';
-import { useRouter } from 'vue-router';
+import CartIdeaComponent from '../idea/CardIdeaComponent.vue'
+import NotFoundData from '../notfound-data/NotFoundData.vue'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 // const searchStore = useSearchStore()
@@ -51,15 +51,14 @@ const homePageStore = useHomePageStore()
 const { pageData } = storeToRefs(homePageStore)
 const { loadMore } = homePageStore
 
-await loadMore().catch(error => {
-  if(error.response.status === 401){
-          router.push({ name: 'sign-in' })
-        }
+await loadMore().catch((error) => {
+  if (error.response.status === 401) {
+    router.push({ name: 'sign-in' })
+  }
 })
-
 </script>
 <style scoped>
-.spinner{
-  display: none
+.spinner {
+  display: none;
 }
 </style>

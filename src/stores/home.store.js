@@ -84,7 +84,7 @@ export const useHomePageStore = defineStore('home', () => {
     return await apiGetIdeas(query.value)
       .then((response) => {
         response.data.data.ideas.forEach((idea) => {
-          idea.createdAt = convertTime(idea.createdAt)
+          idea.updatedAt = convertTime(idea.updatedAt)
         })
         pageData.value = [...pageDataBackup.value, ...response.data.data.ideas]
         if (response.data.data.ideas.length === 5) {

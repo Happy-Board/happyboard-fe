@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-start border-b pb-2">
-    <div class="flex flex-col items-center pr-2 border-r gap-1 w-32">
+  <div class="flex items-start border-b border-borderColor pb-2">
+    <!-- <div class="flex flex-col items-center pr-2 border-r gap-1 w-32">
       <div
         class="border border-gray-500 px-2 py-1 rounded-full"
         :class="
@@ -39,15 +39,23 @@
           "
         ></i>
       </div>
-    </div>
-    <div class="flex flex-col items-start ps-2">
-      <div class="!text-3xl !font-bold overflow-hidden max-w-[500px]" v-html="idea?.title"></div>
+    </div> -->
+    <div class="flex flex-col items-start ps-2 w-full">
+      <div
+        class="!text-3xl !font-bold overflow-hidden break-words line-clamp-2 w-[90%]"
+        v-html="idea?.title"
+      ></div>
       <div class="flex justify-between items-center">
         <div class="flex items-center mt-2">
+          <button
+            @click="handleVote"
+            class="me-5 text-sm font-semibold px-3 rounded-full border border-primaryColor"
+            :class="vote === null ? 'bg-white hover:bg-backgroundButtonColor text-black' : 'bg-primaryColor text-white'"
+            >
+            {{ idea?.voteCount === 1 ? `${idea?.voteCount} Vote` : `${idea?.voteCount} Votes` }}
+          </button>
           <img
-            :src="
-              idea?.User?.avatar === '' ? '/avatar/default-avatar.jpg' : idea?.User?.avatar
-            "
+            :src="idea?.User?.avatar === '' ? '/avatar/default-avatar.jpg' : idea?.User?.avatar"
             alt="avatar"
             class="w-[2%] aspect-square rounded-full cursor-pointer lg:w-[3%] md:w-[4%] sm:w-[6%] xl:w-[3%]"
           />
@@ -58,13 +66,13 @@
               <span class="ps-1">{{ idea?.Category?.title }}</span>
             </div>
             <div class="flex">
-              <span class="text-[12px] font-thin">{{ idea?.createdAt }}</span>
+              <span class="text-[12px] font-thin">{{ idea?.updatedAt }}</span>
             </div>
             <div class="flex">
               <span class="text-[12px] font-thin">{{ `${idea?.commentCount} comments` }}</span>
             </div>
             <div class="flex">
-              <span class="text-[12px] font-thin">{{ `${idea?.viewCount} views` }}</span>
+              <span class="text-[12px] font-thin">{{ `${idea?.viewCount + 1} views` }}</span>
             </div>
           </div>
           <div class=""></div>
@@ -87,20 +95,39 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue';
 
 const route = useRoute()
 const router = useRouter()
 const ideaStore = useIdeaStore()
 const ideaId = route.params.id
+const typeIdea = route.params.type
 const { idea } = storeToRefs(ideaStore)
-const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas } = ideaStore
+const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas, getDetailPendingIdea } = ideaStore
 
-await getDetailIdea(ideaId)
-await getRelatedIdeas(ideaId).catch(error => {
-  if(error.response.status === 401){
-          router.push({ name: 'sign-in' })
-        }
+
+if(typeIdea === 'pending'){
+  await getDetailPendingIdea(ideaId)
+}
+if(typeIdea === 'publish'){
+  await getDetailIdea(ideaId)
+}
+
+await getRelatedIdeas(ideaId).catch((error) => {
+  if (error.response.status === 401) {
+    router.push({ name: 'sign-in' })
+  }
 })
+const vote = ref(idea.value?.vote)
+const handleVote = () => {
+  if (vote.value === null) {
+    increaseVote(ideaId)
+    vote.value = 'up'
+  } else {
+    decreaseVote(ideaId)
+    vote.value = null
+  }
+}
 </script>
 <style scoped>
 .ql-toolbar {

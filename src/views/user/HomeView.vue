@@ -1,6 +1,6 @@
 <template>
-  <div class="col-span-5 pt-[75px] z-0 bg-white px-8 border w-full min-h-screen">
-    <div class="mb-2 min-h-[136px]">
+  <div class="col-span-7 pt-[75px] z-0 bg-white px-8 w-full min-h-screen ms-5">
+    <div>
       <Suspense>
         <HotIdea />
         <template #fallback>
@@ -8,15 +8,15 @@
         </template>
       </Suspense>
     </div>
-    <div class="flex-1">
-      <div class="min-w-full flex mb-2 justify-end items-end">
+    <div class="flex-1 mx-2">
+      <div class="min-w-full flex mb-2 justify-start items-end mt-3">
         <div class="px-1.5 py-1 border border-gray-400 rounded-md flex items-center">
           <button
             @click="setTab('newest')"
             type="button"
             :class="
               tab === 'newest'
-                ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
+                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
                 : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
             "
           >
@@ -27,7 +27,7 @@
             type="button"
             :class="
               tab === 'highvote'
-                ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
+                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
                 : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
             "
           >
@@ -38,7 +38,7 @@
             type="button"
             :class="
               tab === 'highview'
-                ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
+                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
                 : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
             "
           >
@@ -49,7 +49,7 @@
             type="button"
             :class="
               tab === 'highcomment'
-                ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
+                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
                 : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
             "
           >
@@ -68,7 +68,7 @@
   </div>
 
   <div class="col-span-3">
-    <div class="col-span-3 mt-[95px] ms-14">
+    <div class=" mt-[90px] ">
       <Suspense>
         <div>
           <SuggestIdeaComponent
