@@ -18,7 +18,7 @@
           v-html="activity.contentIdea"
         ></div>
       </div>
-      <div class="text-sm font-semibold w-fit">{{ activity.createdAt }}</div>
+      <div class="text-sm font-semibold w-fit">{{ activity.updatedAt }}</div>
     </div>
   </div>
 </template>

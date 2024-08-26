@@ -1,12 +1,12 @@
 <template>
   <nav
-    class="block w-full px-[2%] py-3 mx-auto text-black shadow-md bg-gradient-to-tr from-blue-gray-900 to-blue-gray-800 border-b border-b-gray-400 bg-white"
+    class="block w-full px-[2%] py-3 mx-auto text-black bg-gradient-to-tr from-blue-gray-900 to-blue-gray-800 border-b border-b-borderColor bg-backgroundColor"
   >
     <div class="grid grid-cols-10 items-center justify-between text-black gap-y-4">
       <div class="col-span-2">
         <a
           href="/"
-          class="w-fit block cursor-pointer py-1.5 font-sans text-2xl font-bold leading-relaxed tracking-normal text-inherit antialiased"
+          class="text-[#4d3d91] w-fit block cursor-pointer py-1.5 font-sans text-2xl font-bold leading-relaxed tracking-normal text-inherit antialiased"
         >
           Happy Board
         </a>
@@ -48,75 +48,47 @@
       </div>
       <div class="col-span-4 flex justify-end gap-1">
         <div class="flex justify-end items-center object-fill">
+          <div class="">
+            <router-link
+              to="/create-idea"
+              :class="`flex bg-primaryColor items-center ps-1.5 pe-3 py-1 text-white rounded-full hover:bg-secondaryColor group`"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                :class="`flex-shrink-0 w-6 h-6 transition duration-75 group-hover:text-white`"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+
+              <span class="flex-1 ms-1 whitespace-nowrap text-white font-sans text-sm font-bold"
+                >New idea</span
+              >
+              <!-- <span
+              class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"
+              >Pro</span
+              > -->
+            </router-link>
+          </div>
           <NotificationComponent />
-          <!-- <button
-            v-if="mode === 'light'"
-            @click="handleChangeMode('dark')"
-            class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-700 transition-all hover:bg-white/10 active:bg-white/30 hover:text-black disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button"
-          >
-            <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-7 h-7"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </span>
-          </button> -->
-          <!-- <button
-            v-if="mode === 'dark'"
-            @click="handleChangeMode('light')"
-            class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-700 transition-all hover:bg-white/10 active:bg-white/30 hover:text-black disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button"
-          >
-            <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-7 h-7"
-              >
-                <path
-                  d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z"
-                />
-              </svg>
-            </span>
-          </button> -->
-          <!-- <button
-            class="relative ms-5 me-10 h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-700 transition-all hover:bg-white/10 active:bg-white/30 hover:text-black disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button"
-          >
-            <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-7 h-7"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M9 2.25a.75.75 0 0 1 .75.75v1.506a49.384 49.384 0 0 1 5.343.371.75.75 0 1 1-.186 1.489c-.66-.083-1.323-.151-1.99-.206a18.67 18.67 0 0 1-2.97 6.323c.318.384.65.753 1 1.107a.75.75 0 0 1-1.07 1.052A18.902 18.902 0 0 1 9 13.687a18.823 18.823 0 0 1-5.656 4.482.75.75 0 0 1-.688-1.333 17.323 17.323 0 0 0 5.396-4.353A18.72 18.72 0 0 1 5.89 8.598a.75.75 0 0 1 1.388-.568A17.21 17.21 0 0 0 9 11.224a17.168 17.168 0 0 0 2.391-5.165 48.04 48.04 0 0 0-8.298.307.75.75 0 0 1-.186-1.489 49.159 49.159 0 0 1 5.343-.371V3A.75.75 0 0 1 9 2.25ZM15.75 9a.75.75 0 0 1 .68.433l5.25 11.25a.75.75 0 1 1-1.36.634l-1.198-2.567h-6.744l-1.198 2.567a.75.75 0 0 1-1.36-.634l5.25-11.25A.75.75 0 0 1 15.75 9Zm-2.672 8.25h5.344l-2.672-5.726-2.672 5.726Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </span>
-          </button> -->
           <img
             @click="openUserOption"
-            :src="!profile.avatar ? 'avatar/default-avatar.jpg': profile.avatar "
+            :src="!profile.avatar ? 'avatar/default-avatar.jpg' : profile.avatar"
             alt="avatar"
             class="w-[5%] aspect-square rounded-full cursor-pointer lg:w-[8%] md:w-[7%] sm:w-[8%] xl:w-[7%]"
           />
           <span @click="openUserOption" class="ms-2 font-semibold text-lg cursor-pointer"
             >{{ profile.username }}
-            <PopUpUserOption v-if="showUserOption" @logout="handleLogout" @closeUserOption="closeUserOption" />
+            <PopUpUserOption
+              v-if="showUserOption"
+              @logout="handleLogout"
+              @closeUserOption="closeUserOption"
+            />
           </span>
         </div>
       </div>
@@ -136,7 +108,6 @@ import PopUpUserOption from './PopUpUserOption.vue'
 const userStore = useUserStore()
 const { profile } = storeToRefs(userStore)
 const { getProfile } = userStore
-
 
 await getProfile()
 

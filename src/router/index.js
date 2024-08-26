@@ -31,7 +31,7 @@ const router = createRouter({
           component: CreateIdea
         },
         {
-          path: 'idea/:id',
+          path: 'idea/:type/:id',
           name: 'detail-idea',
           component: DetailIdeaView
         },

@@ -36,7 +36,7 @@
             <div class="flex mt-4 !items-center">
               <button
                 @click.prevent="ggLogin"
-                class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
+                class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-secondaryColor justify-center items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +75,7 @@
             <div class="flex mt-4 !items-center">
               <button
                 @click="ggLogin"
-                class="gg-login !mb-3 !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
+                class="gg-login !mb-3 !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-secondaryColor justify-center items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +138,7 @@
             <div class="flex mt-4 !items-center">
               <button
                 @click.prevent="ggLogin"
-                class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
+                class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-secondaryColor justify-center items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

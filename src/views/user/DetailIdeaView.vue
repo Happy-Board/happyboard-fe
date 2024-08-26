@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-5 pt-[100px] px-3 border z-0 bg-white min-h-screen">
+  <div class="col-span-7 pt-[100px] px-3 ms-10 z-0 bg-white min-h-screen">
       <Suspense>
         <DetailIdea />
         <template #fallback>
@@ -14,7 +14,7 @@
       </Suspense>
   </div>
 
-  <div class="col-span-3 mt-[95px] ms-14">
+  <div class="col-span-3 mt-[95px]">
     <Suspense>
       <SuggestIdeaComponent feature="Related ideas" :ideas="relatedIdeas" />
       <template #fallback>

@@ -1,6 +1,6 @@
 <template>
-  <div class="col-span-5 flex pt-[90px] z-0 bg-white px-5 min-h-screen">
-    <div class="flex flex-col gap-5 w-full">
+  <div class="col-span-10 flex pt-[90px] z-0 bg-white px-5 min-h-screen">
+    <div class="flex flex-col gap-5 w-[80%] mx-auto">
       <p class="font-semibold text-3xl">Let's create your idea</p>
       <Listbox class="w-2/5" as="div" v-model="selected">
         <ListboxLabel class="block text-sm font-medium leading-6 text-black"
@@ -75,7 +75,7 @@
         <div
           id="title"
           placeholder="Write your title here..."
-          class="comment-input rounded-lg border bg-white border-gray-400 focus:outline-0 py-2 px-3 pe-11 w-full text-sm"
+          class="comment-input rounded-lg border bg-white border-borderColor focus:outline-0 py-2 px-3 pe-11 w-full text-sm"
           contentEditable="true"
           spellcheck="false"
         ></div>
@@ -97,14 +97,14 @@
         <button
         @click.prevent="saveIdea"
           type="button"
-          class="text-black bg-gray-200 border border-gray-400 focus:outline-none hover:bg-blue-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="text-white bg-primaryColor/90 border border-borderColor focus:outline-none hover:bg-secondaryColor/90 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2    "
         >
           Save Draft
         </button>
         <button
           @click.prevent="createIdea"
           type="button"
-          class="text-black bg-gray-200 border border-gray-400 focus:outline-none hover:bg-green-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2    "
         >
           Create
         </button>
@@ -158,7 +158,7 @@ const saveIdea = () => {
   apiSaveIdea(ideaData).then(() => {
       notify('success', 'Your idea has been saved!')
       setTimeout(() => {
-        router.push('/')
+        router.push({name: 'my-board-ideas'})
       }, 1000)
     })
     .catch((err) => {
@@ -184,7 +184,7 @@ const createIdea = () => {
     .then(() => {
       notify('success', 'Create idea successfully !')
       setTimeout(() => {
-        router.push('/')
+        router.push({name: 'my-board-ideas'})
       }, 1000)
     })
     .catch((err) => {

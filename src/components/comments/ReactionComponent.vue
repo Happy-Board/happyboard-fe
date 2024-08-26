@@ -7,42 +7,42 @@
     <div class="relative flex">
       <img
         @click="react('like')"
-        src="../assets//icons/png/like.png"
+        src="../../assets//icons/png/like.png"
         alt=""
         :class="props.currentReact === 'like' ? 'bg-[#cce0ff]' : ''"
         class="absolute top-[-1px] left-[-2px] transition hover:scale-150"
       />
       <img
         @click="react('love')"
-        src="../assets//icons/png/love.png"
+        src="../../assets//icons/png/love.png"
         :class="props.currentReact === 'love' ? 'bg-[#cce0ff]' : ''"
         class="absolute top-[-1px] left-[32px] transition hover:scale-150"
         alt=""
       />
       <img
         @click="react('haha')"
-        src="../assets//icons/png/haha.png"
+        src="../../assets//icons/png/haha.png"
         :class="props.currentReact === 'haha' ? 'bg-[#cce0ff]' : ''"
         class="absolute top-[-1px] left-[66px] transition hover:scale-150"
         alt=""
       />
       <img
         @click="react('wow')"
-        src="../assets//icons/png/wow.png"
+        src="../../assets//icons/png/wow.png"
         :class="props.currentReact === 'wow' ? 'bg-[#cce0ff]' : ''"
         class="absolute top-[-1px] left-[100px] transition hover:scale-150"
         alt=""
       />
       <img
         @click="react('sad')"
-        src="../assets//icons/png/sad.png"
+        src="../../assets//icons/png/sad.png"
         :class="props.currentReact === 'sad' ? 'bg-[#cce0ff]' : ''"
         class="absolute top-[-1px] left-[134px] transition hover:scale-150"
         alt=""
       />
       <img
         @click="react('angry')"
-        src="../assets//icons/png/angry.png"
+        src="../../assets//icons/png/angry.png"
         :class="props.currentReact === 'angry' ? 'bg-[#cce0ff]' : ''"
         class="absolute top-[-1px] left-[168px] transition hover:scale-150"
         alt=""

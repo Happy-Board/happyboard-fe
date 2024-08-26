@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-6 pt-2 pb-4 border-t border-slate-400 w-full">
+  <div class="grid grid-cols-6 pt-2 pb-4 border-t border-borderColor w-full">
     <div class="col-span-1 flex flex-col gap-3 mt-1.5 mr-3 text-[12px] items-end">
       <AnimatedPlaceholder width="100%" height="8px" border-radius="10px" />
       <AnimatedPlaceholder width="50%" height="8px" border-radius="10px" />

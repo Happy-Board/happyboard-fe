@@ -48,7 +48,7 @@
                 class="font-medium text-gray-600 cursor-pointer mx-1 hover:text-gray-800 hover:underline"
                 >Reply</span
               >
-              <span class="font-medium text-gray-600 text-[12px] mx-1">{{ props.createdAt }}</span>
+              <span class="font-medium text-gray-600 text-[12px] mx-1">{{ props.updatedAt }}</span>
             </div>
             <div v-if="isOpenReply" class="comment-level-1 mt-5 flex items-start gap-1">
               <img
@@ -108,7 +108,7 @@ const props = defineProps({
   id: Number,
   content: String,
   author: String,
-  createdAt: String,
+  updatedAt: String,
   react: String,
   avatar: String
 })

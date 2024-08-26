@@ -1,6 +1,6 @@
 <template>
-  <div id="carouselElement" ref="carouselElement">
-    <carousel ref="myCarousel" :items-to-show="2.5" :wrap-around="true" :snap-align="'start'">
+  <div v-if="hotIdeas.length >= 3" id="carouselElement" ref="carouselElement">
+    <carousel ref="myCarousel" :autoplay="hotIdeas.length === 3 ? 0 : 2000" :items-to-show="3" :wrap-around="true" :snap-align="'start'" :pauseAutoplayOnHover="true">
       <slide v-for="(idea, index) in hotIdeas" :key="index">
         <HotCardideaComponenet
           :id="idea.id"

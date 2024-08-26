@@ -1,11 +1,11 @@
 <template>
-  <div class="grid grid-cols-6 pt-2 pb-4 border-t border-slate-400">
+  <div class="grid grid-cols-6 pt-2 pb-4 border-t border-borderColor">
     <div class="col-span-1 flex flex-col gap-1 mt-1.5 mr-3 text-[12px]">
       <div class="flex justify-end font-medium text-gray-900">
         <span class="font-medium mr-0.5">{{ props.totalComment }}</span>
         {{ props.totalComment === 1 ? 'comment' : 'comments' }}
       </div>
-      <div class="flex justify-end font-medium text-green-900">
+      <div class="flex justify-end font-medium text-green-600">
         <span class="font-medium mr-0.5">{{ props.totalVote }}</span
         >{{ props.totalVote === 1 ? 'vote' : 'votes' }}
       </div>
@@ -17,10 +17,28 @@
     <div class="col-span-5">
       <div class="title ms-1 flex justify-between">
         <div
-          @click="viewDetailIdea(props.id)"
-          class="text-wrap me-5 ms-1 font-bold text-xl text-blue-900 hover:text-blue-900 hover:underline cursor-pointer line-clamp-2"
+          @click="viewDetailIdea()"
+          class="text-wrap me-5 ms-1 font-bold text-xl text-primaryColor hover:text-secondaryColor break-words hover:underline cursor-pointer line-clamp-2"
           v-html="props?.title"
         ></div>
+        <div
+          v-if="props.isDraft === true"
+          class="bg-gray-600 px-2 rounded-lg text-[10px] h-fit font-bold text-white"
+        >
+          Draft
+        </div>
+        <div
+          v-if="props.isPublish === true"
+          class="bg-green-600 px-2 rounded-lg text-[10px] h-fit font-bold text-white"
+        >
+          Release
+        </div>
+        <div
+          v-if="props.isPublish === false && props.isDraft === false"
+          class="bg-yellow-600 px-2 rounded-lg text-[10px] h-fit font-bold text-white"
+        >
+          Pending
+        </div>
         <!-- <div v-if="props.author === userName" class="dropdown h-[30px]">
           <button
             class="dropbtn px-2 aspect-square rounded-full bg-gray-50 hover:bg-gray-200 font-medium"
@@ -51,13 +69,14 @@
           ></div>
         </div>
       </div>
+
       <div class="flex flex-row justify-end items-center text-[12px] pt-1">
-        <img
-          :src="avatarURL"
-          alt="avatar"
-          class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3%]"
-        />
-        <span class="ms-2 me-6 font-semibold cursor-pointer">{{ props.author }}</span>
+        <!-- <img
+            :src="avatarURL"
+            alt="avatar"
+            class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3%]"
+          />
+          <span class="ms-2 me-6 font-semibold cursor-pointer">{{ props.author }}</span> -->
 
         <div class="flex relative">
           <i
@@ -69,7 +88,19 @@
         </div>
 
         <div class="flex">
-          <span class="ms-2 text-[11px]">{{ props.createdAt }}</span>
+          <span class="ms-2 text-[11px]">{{ props.updatedAt }}</span>
+        </div>
+        <div class="flex space-x-4 ms-5">
+          <i
+            v-if="props.isDraft === true || props.isPublish === true"
+            @click="handleEdit"
+            class="fa-solid fa-pen-to-square cursor-pointer text-secondaryColor hover:text-blue-800"
+          ></i>
+          <i
+            v-if="props.isPublish === false && props.isDraft === false"
+            class="fa-solid fa-pen-to-square cursor-not-allowed text-gray-400"
+          ></i>
+          <i class="fa-solid fa-trash-can cursor-pointer text-red-600 hover:text-red-800"></i>
         </div>
       </div>
     </div>
@@ -78,22 +109,7 @@
 <script setup>
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useRouter } from 'vue-router'
-// import { useUserStore } from '@/stores/user.store'
-// import { storeToRefs } from 'pinia';
 
-
-// const userStore = useUserStore()
-// const { profile } = storeToRefs(userStore)
-// import { defineEmits } from 'vue'
-
-// const emits = defineEmits(['vote', 'unvote'])
-
-// const vote = () => {
-//   emits('vote', props.index)
-// }
-// const unvote = () => {
-//   emits('unvote', props.index)
-// }
 const router = useRouter()
 const props = defineProps({
   index: Number,
@@ -105,22 +121,28 @@ const props = defineProps({
   totalVote: Number,
   totalView: Number,
   description: String,
-  createdAt: String,
+  updatedAt: String,
   isPublish: Boolean,
   isDraft: Boolean,
   avatar: String
 })
 
-const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
+// const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
 
-// const handleEdit = () => {
-//   router.push({ name: 'edit', params: { type: props.isDraft ? 'draft' : 'release', id: props.id } })
-// }
+const handleEdit = () => {
+  router.push({ name: 'edit', params: { type: props.isDraft ? 'draft' : 'release', id: props.id } })
+}
 // const handleDelete = () => {
 //   console.log('delete')
 // }
-const viewDetailIdea = (id) => {
-  router.push(`idea/${id}`)
+const viewDetailIdea = () => {
+  if (props.isDraft === true) {
+    router.push({ name: 'edit', params: { type: 'draft', id: props.id } })
+  } else if (props.isPublish === true) {
+    router.push({ name: 'detail-idea', params: { type: 'publish', id: props.id } })
+  } else {
+    router.push({ name: 'detail-idea', params: { type: 'pending', id: props.id } })
+  }
 }
 </script>
 <style scoped>

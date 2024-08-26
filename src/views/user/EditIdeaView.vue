@@ -8,6 +8,6 @@
 </template>
 <script setup>
 import EditIdea from '@/components/idea/EditIdea.vue'
-import LeftbarComponent from '@/components/my-ideas/LeftbarComponent.vue'
+import LeftbarComponent from '@/components/my-ideas/TabIdea.vue'
 </script>
 <style></style>

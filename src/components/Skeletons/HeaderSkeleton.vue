@@ -1,6 +1,6 @@
 <template>
     <nav
-      class="block w-full px-[2%] py-3 mx-auto text-black shadow-md bg-gradient-to-tr from-blue-gray-900 to-blue-gray-800 border-b border-b-gray-400 bg-white"
+      class="block w-full px-[2%] py-3 mx-auto text-black shadow-md bg-gradient-to-tr from-blue-gray-900 to-blue-gray-800 border-b border-b-borderColor bg-white"
     >
       <div class="grid grid-cols-10 items-center justify-between text-black gap-y-4">
         <div class="col-span-2">

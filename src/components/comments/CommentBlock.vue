@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 p-4 rounded-xl mb-10">
+  <div class="bg-backgroundColor p-4 rounded-xl mb-10">
     <div class="relative">
       <div
         id="comment-input"
@@ -31,7 +31,7 @@
         :author="comment?.User?.username"
         :id="comment?.id"
         :ideaId="props?.ideaId"
-        :createdAt="comment?.createdAt"
+        :updatedAt="comment?.updatedAt"
         :react="comment?.reaction"
         :avatar="comment?.User?.avatar"
       />
@@ -45,7 +45,7 @@
           :author="reply?.User?.username"
           :id="reply?.id"
           :ideaId="props?.ideaId"
-          :createdAt="reply?.createdAt"
+          :updatedAt="reply?.updatedAt"
           :react="reply?.reaction"
           :avatar="reply?.User?.avatar"
         />
