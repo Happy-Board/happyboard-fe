@@ -18,6 +18,7 @@ export default {
       backgroundButtonColor: '#c9c6dd',
       borderColor: '#c9c6dd',
       gray: {
+        200: '#e5e7eb',
         400: '#9ca3af',
         600: '#4b5563',
         700: '#374151',
@@ -37,7 +38,8 @@ export default {
         700: '#a16207'
       },
       blue: {
-        800: '#1e40af'
+        800: '#1e40af',
+        900: '#1e3a8a'
       },
     }
   },

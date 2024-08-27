@@ -3,7 +3,8 @@
     class="block w-full px-[2%] py-3 mx-auto text-black bg-gradient-to-tr from-blue-gray-900 to-blue-gray-800 border-b border-b-borderColor bg-backgroundColor"
   >
     <div class="grid grid-cols-10 items-center justify-between text-black gap-y-4">
-      <div class="col-span-2">
+      <div class="col-span-2 flex">
+        <img src="../../assets/icons/png/logo.png" alt="" class="w-14 h-auto">
         <a
           href="/"
           class="text-[#4d3d91] w-fit block cursor-pointer py-1.5 font-sans text-2xl font-bold leading-relaxed tracking-normal text-inherit antialiased"

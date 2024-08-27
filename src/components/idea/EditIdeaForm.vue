@@ -4,7 +4,7 @@
       <p class="font-semibold text-3xl">Edit your idea</p>
       <Listbox class="w-2/5" as="div" v-model="selected">
         <ListboxLabel class="block text-sm font-medium leading-6 text-black"
-          >Category <span class="text-red-500">*</span></ListboxLabel
+          >Category <span class="text-red-600">*</span></ListboxLabel
         >
         <div class="relative mt-2">
           <ListboxButton
@@ -40,7 +40,7 @@
               >
                 <li
                   :class="[
-                    active ? 'bg-gray-500 text-white' : 'text-gray-900',
+                    active ? 'bg-primaryColor text-white' : 'text-gray-900',
                     'relative cursor-pointer select-none py-2 pl-3 pr-9'
                   ]"
                 >
@@ -70,7 +70,7 @@
       </Listbox>
       <div class="">
         <label for="message" class="block text-sm font-medium text-black mb-3"
-          >Title <span class="text-red-500">*</span></label
+          >Title <span class="text-red-600">*</span></label
         >
         <div
           id="title"
@@ -82,7 +82,7 @@
       </div>
       <div class="mb-10">
         <label class="block text-sm font-medium text-black mb-3" for="content"
-          >Content <span class="text-red-500">*</span></label
+          >Content <span class="text-red-600">*</span></label
         >
         <QuillEditor
           id="content"
@@ -96,14 +96,14 @@
         <button
           @click.prevent="saveIdea"
           type="button"
-          class="text-white bg-primaryColor/80 border border-borderColor focus:outline-none hover:bg-blue-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
         >
           Save Draft
         </button>
         <button
           @click.prevent="createIdea"
           type="button"
-          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-green-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 "
         >
           Create
         </button>

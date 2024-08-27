@@ -9,8 +9,8 @@
       </Suspense>
     </div>
     <div class="flex-1 mx-2">
-      <div class="min-w-full flex mb-2 justify-start items-end mt-3">
-        <div class="px-1.5 py-1 border border-gray-400 rounded-md flex items-center">
+      <div class="min-w-full border-t border-t-borderColor flex mb-1 pt-1 justify-start items-end mt-3">
+        <div class="px-1.5 py-1 rounded-md flex items-center">
           <button
             @click="setTab('newest')"
             type="button"
@@ -68,7 +68,7 @@
   </div>
 
   <div class="col-span-3">
-    <div class=" mt-[90px] ">
+    <div class="mt-[90px]">
       <Suspense>
         <div>
           <SuggestIdeaComponent
@@ -102,8 +102,6 @@ const ListIdea = defineAsyncComponent(() => import('@/components/home/ListIdea.v
 const homePageStore = useHomePageStore()
 const { tab, recentIdeas } = storeToRefs(homePageStore)
 const { setTab } = homePageStore
-
-
 </script>
 <style>
 .container.spinner {

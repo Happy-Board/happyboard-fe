@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-6 pt-2 pb-4 border-t border-borderColor">
+  <div class="grid grid-cols-6 pt-2 pb-1 border-t border-borderColor">
     <div class="col-span-1 flex flex-col gap-1 mt-1.5 mr-3 text-[12px]">
       <div class="flex justify-end font-medium text-gray-900">
         <span class="font-medium mr-0.5">{{ props.totalComment }}</span>
@@ -51,7 +51,7 @@
           ></div>
         </div>
       </div>
-      <div class="flex flex-row justify-end items-center text-[12px] pt-1">
+      <div class="flex flex-row justify-end items-center text-[12px]">
         <img
           :src="avatarURL"
           alt="avatar"
@@ -80,7 +80,6 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useRouter } from 'vue-router'
 // import { useUserStore } from '@/stores/user.store'
 // import { storeToRefs } from 'pinia';
-
 
 // const userStore = useUserStore()
 // const { profile } = storeToRefs(userStore)
@@ -120,7 +119,7 @@ const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avat
 //   console.log('delete')
 // }
 const viewDetailIdea = (id, type) => {
-  router.push(`idea/${type}/${id}`)
+  router.push({ name: 'detail-idea', params: { type: type, id: id } })
 }
 </script>
 <style scoped>

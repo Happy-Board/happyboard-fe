@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col justify-center h-screen bg-[#c9d6ff] bg-gradient-to-r from-gray-400 to-white items-center relative"
+    class="flex flex-col justify-center h-screen bg-primaryColor bg-gradient-to-r from-primaryColor to-backgroundColor items-center relative"
   >
     <div :class="`container${classAdded} z-10 mt-10`" id="container">
       <div class="form-container sign-up">
@@ -23,9 +23,9 @@
           />
           <button
             @click.prevent="signUp"
-            class="group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+            class="group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left hover:!bg-secondaryColor"
           >
-            <span class="relative text-black font-bold">Sign Up</span>
+            <span class="relative !text-white font-bold ">Sign Up</span>
           </button>
           <div class="!text-center !w-full !mt-5">
             <span class="font-light text-gray-300"
@@ -36,7 +36,7 @@
             <div class="flex mt-4 !items-center">
               <button
                 @click.prevent="ggLogin"
-                class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-secondaryColor justify-center items-center"
+                class="gg-login !bg-white w-full !text-black  flex border !border-borderColor !rounded-full px-2 py-1 font-medium hover:!bg-gray-200 hover:text-secondaryColor justify-center items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -119,15 +119,15 @@
           />
           <span
             @click="setIsShowForgetPasswordPopUp(true)"
-            class="my-2 font-medium hover:text-[#000000] hover:cursor-pointer"
+            class="my-2 font-medium hover:text-secondaryColor hover:cursor-pointer"
           >
             Forget Your Password?
           </span>
           <button
             @click.prevent="signIn"
-            class="group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+            class="group overflow-hidden relative hover:!bg-secondaryColor"
           >
-            <span class="relative font-bold text-black">Sign In</span>
+            <span class="relative font-bold text-white">Sign In</span>
           </button>
           <div class="!text-center !w-full !mt-5">
             <span class="font-light text-gray-300"
@@ -138,7 +138,7 @@
             <div class="flex mt-4 !items-center">
               <button
                 @click.prevent="ggLogin"
-                class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-secondaryColor justify-center items-center"
+                class="gg-login !bg-white w-full !text-black  flex border !border-borderColor !rounded-full px-2 py-1 font-medium hover:!bg-gray-200 hover:text-secondaryColor justify-center items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -176,11 +176,11 @@
             <h1 class="font-extrabold text-3xl">Hello, Friend!</h1>
             <p>Register with your personal details to use all of site features</p>
             <button
-              class="hidden-button group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+              class="hidden-button group overflow-hidden relative "
               id="login"
               @click="setClassAdded('')"
             >
-              <span class="relative text-base text-black font-bold"> Sign In </span>
+              <span class="relative text-base !text-black font-bold"> Sign In </span>
             </button>
           </div>
           <div class="toggle-panel toggle-right">
@@ -201,10 +201,10 @@
 
     <div
       v-if="isShowForgetPasswordPopUp"
-      class="forget-password absolute flex flex-col items-center justify-center w-full h-full bg-[#5525c43d] z-50"
+      class="forget-password absolute flex flex-col items-center justify-center w-full h-full bg-backgroundColor/30 z-50"
     >
       <div
-        class="bg-[#fff] h-auto rounded-lg shadow-md shadow-black !p-5 !py-8 text-center relative"
+        class="bg-[#fff] h-auto rounded-lg shadow-md !p-8 text-center relative  border border-borderColor"
       >
         <div v-if="!isSentEmail">
           <p class="font-bold text-xl">Enter your Email to get new password.</p>
@@ -217,7 +217,7 @@
 
           <button
             @click="handleForgotPassword"
-            class="group !p-2 py-1 rounded-md overflow-hidden relative bg-gray-500 before:absolute before:inset-0 before:bg-gray-400 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+            class="group !px-3 !py-1 rounded-full overflow-hidden relative bg-primaryColor hover:bg-secondaryColor"
           >
             <span class="relative text-white">Get password</span>
           </button>
@@ -235,7 +235,7 @@
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          class="absolute right-[2px] top-[2px] w-5 h-5 hover:cursor-pointer"
+          class="absolute right-[2px] top-[2px] w-5 h-5 hover:cursor-pointer font-bold"
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
@@ -256,7 +256,7 @@ onMounted(() => {
 })
 const ggLogin = () => {
   console.log('gg login')
-  window.open('http://duymt.io.vn/api/v1/auth/google/callback/', '_self')
+  window.open('http://localhost:8000/api/v1/auth/google/callback/', '_self')
 }
 const router = useRouter()
 const signInInfo = reactive({
@@ -406,8 +406,8 @@ const signUp = () => {
 }
 
 .container button {
-  background-color: #afafaf;
-  color: #000000;
+  background-color: #7061d1;
+  color: #ffffff;
   font-size: 15px;
   padding: 8px 45px;
   border: 1px solid transparent;
@@ -530,7 +530,7 @@ const signUp = () => {
 
 .toggle {
   height: 100%;
-  background: linear-gradient(to right, #f7f7f7, #818181);
+  background: linear-gradient(to right, #eff1f3, #5d4ca5);
   color: #000000;
   position: relative;
   left: -100%;

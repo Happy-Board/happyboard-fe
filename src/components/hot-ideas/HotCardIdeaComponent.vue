@@ -1,9 +1,9 @@
 <template>
   <div
     @click="viewDetailIdea(props.id)"
-    class="px-2 py-1 my-3 mx-2 border border-borderColor rounded-lg shadow-md shadow-gray-300 overflow-hidden cursor-pointer hover:bg-slate-50"
+    class="px-2 py-1 my-3 mx-2 border border-borderColor rounded-lg overflow-hidden cursor-pointer hover:bg-slate-50"
   >
-    <img src="../../../public/animations/fire.gif" class="absolute top-0 right-0 w-7 h-7" alt="">
+    <img src="../../../public/animations/fire.gif" class="absolute top-0 right-0 w-7 h-7" alt="" />
 
     <div class="title ms-1 me-3 overflow-hidden">
       <div
@@ -50,7 +50,7 @@ const props = defineProps({
 const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
 const router = useRouter()
 const viewDetailIdea = (id) => {
-  router.push(`idea/${id}`)
+  router.push({ name: 'detail-idea', params: { type: 'publish', id: id } })
 }
 </script>
 <style scoped>
