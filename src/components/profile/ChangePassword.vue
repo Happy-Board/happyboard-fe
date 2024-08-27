@@ -2,6 +2,7 @@
 import { apiUpdatePassword } from '@/apis/user.api'
 import { notify } from '@/utils/toast'
 import { ref, watch } from 'vue'
+import ModalComponent from './ModalComponent.vue'
 
 const loading = ref(false)
 const maxlength = 20
@@ -20,6 +21,8 @@ const isErrorNewPasswordShow = ref(false)
 const isErrorConfirmNewPasswordShow = ref(false)
 
 const isEmptyFields = ref(true)
+
+let visibleSubmit = ref(false)
 
 const validateOldPassword = () => {
   if (oldPassword.value === '') {
@@ -68,13 +71,17 @@ const handleUpdate = (fieldRef, value) => {
 const submitForm = async () => {
   validateOldPassword()
   validateNewPassword()
+  if (!isErrorOldPasswordShow.value && !isErrorConfirmNewPasswordShow.value)
+    visibleSubmit.value = true
+}
+
+const changePassword = () => {
   if (!isErrorOldPasswordShow.value && !isErrorConfirmNewPasswordShow.value) {
     loading.value = true
     let payload = {
       old_password: oldPassword.value,
       new_password: newPassword.value
     }
-    console.log(`payload::`, payload)
     apiUpdatePassword(payload)
       .then(() => {
         notify('success', 'Password updated successfully')
@@ -83,13 +90,11 @@ const submitForm = async () => {
         if (err.response.status === 400) isErrorOldPasswordShow.value = true
       })
       .finally(() => {
-        resetFields()
+        visibleSubmit.value = false
         loading.value = false
       })
   }
 }
-
-const updateData = () => {}
 
 // Follow field change
 watch(oldPassword, () => {
@@ -217,7 +222,7 @@ watch(confirmNewPassword, () => {
       <button
         v-if="isEmptyFields"
         type="button"
-        class="text-white font-bold bg-blue-300 rounded-lg text-sm w-full md:max-w-40 px-5 py-2.5 text-center"
+        class="text-white font-bold bg-blue-700 rounded-lg text-sm w-full md:max-w-40 px-5 py-2.5 text-center"
         :style="{ cursor: 'not-allowed' }"
       >
         Submit
@@ -238,6 +243,34 @@ watch(confirmNewPassword, () => {
       </button>
     </div>
   </form>
+
+  <!-- Modal Confirm Save Change -->
+  <ModalComponent
+    v-if="visibleSubmit"
+    title="Confirm Action"
+    maxWidth="sm"
+    :visible="visibleSubmit"
+    v-on:close="visibleSubmit = false"
+  >
+    <p class="text-gray-800">Are you sure you want change password ?</p>
+
+    <div class="text-right mt-4">
+      <button
+        @click="visibleSubmit = false"
+        class="px-4 py-2 text-sm text-gray-600 focus:outline-none hover:underline"
+      >
+        Cancel
+      </button>
+      <button
+        class="mr-2 px-4 py-2 text-sm rounded text-white bg-blue-700 focus:outline-none hover:bg-blue-800"
+        @click="changePassword"
+      >
+        Submit
+      </button>
+    </div>
+  </ModalComponent>
+  <!-- End Modal Confirm Save Change -->
+
   <!-- Loading -->
   <div
     class="fixed w-screen h-screen top-0 left-0 flex items-center justify-center z-50 transition-opacity duration-500 ease-in-out"
@@ -256,7 +289,7 @@ watch(confirmNewPassword, () => {
         <div class="max-h-full px-4 py-4 flex flex-col items-center gap-3">
           <svg
             aria-hidden="true"
-            class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            class="w-8 h-8 text-blue-700 animate-spin fill-blue-800"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

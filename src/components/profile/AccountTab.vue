@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/user.store'
 import { storeToRefs } from 'pinia'
 import InputField from './InputField.vue'
-import Modal from './Modal.vue'
+import Modal from './ModalComponent.vue'
 import { apiUpdateProfile } from '@/apis/user.api'
 import { notify } from '@/utils/toast'
 import { nextTick } from 'vue'
@@ -186,7 +186,7 @@ const updateBio = (event) => {
   <!-- Avatar -->
   <div class="avatar flex items-center flex-col md:flex-row gap-2 mb-4">
     <img
-      :src="avatar"
+      :src="avatar || './avatar/default-avatar.jpg'"
       class="w-32 h-32 md:w-28 md:h-28 object-cover rounded-lg shadow-2xl"
       alt="Avatar"
     />
@@ -270,7 +270,7 @@ const updateBio = (event) => {
     <button
       v-if="!isChanged"
       type="button"
-      class="w-full md:w-auto text-white bg-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+      class="w-full md:w-auto text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
       :style="{ cursor: 'not-allowed' }"
       disabled
     >
@@ -313,7 +313,7 @@ const updateBio = (event) => {
     </div>
   </Modal>
 
-  <!-- Model Confirm Save Change -->
+  <!-- Modal Confirm Save Change -->
   <Modal
     v-if="visibleSaveChange"
     title="Confirm Action"
@@ -331,14 +331,14 @@ const updateBio = (event) => {
         Cancel
       </button>
       <button
-        class="mr-2 px-4 py-2 text-sm rounded text-white bg-blue-600 focus:outline-none hover:bg-blue-700"
+        class="mr-2 px-4 py-2 text-sm rounded text-white bg-blue-700 focus:outline-none hover:bg-blue-800"
         @click="updateInfo"
       >
         Save
       </button>
     </div>
   </Modal>
-  <!-- End Model Confirm Save Change -->
+  <!-- End Modal Confirm Save Change -->
 
   <!-- Loading -->
   <div
@@ -358,7 +358,7 @@ const updateBio = (event) => {
         <div class="max-h-full px-4 py-4 flex flex-col items-center gap-3">
           <svg
             aria-hidden="true"
-            class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            class="w-8 h-8 text-blue-700 animate-spin fill-blue-800"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

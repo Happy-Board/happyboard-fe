@@ -1,26 +1,23 @@
 <script setup>
-import { ref } from 'vue'
-import Account from './Account.vue'
-import ChangePassword from './ChangePassword.vue'
-import SkeletonView from '@/views/user/SkeletonView.vue'
-import History from './History.vue'
+import { defineAsyncComponent, ref } from 'vue'
 
 const tabs = [
   {
     name: 'Account',
-    component: Account
+    component: defineAsyncComponent(async () => {
+      return import('./AccountTab.vue')
+    }),
+    skeleton: defineAsyncComponent(() => import('../skeletons/TabAccountSkeleton.vue'))
   },
   {
     name: 'Change Password',
-    component: ChangePassword
+    component: defineAsyncComponent(async () => {
+      return import('./ChangePassword.vue')
+    }),
+    skeleton: defineAsyncComponent(() => import('../skeletons/TabChangePasswordSkeleton.vue'))
   }
-  // {
-  //   name: 'History',
-  //   component: History
-  // }
 ]
 
-// Define the active tab
 const activeTab = ref(0)
 
 // Function to switch tabs
@@ -34,16 +31,13 @@ const switchTab = (tabId) => {
     <div class="profile-setting">
       <h5 class="pt-1 font-bold text-xl">Profile Setting</h5>
       <div class="relative right-0">
-        <ul
-          class="relative flex flex-wrap list-none rounded-t-md text-gray-400 border-b-2"
-          role="list"
-        >
+        <ul class="relative flex flex-wrap list-none rounded-t-md text-gray-400" role="list">
           <li
             v-for="(tab, index) in tabs"
             :key="index"
             class="z-30 text-center font-bold p-2"
             :class="{
-              'border-purple-600 border-b-2 text-purple-600': activeTab === index
+              'border-primaryColor border-b-2 text-primaryColor': activeTab === index
             }"
           >
             <a
@@ -58,21 +52,12 @@ const switchTab = (tabId) => {
           </li>
         </ul>
         <div class="p-5">
-          <div
-            v-for="(tab, index) in tabs"
-            :key="index"
-            v-show="activeTab === index"
-            class="block opacity-100"
-            :id="tab.name.toLowerCase()"
-            role="tabpanel"
-          >
-            <suspense>
-              <component :is="tab.component" />
-              <template #fallback>
-                <SkeletonView />
-              </template>
-            </suspense>
-          </div>
+          <suspense>
+            <component :is="tabs[activeTab].component" />
+            <template #fallback>
+              <component :is="tabs[activeTab].skeleton" />
+            </template>
+          </suspense>
         </div>
       </div>
     </div>
