@@ -312,7 +312,7 @@ const updateBio = (event) => {
       </button>
     </div>
   </Modal>
-
+ 
   <!-- Model Confirm Save Change -->
   <Modal
     v-if="visibleSaveChange"

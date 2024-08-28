@@ -42,9 +42,13 @@ import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
 import { useMyBoardStore } from '@/stores/my-board.store'
 import { storeToRefs } from 'pinia'
 import TabIdea from './TabIdea.vue'
-//   import ListHistory from '@/components/ListHistory.vue'
+import { useUserStore } from '@/stores/user.store'
 
+const userStore = useUserStore()
+
+const { getMyHistoryActivities } = userStore
 const myBoardStore = useMyBoardStore()
 const { tab } = storeToRefs(myBoardStore)
+getMyHistoryActivities()
 </script>
 <style scoped></style>

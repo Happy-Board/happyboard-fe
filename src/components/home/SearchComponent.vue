@@ -11,13 +11,13 @@
   <ul
     v-if="searchData.length && props.isOpen"
     ref="target"
-    class="w-full rounded-xl bg-white border border-gray-300 px-4 py-2 space-y-1 absolute z-10 top-12 shadow-xl"
+    class="w-full rounded-xl bg-white border border-borderColor px-4 py-2 space-y-1 absolute z-10 top-12 shadow-xl"
   >
     <li
       v-for="result in searchData"
       :key="result.id"
       @click="handleShowDetailIdea(result.id)"
-      class="cursor-pointer hover:bg-gray-100 p-1 rounded-lg px-2 text-blue-900 font-semibold"
+      class="cursor-pointer hover:bg-backgroundColor p-1 rounded-lg px-2 text-primaryColor font-semibold"
     >
       <div v-html="result.title"></div>
     </li>
@@ -71,10 +71,10 @@ const handleShowResultsInHomePage = () => {
 const handleShowDetailIdea = (id) => {
   resetSearchData()
   if (route.path.includes('idea')) {
-    router.push({ name: 'detail-idea', params: { id: id } })
+    router.push({ name: 'detail-idea', params: { id: id, type: 'publish' } })
     router.go()
   } else {
-    router.push({ name: 'detail-idea', params: { id: id } })
+    router.push({ name: 'detail-idea', params: { id: id, type: 'publish'  } })
   }
 }
 </script>

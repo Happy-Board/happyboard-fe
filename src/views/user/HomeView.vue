@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-7 pt-[75px] z-0 bg-white px-8 w-full min-h-screen ms-5">
+  <div class="col-span-7 pt-[75px] bg-white px-5 min-h-screen ms-5">
     <div>
       <Suspense>
         <HotIdea />
@@ -8,8 +8,10 @@
         </template>
       </Suspense>
     </div>
-    <div class="flex-1 mx-2">
-      <div class="min-w-full border-t border-t-borderColor flex mb-1 pt-1 justify-start items-end mt-3">
+    <div class="flex-1">
+      <div
+        class="min-w-full border-t border-t-borderColor flex mb-1 pt-1 justify-start items-end mt-3"
+      >
         <div class="px-1.5 py-1 rounded-md flex items-center">
           <button
             @click="setTab('newest')"
@@ -67,8 +69,8 @@
     </div>
   </div>
 
-  <div class="col-span-3">
-    <div class="mt-[90px]">
+  <div class="col-span-3 px-2 me-5">
+    <div class="mt-[86px]">
       <Suspense>
         <div>
           <SuggestIdeaComponent
@@ -76,6 +78,14 @@
             :titleIdeas="titleIdea"
             :ideas="recentIdeas"
           />
+        </div>
+        <template #fallback>
+          <SuggestIdeaSkeleton />
+        </template>
+      </Suspense>
+      <Suspense>
+        <div>
+          <ActivityHistory />
         </div>
         <template #fallback>
           <SuggestIdeaSkeleton />
@@ -93,6 +103,7 @@ import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
 import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
 import HotIdeaSkeleton from '@/components/skeletons/HotIdeaSkeleton.vue'
+import ActivityHistory from '@/components/my-ideas/ActivityHistory.vue'
 const HotIdea = defineAsyncComponent(() => import('@/components/hot-ideas/HotIdea.vue'))
 const SuggestIdeaComponent = defineAsyncComponent(
   () => import('@/components/home/SuggestIdeaComponent.vue')

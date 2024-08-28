@@ -70,15 +70,26 @@
       </Listbox>
       <div class="">
         <label for="message" class="block text-sm font-medium text-black mb-3"
-          >Title <span class="text-red-600">*</span></label
-        >
-        <div
+          >Title <span class="text-red-600">*</span>
+          <span v-if="ideaData?.title?.length" class="ms-2 text-xs">{{
+            `(${ideaData?.title?.length}/200)`
+          }}</span>
+        </label>
+        <!-- <div
           id="title"
           placeholder="Write your title here..."
           class="comment-input rounded-lg border bg-white border-borderColor focus:outline-0 py-2 px-3 pe-11 w-full text-sm"
           contentEditable="true"
           spellcheck="false"
-        ></div>
+        ></div> -->
+        <textarea
+          v-model="ideaData.title"
+          placeholder="Write your title here..."
+          rows="1"
+          maxlength="200"
+          class="text-sm overflow-hidden border border-gray-300 focus:outline-0 px-3 py-2 resize-none rounded-lg w-full"
+          id="title1"
+        ></textarea>
       </div>
       <div class="mb-10">
         <label class="block text-sm font-medium text-black mb-3" for="content"
@@ -92,7 +103,7 @@
           contentType="html"
         />
       </div>
-      <div class="my-10 flex justify-end">
+      <div v-if="route.params.type === 'draft'" class="my-10 flex justify-end">
         <button
           @click.prevent="saveIdea"
           type="button"
@@ -103,9 +114,25 @@
         <button
           @click.prevent="createIdea"
           type="button"
-          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 "
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
         >
           Create
+        </button>
+      </div>
+      <div v-if="route.params.type === 'release'" class="my-10 flex justify-end">
+        <button
+          @click.prevent="saveIdea"
+          type="button"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
+        >
+          Cancel
+        </button>
+        <button
+          @click.prevent="createIdea"
+          type="button"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
+        >
+          Update
         </button>
       </div>
     </div>
@@ -145,24 +172,37 @@ const userStore = useUserStore()
 const { ideaToEdit } = storeToRefs(userStore)
 const { getDetailDraftIdea, getDetailReleaseIdea } = userStore
 
+// const title = ref()
+const ideaData = reactive({
+  categoryId: '',
+  title: '',
+  content: ''
+})
+
 onMounted(() => {
   getAllCategory()
-  document.querySelector('#title').innerHTML = ideaToEdit.value.title
+  // document.querySelector('#title').innerHTML = ideaToEdit.value.title
+  ideaData.title = ideaToEdit.value.title
+  ideaData.categoryId = ideaToEdit.value?.Category.id
+  ideaData.content = ideaToEdit.value?.content
 })
 
 if (type === 'draft') await getDetailDraftIdea(ideaId)
 
 if (type === 'release') await getDetailReleaseIdea(ideaId)
 
-const ideaData = reactive({
-  categoryId: ideaToEdit.value.Category.id,
-  title: ideaToEdit.value.title,
-  content: ideaToEdit.value.content
-})
+watch(
+  () => ideaData.title,
+  () => {
+    document.querySelector('#title1').style.height = '5px'
+    document.querySelector('#title1').style.height =
+      document.querySelector('#title1').scrollHeight + 'px'
+  }
+)
 
 const saveIdea = () => {
-  const title = document.querySelector('#title').innerHTML
-  ideaData.title = title
+  // const title = document.querySelector('#title').innerHTML
+  // ideaData.title = title
   if (!ideaData.categoryId && !ideaData.title && !ideaData.content) {
     notify('warning', 'Nothing to save')
     return
@@ -174,7 +214,6 @@ const saveIdea = () => {
         notify('success', 'Idea saved successfully')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
-
         }, 500)
       })
       .catch((error) => {
@@ -197,8 +236,8 @@ const saveIdea = () => {
 }
 
 const createIdea = () => {
-  const title = document.querySelector('#title').innerHTML
-  ideaData.title = title
+  // const title = document.querySelector('#title').innerHTML
+  // ideaData.title = title
 
   if (!ideaData.categoryId) {
     notify('warning', 'Category is not empty !')
@@ -216,7 +255,6 @@ const createIdea = () => {
         notify('success', 'Create idea successfully!')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
-
         }, 500)
       })
       .catch((error) => {
@@ -229,7 +267,6 @@ const createIdea = () => {
         notify('success', 'Create idea successfully!')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
-
         }, 500)
       })
       .catch((error) => {
@@ -247,15 +284,6 @@ const selected = ref({
   title: ideaToEdit.value.Category.title,
   icon: ideaToEdit.value.Category.icon
 })
-// watch(ideaToEdit.value, async () => {
-//   selected.value = {
-//     title: ideaToEdit.Category.title,
-//     icon: ideaToEdit.Category.icon
-//   }
-//   console.log('ideaToEdit change')
-//   ideaData.title = ideaToEdit.title
-//   ideaData.content = ideaToEdit.content
-// })
 
 watch(selected, async () => {
   ideaData.categoryId = selected.value.id
@@ -302,5 +330,11 @@ a {
   content: attr(placeholder);
   color: gray;
   cursor: text;
+}
+textarea {
+  resize: none;
+}
+textarea::placeholder {
+  font-size: 14px;
 }
 </style>

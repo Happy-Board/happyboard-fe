@@ -1,11 +1,11 @@
 <template>
-  <div class="w-[70%] bg-white p-2 px-4 rounded-lg mb-5 border border-borderColor mx-auto">
+  <div class="w-full bg-white p-2 px-4 rounded-lg mb-5 border border-borderColor mx-auto">
     <div class="flex justify-between border-b border-b-borderColor mb-3 items-end">
       <span class="font-semibold text-[18px]">{{ props.feature }}</span>
       <!-- <span class="hover:underline text-sm"><a href="" class="">Sea all</a></span> -->
     </div>
     <div
-      class="my-2 grid grid-cols-10 gap-1 text-primaryColor text-sm cursor-pointer font-medium hover:underline hover:text-secondaryColor hover:font-semibold"
+      class="my-2 grid grid-cols-10 devide-y gap-1 text-primaryColor text-sm cursor-pointer font-medium hover:underline hover:text-secondaryColor hover:font-semibold"
       v-for="(idea, index) in props.ideas"
       :key="index"
       @click="viewDetailIdea(idea.id)"
@@ -42,7 +42,7 @@ const props = defineProps({
 console.log(props)
 const router = useRouter()
 const viewDetailIdea = (id) => {
-  router.push({ name: 'detail-idea', params: { id: id } })
+  router.push({ name: 'detail-idea', params: { type: 'publish', id: id } })
   getDetailIdea(id)
   // router.go()
 }

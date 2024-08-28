@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', () => {
     return await apiGetMyHistoryActivities()
       .then((response) => {
         response.data.data.forEach((history) => {
-          history.updatedAt = convertTime(history.updatedAt)
+          history.createdAt = convertTime(history.createdAt)
         })
         historyActivities.value = response.data.data
       })

@@ -4,7 +4,7 @@
       <div>
         <div id="comment-block" class="comment-level-1 mt-5 flex items-start gap-1 min-w-[50%]">
           <img
-            :src="props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar"
+            :src="props.avatar === '' ? '../../avatar/default-avatar.jpg' : props.avatar"
             alt="avatar"
             class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3.5%]"
           />
@@ -52,7 +52,7 @@
             </div>
             <div v-if="isOpenReply" class="comment-level-1 mt-5 flex items-start gap-1">
               <img
-                :src="profile.avatar"
+                :src="profile.avatar || '../../avatar/default-avatar.jpg'"
                 alt="avatar"
                 class="w-[3%] lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3.5%] aspect-square rounded-full cursor-pointer"
               />

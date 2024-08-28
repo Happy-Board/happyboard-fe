@@ -69,10 +69,10 @@
               <span class="text-[12px] font-thin">{{ idea?.updatedAt }}</span>
             </div>
             <div class="flex">
-              <span class="text-[12px] font-thin">{{ `${idea?.commentCount} comments` }}</span>
+              <span class="text-[12px] font-thin">{{ idea?.commentCount === 1 ? `${idea?.commentCount} comment` : `${idea?.commentCount} comments` }}</span>
             </div>
             <div class="flex">
-              <span class="text-[12px] font-thin">{{ `${idea?.viewCount + 1} views` }}</span>
+              <span class="text-[12px] font-thin">{{ idea?.viewCount === 0 ? `${idea?.viewCount + 1} view` : `${idea?.viewCount + 1} views` }}</span>
             </div>
           </div>
           <div class=""></div>
@@ -138,5 +138,8 @@ const handleVote = () => {
   content: attr(placeholder);
   color: gray;
   cursor: text;
+}
+.ql-editor{
+  padding: 12px 0px;
 }
 </style>
