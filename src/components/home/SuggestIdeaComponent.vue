@@ -28,8 +28,10 @@
 import { useRouter } from 'vue-router'
 import { useIdeaStore } from '@/stores/idea.store'
 import { useHomePageStore } from '@/stores/home.store'
+import { useCommentStore } from '@/stores/comment.store'
 
 const homePageStore = useHomePageStore()
+const commentStore = useCommentStore()
 const { getRecentIdeas } = homePageStore
 const ideaStore = useIdeaStore()
 const { getDetailIdea, getRelatedIdeas } = ideaStore
@@ -39,11 +41,12 @@ const props = defineProps({
   ideas: Array
 })
 
-console.log(props)
+const {  getAllComments } = commentStore
 const router = useRouter()
 const viewDetailIdea = (id) => {
   router.push({ name: 'detail-idea', params: { type: 'publish', id: id } })
   getDetailIdea(id)
+  getAllComments(id)
   getRelatedIdeas(id)
 }
 
