@@ -79,7 +79,7 @@
           <NotificationComponent />
           <img
             @click="openUserOption"
-            :src="!profile.avatar ? 'avatar/default-avatar.jpg' : profile.avatar"
+            :src="!profile.avatar ? '../../avatar/default-avatar.jpg' : profile.avatar"
             alt="avatar"
             class="w-[5%] aspect-square rounded-full cursor-pointer lg:w-[8%] md:w-[7%] sm:w-[8%] xl:w-[7%]"
           />

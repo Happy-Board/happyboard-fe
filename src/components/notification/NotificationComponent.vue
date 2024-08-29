@@ -30,7 +30,7 @@
     </div>
     <div
       v-if="isShowNotificationList"
-      class="absolute w-fit min-w-[350px] border border-borderColor bg-white shadow-lg shadow-gray-400 py-1 rounded-lg left-1/2 transform -translate-x-1/2 top-10 max-h-[550px] overflow-y-scroll mb-5"
+      class="absolute w-fit min-w-[350px] border border-borderColor bg-white shadow-lg py-1 rounded-lg left-1/2 transform -translate-x-1/2 top-10 max-h-[550px] overflow-y-scroll mb-5"
       ref="notificationList"
     >
       <div class="ps-3">

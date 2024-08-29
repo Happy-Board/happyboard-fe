@@ -5,16 +5,16 @@ const tabs = [
   {
     name: 'Account',
     component: defineAsyncComponent(async () => {
-      return import('./AccountTab.vue')
+      return import('@/components/profile/AccountTab.vue')
     }),
-    skeleton: defineAsyncComponent(() => import('../skeletons/TabAccountSkeleton.vue'))
+    skeleton: defineAsyncComponent(() => import('@/components/skeletons/TabAccountSkeleton.vue'))
   },
   {
     name: 'Change Password',
     component: defineAsyncComponent(async () => {
-      return import('./ChangePassword.vue')
+      return import('@/components/profile/ChangePassword.vue')
     }),
-    skeleton: defineAsyncComponent(() => import('../skeletons/TabChangePasswordSkeleton.vue'))
+    skeleton: defineAsyncComponent(() => import('@/components/skeletons/TabChangePasswordSkeleton.vue'))
   }
 ]
 
@@ -27,7 +27,7 @@ const switchTab = (tabId) => {
 </script>
 
 <template>
-  <div class="w-full col-span-8 md:col-span-6 pt-[80px]">
+  <div class="w-full col-span-8 md:col-span-6 pt-[90px] ms-5">
     <div class="profile-setting">
       <h5 class="pt-1 font-bold text-xl">Profile Setting</h5>
       <div class="relative right-0">

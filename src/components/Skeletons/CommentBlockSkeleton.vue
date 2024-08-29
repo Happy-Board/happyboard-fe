@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 p-4 rounded-xl mb-10">
+  <div class="bg-backgroundColor p-4 rounded-xl mb-10">
     <div class="relative">
       <div
         id="comment-input"
@@ -22,8 +22,6 @@
         </svg>
       </button>
     </div>
-    <CommentSkeleton />
-    <CommentSkeleton />
     <CommentSkeleton />
     <CommentSkeleton />
   </div>

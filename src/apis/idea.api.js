@@ -2,6 +2,8 @@ import { axiosInstance } from '@/configs/axios.config'
 
 export const apiGetIdeas = async (url) => await axiosInstance.get(`/ideas${url}`)
 
+export const apiGetHotIdeas = async () => await axiosInstance.get(`/ideas/popular`)
+
 export const apiGetDetailDraftIdeas = async (id) => await axiosInstance.get(`/ideas/draft/${id}`)
 
 export const apiGetRecentIdeas = async () => await axiosInstance.get(`/ideas/recent`)

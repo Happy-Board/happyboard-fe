@@ -176,11 +176,11 @@
             <h1 class="font-extrabold text-3xl">Hello, Friend!</h1>
             <p>Register with your personal details to use all of site features</p>
             <button
-              class="hidden-button group overflow-hidden relative "
+              class="hidden-button group overflow-hidden relative !bg-primaryColor !text-white hover:!bg-secondaryColor !border !border-white"
               id="login"
               @click="setClassAdded('')"
             >
-              <span class="relative text-base !text-black font-bold"> Sign In </span>
+              <span class="relative text-base !text-white font-bold"> Sign In </span>
             </button>
           </div>
           <div class="toggle-panel toggle-right">
@@ -188,11 +188,11 @@
             <p>Enter your personal details to use all of site features</p>
 
             <button
-              class="hidden-button group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+              class="hidden-button group overflow-hidden relative !bg-primaryColor !text-white hover:!bg-secondaryColor !border !border-white"
               id="register"
               @click="setClassAdded(' active')"
             >
-              <span class="relative text-base text-black font-bold"> Sign Up </span>
+              <span class="relative text-base text-white font-bold"> Sign Up </span>
             </button>
           </div>
         </div>
@@ -201,7 +201,7 @@
 
     <div
       v-if="isShowForgetPasswordPopUp"
-      class="forget-password absolute flex flex-col items-center justify-center w-full h-full bg-backgroundColor/30 z-50"
+      class="forget-password absolute flex flex-col items-center justify-center w-full h-full bg-backgroundColor/80 z-50"
     >
       <div
         class="bg-[#fff] h-auto rounded-lg shadow-md !p-8 text-center relative  border border-borderColor"
@@ -222,7 +222,7 @@
             <span class="relative text-white">Get password</span>
           </button>
         </div>
-        <div v-if="isSentEmail" class="space-y-5">
+        <div v-if="isSentEmail" class="space-y-5 w-full">
           <p class="font-bold text-xl">
             We have sent an email to account <span class="">{{ emailToGetPassword }}</span>
           </p>
@@ -256,7 +256,7 @@ onMounted(() => {
 })
 const ggLogin = () => {
   console.log('gg login')
-  window.open('http://localhost:8000/api/v1/auth/google/callback/', '_self')
+  window.open('http://localhost:8000/api/v1/auth/google', '_self')
 }
 const router = useRouter()
 const signInInfo = reactive({
@@ -324,8 +324,10 @@ const signIn = () => {
     })
     .catch((err) => {
       console.log(err)
-      if (err?.response?.data?.statusCode === 400) {
-        notify('error', 'Email or password invalid !')
+      if (err?.response?.status === 400) {
+        notify('error', 'Password incorrect!')
+      }else if(err?.response?.status === 409) {
+        notify('error', 'Account does not exist!')
       } else {
         console.log('some thing went wrong')
         notify('error', 'Something went wrong !')
@@ -420,7 +422,6 @@ const signUp = () => {
 
 .container button.hidden-button {
   background-color: transparent;
-  border-color: #000000;
 }
 
 .container button::before {

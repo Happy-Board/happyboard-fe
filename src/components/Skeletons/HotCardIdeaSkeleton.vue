@@ -2,7 +2,7 @@
   <div
     class="w-[36%] h-fit px-2 py-1 my-3 mx-2 border border-borderColor rounded-lg shadow-md shadow-gray-300 overflow-visible relative"
   >
-    <img src="../../../public/animations/fire.gif" class="absolute -top-3 -right-3 w-7 h-7" alt="" />
+    <img src="/animations/fire.gif" class="absolute -top-3 -right-3 w-7 h-7" alt="" />
 
     <div class="title ms-1 cursor-grab active:cursor-grabbing">
       <AnimatedPlaceholder width="100%" height="20px" border-radius="8px" />

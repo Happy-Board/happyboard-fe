@@ -6,13 +6,13 @@
               <div>
                 <router-link
                   to="/profile"
-                  class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-backgroundColor group"
+                  class="flex items-center p-2 text-gray-600 rounded-lg hover:bg-backgroundColor group"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    class="flex-shrink-0 w-5 h-5 text-gray-900"
+                    class="flex-shrink-0 w-5 h-5 text-gray-600"
                   >
                     <path
                       fill-rule="evenodd"
@@ -27,13 +27,13 @@
               <div>
                 <div
                   @click="emits('logout')"
-                  class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-backgroundColor group"
+                  class="flex items-center p-2 text-gray-600 rounded-lg hover:bg-backgroundColor group"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    class="flex-shrink-0 w-5 h-5 text-gray-900 "
+                    class="flex-shrink-0 w-5 h-5 text-gray-600 "
                   >
                     <path
                       fill-rule="evenodd"

@@ -8,7 +8,7 @@ import {
   apiGetMyDraftIdeaById,
   apiGetMyHideIdeaById
 } from '@/apis/user.api'
-import { apiGetDetailIdea } from '@/apis/idea.api'
+import { apiDeleteIdea, apiGetDetailIdea } from '@/apis/idea.api'
 import { convertTime } from '@/utils/convert-time'
 
 export const useMyBoardStore = defineStore('my-board', () => {
@@ -51,6 +51,13 @@ export const useMyBoardStore = defineStore('my-board', () => {
         console.log(response.data.data)
       })
       .catch((err) => console.log(err))
+  }
+
+  async function deleteIdea(id, index) {
+    return await apiDeleteIdea(id)
+    .then(() => {
+      myIdeas.value.splice(index, 1)
+      })
   }
 
   async function loadMore() {
@@ -117,6 +124,7 @@ export const useMyBoardStore = defineStore('my-board', () => {
     getDetailHideIdea,
     getDetailReleaseIdea,
     setTab,
-    loadMore
+    loadMore,
+    deleteIdea
   }
 })

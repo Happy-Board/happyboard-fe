@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-7 pt-[100px] px-3 ms-10 z-0 bg-white min-h-screen">
+  <div class="col-span-7 pt-[100px] ms-5 z-0 bg-white min-h-screen">
       <Suspense>
         <DetailIdea />
         <template #fallback>
@@ -14,7 +14,7 @@
       </Suspense>
   </div>
 
-  <div class="col-span-3 mt-[95px]">
+  <div class="col-span-3 mt-[95px]  px-2 me-5">
     <Suspense>
       <SuggestIdeaComponent feature="Related ideas" :ideas="relatedIdeas" />
       <template #fallback>
@@ -43,18 +43,6 @@ const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const { relatedIdeas } = storeToRefs(ideaStore)
 
-// const editorRef = ref()
-// const handleComment = (event) => {
-//   if (!event.ctrlKey || event.code !== 'Enter') return
-//   commitComment()
-// }
-
-// const commitComment = () => {
-//   addComment(ideaId, { content: editorRef.value.innerHTML })
-//   const comment = document.querySelector('#comment-input')
-//   comment.innerHTML = ''
-//   router.go()
-// }
 </script>
 <style scoped>
 .ql-toolbar {

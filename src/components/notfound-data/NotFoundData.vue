@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full mt-48">
-    <img src="../../../public/no_found.gif" alt="No data" class="w-48 h-48" />
+  <div class="flex flex-col items-center justify-center w-full">
+    <img src="/icons/svgs/nodata.svg" alt="No data" class="w-[90%]" />
   </div>
 </template>
 <script setup></script>

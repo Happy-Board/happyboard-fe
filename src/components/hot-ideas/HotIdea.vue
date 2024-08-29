@@ -1,6 +1,13 @@
 <template>
   <div v-if="hotIdeas.length >= 3" id="carouselElement" ref="carouselElement">
-    <carousel ref="myCarousel" :autoplay="hotIdeas.length === 3 ? 0 : 2000" :items-to-show="2" :wrap-around="true" :snap-align="'center'" :pauseAutoplayOnHover="true">
+    <carousel
+      ref="myCarousel"
+      :autoplay="hotIdeas.length === 3 ? 0 : 2000"
+      :items-to-show="2"
+      :wrap-around="true"
+      :snap-align="'center'"
+      :pauseAutoplayOnHover="true"
+    >
       <slide v-for="(idea, index) in hotIdeas" :key="index">
         <HotCardideaComponenet
           :id="idea.id"
@@ -16,7 +23,7 @@
 <script async setup>
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide } from 'vue3-carousel'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import HotCardideaComponenet from './HotCardIdeaComponent.vue'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
@@ -27,21 +34,11 @@ const { getHotIdeas } = homeStore
 
 const carouselElement = ref()
 const myCarousel = ref()
-
-// onMounted(() => {
-//   getHotIdeas()
-//   carouselElement.value.addEventListener('wheel', (event) => {
-//     event.preventDefault()
-//     if (event.deltaY > 0) {
-//       myCarousel.value.next()
-//     } else if (event.deltaY < 0) {
-//       myCarousel.value.prev()
-//     }
-//   })
-// })
-
-await getHotIdeas()
-onMounted(() => {
+let isAddEvent = false
+let addEvent = () => {
+  if (isAddEvent || !carouselElement.value) {
+    return
+  }
   carouselElement.value.addEventListener('wheel', (event) => {
     event.preventDefault()
     if (event.deltaY > 0) {
@@ -50,6 +47,16 @@ onMounted(() => {
       myCarousel.value.prev()
     }
   })
+  isAddEvent = true
+}
+
+watch(hotIdeas, () => {
+  addEvent()
+})
+
+await getHotIdeas()
+onMounted(() => {
+  addEvent()
 })
 </script>
 <style scoped></style>

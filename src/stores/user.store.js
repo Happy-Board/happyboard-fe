@@ -31,33 +31,26 @@ export const useUserStore = defineStore('user', () => {
     return await apiUpdateProfile(formData)
   }
 
-
   async function getMyHistoryActivities() {
-    return await apiGetMyHistoryActivities()
-      .then((response) => {
-        response.data.data.forEach((history) => {
-          history.updatedAt = convertTime(history.updatedAt)
-        })
-        historyActivities.value = response.data.data
+    return await apiGetMyHistoryActivities().then((response) => {
+      response.data.data.forEach((history) => {
+        history.createdAt = convertTime(history.createdAt)
       })
-
+      historyActivities.value = response.data.data
+    })
   }
 
   async function getDetailDraftIdea(id) {
-    await apiGetMyDraftIdeaById(id)
-      .then((response) => {
-        ideaToEdit.value = response.data.data
-        console.log(ideaToEdit.value)
-      })
-      .catch((err) => console.log(err))
+    return await apiGetMyDraftIdeaById(id).then((response) => {
+      ideaToEdit.value = response.data.data
+      console.log(ideaToEdit.value)
+    })
   }
   async function getDetailReleaseIdea(id) {
-    await apiGetDetailIdea(id)
-      .then((response) => {
-        ideaToEdit.value = response.data.data
-        console.log(ideaToEdit.value)
-      })
-      .catch((err) => console.log(err))
+    return await apiGetDetailIdea(id).then((response) => {
+      ideaToEdit.value = response.data.data
+      console.log(ideaToEdit.value)
+    })
   }
   async function getDetailHideIdea(id) {
     await apiGetMyHideIdeaById(id)

@@ -222,7 +222,7 @@ watch(confirmNewPassword, () => {
       <button
         v-if="isEmptyFields"
         type="button"
-        class="text-white font-bold bg-blue-700 rounded-lg text-sm w-full md:max-w-40 px-5 py-2.5 text-center"
+        class="text-white font-bold bg-primaryColor rounded-full text-sm md:max-w-40 px-5 py-2 text-center"
         :style="{ cursor: 'not-allowed' }"
       >
         Submit
@@ -230,13 +230,13 @@ watch(confirmNewPassword, () => {
       <button
         v-else
         type="submit"
-        class="text-white font-bold bg-blue-700 hover:bg-blue-800 rounded-lg text-sm w-full md:max-w-40 px-5 py-2.5 text-center"
+        class="text-white font-bold bg-primaryColor hover:bg-secondaryColor rounded-full text-sm md:max-w-40 px-5 py-2 text-center"
       >
         Submit
       </button>
       <button
         type="button"
-        class="text-white font-bold bg-gray-400 hover:bg-gray-600 rounded-lg text-sm w-full md:max-w-20 px-5 py-2.5 text-center dark:bg-gray-400 dark:hover:bg-gray-600"
+        class="text-white font-bold bg-gray-400 hover:bg-gray-600 rounded-full text-sm w-full md:max-w-20 px-3 py-2 text-center dark:bg-gray-400 dark:hover:bg-gray-600"
         @click="resetFields"
       >
         Cancel
@@ -262,7 +262,7 @@ watch(confirmNewPassword, () => {
         Cancel
       </button>
       <button
-        class="mr-2 px-4 py-2 text-sm rounded text-white bg-blue-700 focus:outline-none hover:bg-blue-800"
+        class="mr-2 px-4 py-2 text-sm rounded text-white bg-primaryColor focus:outline-none hover:bg-blue-800"
         @click="changePassword"
       >
         Submit
@@ -289,7 +289,7 @@ watch(confirmNewPassword, () => {
         <div class="max-h-full px-4 py-4 flex flex-col items-center gap-3">
           <svg
             aria-hidden="true"
-            class="w-8 h-8 text-blue-700 animate-spin fill-blue-800"
+            class="w-8 h-8 text-primaryColor animate-spin fill-blue-800"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

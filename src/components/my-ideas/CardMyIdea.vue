@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-6 pt-2 pb-4 border-t border-borderColor">
-    <div class="col-span-1 flex flex-col gap-1 mt-1.5 mr-3 text-[12px]">
+  <div class="grid grid-cols-9 pt-2 pb-4 border-t border-borderColor">
+    <div class="col-span-1 flex flex-col gap-1 mt-1.5 text-[12px]">
       <div class="flex justify-end font-medium text-gray-900">
         <span class="font-medium mr-0.5">{{ props.totalComment }}</span>
         {{ props.totalComment === 1 ? 'comment' : 'comments' }}
@@ -9,12 +9,12 @@
         <span class="font-medium mr-0.5">{{ props.totalVote }}</span
         >{{ props.totalVote === 1 ? 'vote' : 'votes' }}
       </div>
-      <div class="flex justify-end font-medium text-red-900">
+      <div class="flex justify-end font-medium text-red-800">
         <span class="font-medium mr-0.5">{{ props.totalView }}</span
         >{{ props.totalView === 1 ? 'view' : 'views' }}
       </div>
     </div>
-    <div class="col-span-5">
+    <div class="col-span-8 ms-3">
       <div class="title ms-1 flex justify-between">
         <div
           @click="viewDetailIdea()"
@@ -100,16 +100,49 @@
             v-if="props.isPublish === false && props.isDraft === false"
             class="fa-solid fa-pen-to-square cursor-not-allowed text-gray-400"
           ></i>
-          <i class="fa-solid fa-trash-can cursor-pointer text-red-600 hover:text-red-800"></i>
+          <i @click="onToggle" class="fa-solid fa-trash-can cursor-pointer text-red-600 hover:text-red-800"></i>
         </div>
       </div>
     </div>
   </div>
+  <ModalConfirmDelete
+  v-if="visible"
+    title="Confirm Action"
+    maxWidth="sm"
+    :visible="visible"
+    v-on:close="onToggle"
+  >
+    <p class="text-gray-800">Are you sure you want you delete this idea ?</p>
+
+    <div class="text-right mt-4">
+      <button
+        @click="onToggle"
+        class="px-4 py-1 text-sm text-gray-600 focus:outline-none hover:underline"
+      >
+        Cancel
+      </button>
+      <button
+        class="mr-2 px-4 py-1 text-sm rounded text-white bg-red-500 focus:outline-none hover:bg-red-400"
+        @click="handleDelete"
+      >
+        Yes
+      </button>
+    </div>
+  </ModalConfirmDelete>
 </template>
 <script setup>
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useRouter } from 'vue-router'
+import ModalConfirmDelete from './ModalConfirmDelete.vue'
+import { ref } from 'vue'
+import { notify } from '@/utils/toast'
+import { useMyBoardStore } from '@/stores/my-board.store'
+import { useUserStore } from '@/stores/user.store'
 
+const myBoardStore = useMyBoardStore()
+const userStore = useUserStore()
+const { deleteIdea } = myBoardStore
+const { getMyHistoryActivities } = userStore
 const router = useRouter()
 const props = defineProps({
   index: Number,
@@ -129,12 +162,33 @@ const props = defineProps({
 
 // const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
 
+const visible = ref(false)
+
 const handleEdit = () => {
   router.push({ name: 'edit', params: { type: props.isDraft ? 'draft' : 'release', id: props.id } })
 }
 // const handleDelete = () => {
 //   console.log('delete')
 // }
+
+const onToggle = () => {
+  visible.value = !visible.value
+}
+
+const handleDelete = () => {
+  onToggle()
+
+  deleteIdea(props.id, props.index)
+    .then(() => {
+      getMyHistoryActivities()
+      notify('success', 'Idea deleted successfully')
+    })
+    .catch((error) => {
+    if (error.response.status === 401) {
+      router.push({ name: 'sign-in' })
+    }
+  })
+}
 const viewDetailIdea = () => {
   if (props.isDraft === true) {
     router.push({ name: 'edit', params: { type: 'draft', id: props.id } })

@@ -13,12 +13,12 @@ const { getProfile } = userStore
 await getProfile()
 const { profile } = storeToRefs(userStore)
 
-const initialFullName = profile.value.username
-const initialEmail = profile.value.email
-const initialAvatar = profile.value.avatar
-const initialPhone = '0378481575'
-const initialJobPosition = profile.value.jobPosition
-const initialBio = profile.value.introduce
+let initialFullName = profile.value.username
+let initialEmail = profile.value.email
+let initialAvatar = profile.value.avatar
+let initialPhone = profile.value.phone
+let initialJobPosition = profile.value.jobPosition
+let initialBio = profile.value.introduce
 
 const fullName = ref(initialFullName)
 const email = ref(initialEmail)
@@ -69,7 +69,7 @@ const uploadAvatar = async (event) => {
   }
 }
 
-const removeAvatar = async (event) => {
+const removeAvatar = async () => {
   try {
     const DefaultAvatar = await import('@/assets/default-avatar.jpg')
     const blob = await fetch(DefaultAvatar.default).then((r) => r.blob())
@@ -119,7 +119,7 @@ const updateInfo = async () => {
   formData.append('username', fullName.value)
   formData.append('jobPosition', jobPosition.value)
   formData.append('introduce', bio.value)
-  let isUpdated = await updateData(formData)
+  await updateData(formData)
   visibleSaveChange.value = false
   isChanged.value = false
 }
@@ -130,6 +130,13 @@ const updateData = async (formData) => {
   await apiUpdateProfile(formData)
     .then(() => {
       isUpdated = true
+      initialFullName = profile.value.username
+      initialEmail = profile.value.email
+      initialAvatar = profile.value.avatar
+      initialPhone = profile.value.phone
+      initialJobPosition = profile.value.jobPosition
+      initialBio = profile.value.introduce
+
       getProfile()
       notify('success', 'Your profile updated successfully!')
     })
@@ -194,7 +201,7 @@ const updateBio = (event) => {
       <h4 class="font-semibold text-lg mb-3 mx-auto md:mx-0">Profile Picture</h4>
       <div class="action mb-2 flex flex-col md:flex-row items-center gap-3">
         <button
-          class="w-[150px] md:w-auto bg-blue-700 hover:bg-blue-800 font-normal py-1 px-2 rounded text-sm text-white focus:outline-none"
+          class="w-[150px] md:w-auto bg-primaryColor hover:bg-secondaryColor font-normal py-1 px-2 rounded text-sm text-white focus:outline-none"
           @click="triggerFileInput"
         >
           <i class="fas fa-upload"></i> Upload Image
@@ -262,7 +269,7 @@ const updateBio = (event) => {
   <div class="mt-8 flex flex-col md:flex-row justify-center md:justify-end">
     <button
       type="button"
-      class="w-full md:w-auto text-white bg-gray-400 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+      class="w-full md:w-auto text-white bg-gray-400 hover:bg-gray-700 font-medium rounded-full text-sm px-3 py-2 me-2 mb-2"
       @click="resetData"
     >
       Cancel
@@ -270,7 +277,7 @@ const updateBio = (event) => {
     <button
       v-if="!isChanged"
       type="button"
-      class="w-full md:w-auto text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+      class="w-full md:w-auto text-white bg-primaryColor font-medium rounded-full text-sm px-3 py-1 me-2 mb-2"
       :style="{ cursor: 'not-allowed' }"
       disabled
     >
@@ -279,7 +286,7 @@ const updateBio = (event) => {
     <button
       v-if="isChanged"
       type="button"
-      class="w-full md:w-auto text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+      class="w-full md:w-auto text-white bg-primaryColor hover:bg-secondaryColor font-medium rounded-full text-sm px-3 py-1 me-2 mb-2"
       :style="{ cursor: 'pointer' }"
       @click="visibleSaveChange = true"
     >
@@ -300,20 +307,20 @@ const updateBio = (event) => {
     <div class="text-right mt-4">
       <button
         @click="onToggle"
-        class="px-4 py-2 text-sm text-gray-600 focus:outline-none hover:underline"
+        class="px-3 py-1 text-sm text-gray-600 focus:outline-none hover:underline"
       >
         Cancel
       </button>
       <button
-        class="mr-2 px-4 py-2 text-sm rounded text-white bg-red-500 focus:outline-none hover:bg-red-400"
+        class="mr-2 px-4 py-1 text-sm rounded text-white bg-red-500 focus:outline-none hover:bg-red-500"
         @click="removeAvatar"
       >
         Remove
       </button>
     </div>
   </Modal>
-
-  <!-- Modal Confirm Save Change -->
+ 
+  <!-- Model Confirm Save Change -->
   <Modal
     v-if="visibleSaveChange"
     title="Confirm Action"

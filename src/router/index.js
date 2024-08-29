@@ -9,7 +9,7 @@ import EditIdea from '@/components/idea/EditIdea.vue'
 import MyIdea from '@/components/my-ideas/MyIdea.vue'
 import MyHistoryActivity from '@/components/history-activities/MyHistoryActivity.vue'
 // import ProfileView from '@/views/user/ProfileView.vue'
-import ProfileView from '@/components/profile/ProfilePage.vue'
+import ProfileView from '@/views/user/ProfilePage.vue'
 import ResetPassword from '@/views/user/ResetPassword.vue'
 import MainLayout from '@/components/layouts/MainLayout.vue'
 const router = createRouter({

@@ -1,20 +1,20 @@
 <template>
-  <div class="grid grid-cols-6 pt-2 pb-1 border-t border-borderColor">
-    <div class="col-span-1 flex flex-col gap-1 mt-1.5 mr-3 text-[12px]">
+  <div class="grid grid-cols-9 pt-2 pb-1 border-t border-borderColor">
+    <div class="col-span-1 flex flex-col gap-1 mt-1.5 text-[12px]">
       <div class="flex justify-end font-medium text-gray-900">
         <span class="font-medium mr-0.5">{{ props.totalComment }}</span>
         {{ props.totalComment === 1 ? 'comment' : 'comments' }}
       </div>
-      <div class="flex justify-end font-medium text-green-900">
+      <div class="flex justify-end font-medium text-green-600">
         <span class="font-medium mr-0.5">{{ props.totalVote }}</span
         >{{ props.totalVote === 1 ? 'vote' : 'votes' }}
       </div>
-      <div class="flex justify-end font-medium text-red-900">
+      <div class="flex justify-end font-medium text-red-800">
         <span class="font-medium mr-0.5">{{ props.totalView }}</span
         >{{ props.totalView === 1 ? 'view' : 'views' }}
       </div>
     </div>
-    <div class="col-span-5">
+    <div class="col-span-8 ms-3">
       <div class="title ms-1 flex justify-between">
         <div
           @click="viewDetailIdea(props.id, 'publish')"

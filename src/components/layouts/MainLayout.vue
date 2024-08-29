@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div>
-      <div class="fixed top-0 z-50 w-full">
+      <div class="fixed top-0 z-40 w-full">
         <Suspense>
           <HeaderComponent />
           <template #fallback>
