@@ -16,9 +16,9 @@ const { profile } = storeToRefs(userStore)
 let initialFullName = profile.value.username
 let initialEmail = profile.value.email
 let initialAvatar = profile.value.avatar
-let initialPhone = profile.value.phone
-let initialJobPosition = profile.value.jobPosition
-let initialBio = profile.value.introduce
+let initialPhone = profile.value.phone || ''
+let initialJobPosition = profile.value.jobPosition || ''
+let initialBio = profile.value.introduce || ''
 
 const fullName = ref(initialFullName)
 const email = ref(initialEmail)
@@ -97,14 +97,6 @@ const removeAvatar = async () => {
 }
 
 const updateInfo = async () => {
-  let isValidPhone = checkPhone(phone.value)
-  if (!isValidPhone) {
-    notify('error', 'Phone number is invalid')
-    visibleSaveChange.value = false
-    phone.value = initialPhone
-    return
-  }
-
   let isValidFullName = fullName.value.trim().length !== 0
   if (!isValidFullName) {
     notify('error', 'Full name is required')
@@ -121,10 +113,19 @@ const updateInfo = async () => {
     return
   }
 
+  let isValidPhone = checkPhone(phone.value)
+  if (!isValidPhone) {
+    notify('error', 'Phone number is invalid')
+    visibleSaveChange.value = false
+    phone.value = initialPhone
+    return
+  }
+
   const formData = new FormData()
   formData.append('username', fullName.value)
-  formData.append('jobPosition', jobPosition.value)
-  formData.append('introduce', bio.value)
+  formData.append('phone', phone.value ? phone.value : '')
+  formData.append('jobPosition', jobPosition.value ? jobPosition.value : '')
+  formData.append('introduce', bio.value ? bio.value : '')
   await updateData(formData)
   visibleSaveChange.value = false
   isChanged.value = false
@@ -160,7 +161,7 @@ const checkPhone = (phone) => {
   const regex = /^(0[3|5|7|8|9])+([0-9]{8})$/
   let isValidPhone = regex.test(phone)
   console.log(phone, ':', isValidPhone)
-  return isValidPhone
+  return phone.value === '' || isValidPhone
 }
 
 const resetData = () => {
