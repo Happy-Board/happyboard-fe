@@ -94,13 +94,14 @@
 import { ref } from 'vue'
 import { useCommentStore } from '@/stores/comment.store'
 import ReactionComponent from './ReactionComponent.vue'
-import { useUserStore } from '@/stores/user.store';
-import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user.store'
+import { storeToRefs } from 'pinia'
+import { useIdeaStore } from '@/stores/idea.store'
 // import OptionComponent from './OptionComponent.vue'
-
 
 const userStore = useUserStore()
 const { profile } = storeToRefs(userStore)
+const { increaseComment } = useIdeaStore()
 const commentStore = useCommentStore()
 const { addComment, createReaction, cancelReaction } = commentStore
 const props = defineProps({
@@ -126,8 +127,10 @@ const handleComment = (event) => {
 // }
 
 const commitComment = (event) => {
+  if (event.target.closest('.input-box').querySelector('.comment-input').innerHTML === '') return
   const content = `<div><strong>@${props.author}</strong> ${event.target.closest('.input-box').querySelector('.comment-input').innerHTML}`
   addComment(props.ideaId, { content: content, parentId: props.id })
+  increaseComment()
   event.target.closest('.input-box').querySelector('.comment-input').innerHTML = ''
   handleCloseReply()
 }

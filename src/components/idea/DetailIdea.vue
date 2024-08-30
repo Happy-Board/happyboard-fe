@@ -49,7 +49,7 @@
         <div class="flex items-center mt-2">
           <button
             @click="handleVote"
-            class="me-5 text-sm font-semibold px-3 rounded-full border border-primaryColor"
+            class="me-5 text-sm font-semibold px-3 rounded-full border border-primaryColor min-w-[73px]"
             :class="vote === null ? 'bg-white hover:bg-backgroundButtonColor text-black' : 'bg-primaryColor text-white'"
             >
             {{ idea?.voteCount === 1 ? `${idea?.voteCount} Vote` : `${idea?.voteCount} Votes` }}

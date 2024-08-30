@@ -55,6 +55,10 @@ export const useIdeaStore = defineStore('idea', () => {
     } else return
   }
 
+function increaseComment(){
+  idea.value.commentCount ++
+}
+
   // const getAllCategory = computed(() => category)
   async function getDetailIdea(id) {
    await apiGetDetailIdea(id)
@@ -95,6 +99,7 @@ export const useIdeaStore = defineStore('idea', () => {
     increaseVote,
     decreaseVote,
     getRelatedIdeas,
-    getDetailPendingIdea
+    getDetailPendingIdea,
+    increaseComment
   }
 })

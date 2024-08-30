@@ -58,11 +58,12 @@ import CommentComponent from '@/components/comments/CommentComponent.vue'
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCommentStore } from '@/stores/comment.store'
+import { useIdeaStore } from '@/stores/idea.store';
 
 const commentStore = useCommentStore()
 const { comments } = storeToRefs(commentStore)
 const { addComment, getAllComments } = commentStore
-
+const { increaseComment } = useIdeaStore()
 const props = defineProps({
   ideaId: Number
 })
@@ -76,7 +77,9 @@ const handleComment = (event) => {
 }
 
 const commitComment = () => {
+  if(editorRef.value.innerHTML === '') return
   addComment(props.ideaId, { content: editorRef.value.innerHTML })
+  increaseComment()
   const comment = document.querySelector('#comment-input')
   comment.innerHTML = ''
 }

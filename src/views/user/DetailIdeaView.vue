@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-7 pt-[100px] ms-5 z-0 bg-white min-h-screen">
+  <div class="col-span-7 pt-[100px] ms-5 z-0 bg-white min-h-screen px-3">
       <Suspense>
         <DetailIdea />
         <template #fallback>
