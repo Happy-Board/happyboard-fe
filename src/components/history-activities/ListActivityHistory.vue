@@ -85,18 +85,18 @@ const handleShowAction = (targetId, type) => {
 </script>
 
 <template>
-  <div class="pb-2 max-h-[480px] overflow-x-auto">
-    <div v-for="ha in historyActivities" :key="ha.id" class="flex justify-between px-2 py-2">
+  <div class="pb-2 max-h-[330px] overflow-x-auto">
+    <div v-for="ha in historyActivities" :key="ha.id" class="flex justify-between px-1 py-1">
       <div
         @click="handleShowAction(ha.objectTargetId, ha.type)"
-        class="items-center w-full hover:bg-backgroundColor cursor-pointer rounded-md p-1"
+        class="items-center w-full hover:bg-backgroundColor cursor-pointer rounded-md py-1"
       >
         <div
-          class="flex items-center w-full hover:bg-backgroundColor cursor-pointer rounded-md p-1"
+          class="flex items-center w-full hover:bg-backgroundColor cursor-pointer rounded-md px-1 pt-1"
         >
-          <div class="me-2">
+          <div class="me-1">
             <div class="flex items-center justify-center rounded-full bg-white p-2 aspect-square">
-              <i :class="HISTORY_TYPE[ha.type].icon" class="fa-lg"></i>
+              <i :class="HISTORY_TYPE[ha.type].icon" class=""></i>
             </div>
           </div>
           <div class="w-[80%]">
@@ -115,7 +115,7 @@ const handleShowAction = (targetId, type) => {
             ></div>
           </div>
         </div>
-        <div class="font-semibold text-[10px] text-gray-600 ms-11 ps-1">
+        <div class="font-semibold text-[10px] text-gray-600 ms-10">
           {{ ha.createdAt }}
         </div>
       </div>

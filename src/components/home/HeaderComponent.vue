@@ -12,7 +12,7 @@
           Happy Board
         </a>
       </div>
-      <div class="col-span-7 flex w-full gap-2 ms-5 px-5 justify-between">
+      <div class="col-span-7 flex w-full gap-2 ms-5 px-5 justify-between items-center">
         <SearchComponent
           :isOpen="isModalOpened"
           @modal-open="openModal"
