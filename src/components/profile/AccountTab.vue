@@ -379,7 +379,7 @@ const updateBio = (event) => {
               fill="currentFill"
             />
           </svg>
-          <p class="font-semibold text-white">Loading ...</p>
+          <p class="font-semibold text-white">Wait a minute ...</p>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full bg-white p-2 px-4 rounded-lg mb-5 border border-borderColor mx-auto">
+  <div class="w-full bg-white p-2 px-4 rounded-lg mb-2 border border-borderColor mx-auto">
     <div class="flex justify-between border-b border-b-borderColor mb-3 items-end">
       <span class="font-semibold text-[18px]">{{ props.feature }}</span>
       <!-- <span class="hover:underline text-sm"><a href="" class="">Sea all</a></span> -->
