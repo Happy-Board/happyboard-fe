@@ -87,7 +87,7 @@ export const useHomePageStore = defineStore('home', () => {
           idea.updatedAt = convertTime(idea.updatedAt)
         })
         pageData.value = [...pageDataBackup.value, ...response.data.data.ideas]
-        if (response.data.data.ideas.length === 5) {
+        if (response.data.data.ideas.length === 10) {
           pageDataBackup.value = [...pageDataBackup.value, ...response.data.data.ideas]
           currentPage.value++
         }

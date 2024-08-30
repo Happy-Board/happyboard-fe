@@ -19,10 +19,10 @@
     </div>
     <InfiniteLoading @infinite="loadMore" />
   </div>
-  <div
-    class="flex justify-center items-center gap-5 text-2xl text-gray-600 font-semibold mt-5 bg-backgroundColor py-3 mb-5"
+  <div v-if="myIdeas?.length !== 0"
+    class="flex justify-center items-center gap-3 text-md text-gray-600 font-semibold mt-5 bg-backgroundColor py-2 mb-5"
   >
-  <img src="/icons/png/folder.png" class="w-12" alt="">
+  <img src="/icons/png/folder.png" class="w-6" alt="">
     No more ideas to show
   </div>
 </template>

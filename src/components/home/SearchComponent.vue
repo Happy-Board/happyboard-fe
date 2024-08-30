@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-10 w-full min-w-[288px]">
+  <div class="relative h-10 w-[70%] min-w-[288px]">
     <input
       @click="emit('modal-open')"
       v-model="search"
@@ -7,8 +7,14 @@
       class="peer h-full w-full rounded-full border border-primaryColor px-3 py-2.5 pr-20 font-sans text-sm font-normal !text-black outline outline-0 placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-primaryColor focus:outline-0"
       placeholder="Search title, idea,..."
     />
-  </div>
-  <ul
+    <button
+      @click="handleShowResultsInHomePage"
+      class="!absolute right-1 top-1 select-none rounded-full bg-primaryColor py-2 px-4 text-center align-middle font-sans text-xs font-bold text-blue-gray-900 shadow-md shadow-blue-gray-500/10 transition-all hover:shadow-lg hover:shadow-blue-gray-500/20 hover:bg-secondaryColor focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none text-white"
+      type="button"
+    >
+      Search
+    </button>
+    <ul
     v-if="searchData.length && props.isOpen"
     ref="target"
     class="w-full rounded-xl bg-white border border-borderColor px-4 py-2 space-y-1 absolute z-10 top-12 shadow-xl"
@@ -17,18 +23,14 @@
       v-for="result in searchData"
       :key="result.id"
       @click="handleShowDetailIdea(result.id)"
-      class="cursor-pointer hover:bg-backgroundColor p-1 rounded-lg px-2 text-primaryColor font-semibold"
+      class="cursor-pointer hover:bg-backgroundColor p-1 rounded-lg px-2 text-primaryColor"
     >
-      <div v-html="result.title"></div>
+      <div class=" font-semibold" v-html="result.highlight.title ? result.highlight.title : result.title "></div>
+      <div class="text-black text-xs line-clamp-1 break-words" v-html="result.highlight.content"></div>
     </li>
   </ul>
-  <button
-    @click="handleShowResultsInHomePage"
-    class="!absolute right-1 top-1 select-none rounded-full bg-primaryColor py-2 px-4 text-center align-middle font-sans text-xs font-bold text-blue-gray-900 shadow-md shadow-blue-gray-500/10 transition-all hover:shadow-lg hover:shadow-blue-gray-500/20 hover:bg-secondaryColor focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none text-white"
-    type="button"
-  >
-    Search
-  </button>
+  </div>
+  
 </template>
 <script setup>
 import { onClickOutside } from '@vueuse/core'
@@ -62,7 +64,7 @@ const handleShowResultsInHomePage = () => {
   resetSearchData()
   setSearchString(search.value)
   setTimeout(() => {
-    if(route.path === '/'){
+    if (route.path === '/') {
       loadMore()
     }
     router.push({ name: 'home' })
@@ -74,7 +76,7 @@ const handleShowDetailIdea = (id) => {
     router.push({ name: 'detail-idea', params: { id: id, type: 'publish' } })
     router.go()
   } else {
-    router.push({ name: 'detail-idea', params: { id: id, type: 'publish'  } })
+    router.push({ name: 'detail-idea', params: { id: id, type: 'publish' } })
   }
 }
 </script>

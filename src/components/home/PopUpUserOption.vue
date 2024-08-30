@@ -1,6 +1,6 @@
 <template>
     <div
-              class="absolute top-16 right-4 bg-white text-sm rounded-lg border border-borderColor p-2"
+              class="absolute top-16 right-32 bg-white text-sm rounded-lg border border-borderColor p-2"
               ref="target"
             >
               <div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-10 relative scroll-smooth">
+  <div class="relative scroll-smooth">
     <div
       @click="handleOpenNotificationList"
       class="p-1  hover:bg-secondaryColor/20 rounded-full relative"

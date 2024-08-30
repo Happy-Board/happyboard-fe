@@ -319,7 +319,7 @@ const updateBio = (event) => {
       </button>
     </div>
   </Modal>
- 
+
   <!-- Model Confirm Save Change -->
   <Modal
     v-if="visibleSaveChange"
@@ -387,7 +387,13 @@ const updateBio = (event) => {
   <!-- End Loading -->
 
   <!-- Input File -->
-  <input type="file" ref="fileInput" class="hidden" @change="uploadAvatar" />
+  <input
+    type="file"
+    ref="fileInput"
+    class="hidden"
+    @change="uploadAvatar"
+    accept="image/png, image/jpeg"
+  />
   <!-- End Input File -->
 </template>
 

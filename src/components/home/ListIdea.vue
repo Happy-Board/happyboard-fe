@@ -34,6 +34,12 @@
     </div>
     <InfiniteLoading @infinite="loadMore" />
   </div>
+  <div v-if="pageData?.length !== 0"
+    class="flex justify-center items-center gap-3 text-md text-gray-600 font-semibold mt-5 bg-backgroundColor py-1 mb-5"
+  >
+  <img src="/icons/png/folder.png" class="w-5" alt="">
+    No more ideas to show
+  </div>
 </template>
 <script async setup>
 import InfiniteLoading from 'v3-infinite-loading'
