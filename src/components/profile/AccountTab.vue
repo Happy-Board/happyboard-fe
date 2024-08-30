@@ -61,6 +61,12 @@ const loading = ref(false)
 const uploadAvatar = async (event) => {
   let file = event.target.files[0]
   if (file) {
+    const validTypes = ['image/png', 'image/jpeg']
+    if (!validTypes.includes(file.type)) {
+      notify('error', 'Invalid file type. Please upload a PNG or JPEG image.')
+      return
+    }
+
     const formData = new FormData()
     formData.append('file', file)
     let isUpdated = await updateData(formData)
@@ -130,14 +136,6 @@ const updateData = async (formData) => {
   await apiUpdateProfile(formData)
     .then(() => {
       isUpdated = true
-      initialFullName = profile.value.username
-      initialEmail = profile.value.email
-      initialAvatar = profile.value.avatar
-      initialPhone = profile.value.phone
-      initialJobPosition = profile.value.jobPosition
-      initialBio = profile.value.introduce
-
-      getProfile()
       notify('success', 'Your profile updated successfully!')
     })
     .catch((err) => {
@@ -147,6 +145,14 @@ const updateData = async (formData) => {
     .finally(() => {
       loading.value = false
     })
+  await getProfile()
+  initialFullName = profile.value.username
+  initialEmail = profile.value.email
+  initialAvatar = profile.value.avatar
+  initialPhone = profile.value.phone
+  initialJobPosition = profile.value.jobPosition
+  initialBio = profile.value.introduce
+
   return isUpdated
 }
 
@@ -213,7 +219,7 @@ const updateBio = (event) => {
           <i class="fas fa-trash"></i> Remove
         </button> -->
       </div>
-      <p class="font-thin text-sm md:text-md">We support PNGs and JPEGs under 10MB</p>
+      <p class="font-thin text-sm md:text-md">We support PNG and JPEG image</p>
     </div>
   </div>
   <!-- End Avatar -->
@@ -319,7 +325,7 @@ const updateBio = (event) => {
       </button>
     </div>
   </Modal>
- 
+
   <!-- Model Confirm Save Change -->
   <Modal
     v-if="visibleSaveChange"
@@ -387,7 +393,13 @@ const updateBio = (event) => {
   <!-- End Loading -->
 
   <!-- Input File -->
-  <input type="file" ref="fileInput" class="hidden" @change="uploadAvatar" />
+  <input
+    type="file"
+    ref="fileInput"
+    class="hidden"
+    @change="uploadAvatar"
+    accept="image/png, image/jpeg"
+  />
   <!-- End Input File -->
 </template>
 
