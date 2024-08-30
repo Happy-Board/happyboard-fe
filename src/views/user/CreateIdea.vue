@@ -1,6 +1,6 @@
 <template>
-  <div class="col-span-10 flex pt-[90px] z-0 bg-white px-5 min-h-screen">
-    <div class="flex flex-col gap-5 w-[80%] mx-auto">
+  <div class="col-span-10 flex pt-[90px] z-0 bg-white px-5 min-h-screen ms-5">
+    <div class="flex flex-col gap-5 w-[80%]">
       <p class="font-semibold text-3xl">Let's create your idea</p>
       <Listbox class="w-2/5" as="div" v-model="selected">
         <ListboxLabel class="block text-sm font-medium leading-6 text-black"
