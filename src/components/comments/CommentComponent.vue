@@ -11,7 +11,7 @@
           <div>
             <div class="relative">
               <div
-                class="comment-input rounded-lg border-0 bg-white border-white focus:border-0 focus:outline-0 px-4 py-2 w-fit break-words max-w-[70%]"
+                class="comment-input rounded-lg border-0 bg-white border-white focus:border-0 focus:outline-0 px-4 py-2 w-fit break-words max-w-[650px]"
                 contentEditable="false"
                 spellcheck="false"
                 v-html="`<div><strong>${props.author}</strong><br>${props.content}`"
