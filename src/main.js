@@ -14,3 +14,11 @@ app.use(router)
 app.use(VueSmoothScroll)
 
 app.mount('#app')
+
+window.addEventListener('scroll', function () {
+  document.documentElement.classList.add('scroll-active')
+  clearTimeout(window.scrollTimeout)
+  window.scrollTimeout = setTimeout(function () {
+    document.documentElement.classList.remove('scroll-active')
+  }, 1000)
+})
