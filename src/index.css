@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover,
+.scroll-active ::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+}
