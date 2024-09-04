@@ -14,7 +14,6 @@
   </div> -->
 </template>
 <script setup>
-import { useUserStore } from '@/stores/user.store';
 // import HotIdeaSkeleton from '@/components/Skeletons/HotIdeaSkeleton.vue'
 // import SuggestIdeaSkeleton from '@/components/Skeletons/SuggestIdeaSkeleton.vue'
 // import CardIdeaSkeleton from '@/components/Skeletons/CardIdeaSkeleton.vue'
@@ -23,13 +22,7 @@ import { useUserStore } from '@/stores/user.store';
 // import ListIdea from '@/components/ListIdea.vue'
 // import DetailIdeaSkeleton from '@/components/Skeletons/DetailIdeaSkeleton.vue'
 // import ListNotification from '@/components/ListNotification.vue'
-import ProfileSkeleton from '@/components/Skeletons/ProfileSkeleton.vue';
-
-const userStore = useUserStore()
-const { getMyIdeas, getMyHistoryActivities } = userStore
-
-getMyIdeas()
-getMyHistoryActivities()
+import ProfileSkeleton from '@/components/skeletons/ProfileSkeleton.vue';
 
 </script>
 <style scoped></style>

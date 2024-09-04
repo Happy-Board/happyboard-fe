@@ -1,6 +1,6 @@
 <template>
-  <div class="col-span-5 pt-[75px] z-0 bg-white px-8 border w-full min-h-screen">
-    <div class="mb-2 min-h-[136px]">
+  <div class="col-span-7 pt-[75px] bg-white px-5 min-h-screen ms-5">
+    <div>
       <Suspense>
         <HotIdea />
         <template #fallback>
@@ -9,14 +9,16 @@
       </Suspense>
     </div>
     <div class="flex-1">
-      <div class="min-w-full flex mb-2 justify-end items-end">
-        <div class="px-1.5 py-1 border border-gray-400 rounded-md flex items-center">
+      <div
+        class="min-w-full border-t border-t-borderColor flex mb-1 pt-1 justify-start items-end mt-3"
+      >
+        <div class="px-1.5 py-1 rounded-md flex items-center">
           <button
             @click="setTab('newest')"
             type="button"
             :class="
               tab === 'newest'
-                ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
+                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
                 : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
             "
           >
@@ -27,7 +29,7 @@
             type="button"
             :class="
               tab === 'highvote'
-                ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
+                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
                 : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
             "
           >
@@ -38,7 +40,7 @@
             type="button"
             :class="
               tab === 'highview'
-                ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
+                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
                 : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
             "
           >
@@ -49,7 +51,7 @@
             type="button"
             :class="
               tab === 'highcomment'
-                ? 'text-gray-900 bg-gray-300 focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
+                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
                 : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
             "
           >
@@ -67,8 +69,8 @@
     </div>
   </div>
 
-  <div class="col-span-3">
-    <div class="col-span-3 mt-[95px] ms-14">
+  <div class="col-span-3 px-2 me-5">
+    <div class="mt-[86px]">
       <Suspense>
         <div>
           <SuggestIdeaComponent
@@ -81,6 +83,14 @@
           <SuggestIdeaSkeleton />
         </template>
       </Suspense>
+      <Suspense>
+        <div>
+          <ActivityHistory />
+        </div>
+        <template #fallback>
+          <SuggestIdeaSkeleton />
+        </template>
+      </Suspense>
 
       <!-- <SuggestIdeaComponent feature="History activity" :ideas="titleIdea" /> -->
     </div>
@@ -88,22 +98,21 @@
 </template>
 <script setup>
 import { defineAsyncComponent } from 'vue'
-import SuggestIdeaSkeleton from '@/components/Skeletons/SuggestIdeaSkeleton.vue'
+import SuggestIdeaSkeleton from '@/components/skeletons/SuggestIdeaSkeleton.vue'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
-import ListIdeaSkeleton from '@/components/Skeletons/ListIdeaSkeleton.vue'
-import HotIdeaSkeleton from '@/components/Skeletons/HotIdeaSkeleton.vue'
-const HotIdea = defineAsyncComponent(() => import('@/components/HotIdea.vue'))
+import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
+import HotIdeaSkeleton from '@/components/skeletons/HotIdeaSkeleton.vue'
+import ActivityHistory from '@/components/history-activities/ActivityHistory.vue'
+const HotIdea = defineAsyncComponent(() => import('@/components/hot-ideas/HotIdea.vue'))
 const SuggestIdeaComponent = defineAsyncComponent(
-  () => import('@/components/SuggestIdeaComponent.vue')
+  () => import('@/components/home/SuggestIdeaComponent.vue')
 )
-const ListIdea = defineAsyncComponent(() => import('@/components/ListIdea.vue'))
+const ListIdea = defineAsyncComponent(() => import('@/components/home/ListIdea.vue'))
 
 const homePageStore = useHomePageStore()
 const { tab, recentIdeas } = storeToRefs(homePageStore)
 const { setTab } = homePageStore
-
-
 </script>
 <style>
 .container.spinner {

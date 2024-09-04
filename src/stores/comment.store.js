@@ -12,8 +12,8 @@ export const useCommentStore = defineStore('comment', () => {
       .then((response) => {
         comments.value = response.data.data.comments
         comments.value.map((comment) => {
-          comment.createdAt = convertTime1(comment.createdAt)
-          comment.children.map((c) => (c.createdAt = convertTime1(c.createdAt)))
+          comment.updatedAt = convertTime1(comment.updatedAt)
+          comment.children.map((c) => (c.updatedAt = convertTime1(c.updatedAt)))
         })
       })
       .catch((err) => console.log(err))

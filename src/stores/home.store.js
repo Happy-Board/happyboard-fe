@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { apiGetIdeas, apiGetRecentIdeas } from '@/apis/idea.api'
+import { apiGetIdeas, apiGetRecentIdeas, apiGetHotIdeas } from '@/apis/idea.api'
 import { convertTime } from '@/utils/convert-time'
 import { useRouter } from 'vue-router'
 
@@ -38,9 +38,9 @@ export const useHomePageStore = defineStore('home', () => {
 
   async function getHotIdeas() {
     //api get hot ideas
-    await apiGetIdeas('?option=highvote')
+    await apiGetHotIdeas()
       .then((response) => {
-        hotIdeas.value = response.data.data.ideas
+        hotIdeas.value = response.data.data
       })
       .catch((err) => console.log(err))
   }
@@ -84,10 +84,10 @@ export const useHomePageStore = defineStore('home', () => {
     return await apiGetIdeas(query.value)
       .then((response) => {
         response.data.data.ideas.forEach((idea) => {
-          idea.createdAt = convertTime(idea.createdAt)
+          idea.updatedAt = convertTime(idea.updatedAt)
         })
         pageData.value = [...pageDataBackup.value, ...response.data.data.ideas]
-        if (response.data.data.ideas.length === 5) {
+        if (response.data.data.ideas.length === 10) {
           pageDataBackup.value = [...pageDataBackup.value, ...response.data.data.ideas]
           currentPage.value++
         }

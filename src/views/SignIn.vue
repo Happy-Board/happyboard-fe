@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col justify-center h-screen bg-[#c9d6ff] bg-gradient-to-r from-gray-400 to-white items-center relative"
+    class="flex flex-col justify-center h-screen bg-primaryColor bg-gradient-to-r from-primaryColor to-backgroundColor items-center relative z-10"
   >
     <div :class="`container${classAdded} z-10 mt-10`" id="container">
       <div class="form-container sign-up">
@@ -23,9 +23,9 @@
           />
           <button
             @click.prevent="signUp"
-            class="group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+            class="group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left hover:!bg-secondaryColor"
           >
-            <span class="relative text-black font-bold">Sign Up</span>
+            <span class="relative !text-white font-bold">Sign Up</span>
           </button>
           <div class="!text-center !w-full !mt-5">
             <span class="font-light text-gray-300"
@@ -36,7 +36,7 @@
             <div class="flex mt-4 !items-center">
               <button
                 @click.prevent="ggLogin"
-                class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
+                class="gg-login !bg-white w-full !text-black flex border !border-borderColor !rounded-full px-2 py-1 font-medium hover:!bg-gray-200 hover:text-secondaryColor justify-center items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +75,7 @@
             <div class="flex mt-4 !items-center">
               <button
                 @click="ggLogin"
-                class="gg-login !mb-3 !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
+                class="gg-login !mb-3 !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-secondaryColor justify-center items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -119,15 +119,15 @@
           />
           <span
             @click="setIsShowForgetPasswordPopUp(true)"
-            class="my-2 font-medium hover:text-[#000000] hover:cursor-pointer"
+            class="my-2 font-medium hover:text-secondaryColor hover:cursor-pointer"
           >
             Forget Your Password?
           </span>
           <button
             @click.prevent="signIn"
-            class="group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+            class="group overflow-hidden relative hover:!bg-secondaryColor"
           >
-            <span class="relative font-bold text-black">Sign In</span>
+            <span class="relative font-bold text-white">Sign In</span>
           </button>
           <div class="!text-center !w-full !mt-5">
             <span class="font-light text-gray-300"
@@ -138,7 +138,7 @@
             <div class="flex mt-4 !items-center">
               <button
                 @click.prevent="ggLogin"
-                class="gg-login !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-blue-700 justify-center items-center"
+                class="gg-login !bg-white w-full !text-black flex border !border-borderColor !rounded-full px-2 py-1 font-medium hover:!bg-gray-200 hover:text-secondaryColor justify-center items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -176,11 +176,11 @@
             <h1 class="font-extrabold text-3xl">Hello, Friend!</h1>
             <p>Register with your personal details to use all of site features</p>
             <button
-              class="hidden-button group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+              class="hidden-button group overflow-hidden relative !bg-primaryColor !text-white hover:!bg-secondaryColor !border !border-white"
               id="login"
               @click="setClassAdded('')"
             >
-              <span class="relative text-base text-black font-bold"> Sign In </span>
+              <span class="relative text-base !text-white font-bold"> Sign In </span>
             </button>
           </div>
           <div class="toggle-panel toggle-right">
@@ -188,11 +188,11 @@
             <p>Enter your personal details to use all of site features</p>
 
             <button
-              class="hidden-button group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+              class="hidden-button group overflow-hidden relative !bg-primaryColor !text-white hover:!bg-secondaryColor !border !border-white"
               id="register"
               @click="setClassAdded(' active')"
             >
-              <span class="relative text-base text-black font-bold"> Sign Up </span>
+              <span class="relative text-base text-white font-bold"> Sign Up </span>
             </button>
           </div>
         </div>
@@ -201,10 +201,10 @@
 
     <div
       v-if="isShowForgetPasswordPopUp"
-      class="forget-password absolute flex flex-col items-center justify-center w-full h-full bg-[#5525c43d] z-50"
+      class="forget-password absolute flex flex-col items-center justify-center w-full h-full bg-backgroundColor/80 z-50"
     >
       <div
-        class="bg-[#fff] h-auto rounded-lg shadow-md shadow-black !p-5 !py-8 text-center relative"
+        class="bg-[#fff] h-auto rounded-lg shadow-md !p-8 text-center relative border border-borderColor"
       >
         <div v-if="!isSentEmail">
           <p class="font-bold text-xl">Enter your Email to get new password.</p>
@@ -217,12 +217,12 @@
 
           <button
             @click="handleForgotPassword"
-            class="group !p-2 py-1 rounded-md overflow-hidden relative bg-gray-500 before:absolute before:inset-0 before:bg-gray-400 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left"
+            class="group !px-3 !py-1 rounded-full overflow-hidden relative bg-primaryColor hover:bg-secondaryColor"
           >
             <span class="relative text-white">Get password</span>
           </button>
         </div>
-        <div v-if="isSentEmail" class="space-y-5">
+        <div v-if="isSentEmail" class="space-y-5 w-full">
           <p class="font-bold text-xl">
             We have sent an email to account <span class="">{{ emailToGetPassword }}</span>
           </p>
@@ -235,10 +235,46 @@
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          class="absolute right-[2px] top-[2px] w-5 h-5 hover:cursor-pointer"
+          class="absolute right-[2px] top-[2px] w-5 h-5 hover:cursor-pointer font-bold"
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
+      </div>
+    </div>
+  </div>
+  <div
+    class="fixed w-screen h-screen top-0 left-0 flex items-center justify-center z-50 transition-opacity duration-500 ease-in-out"
+    :class="{ 'opacity-0 pointer-events-none': !loading, 'opacity-100': loading }"
+  >
+    <div
+      class="absolute w-full h-full !bg-gray-900 opacity-50 transition-opacity duration-500 ease-in-out"
+      @click="closeModal"
+    ></div>
+
+    <div
+      class="absolute max-h-full transition-transform duration-500 ease-in-out transform"
+      :class="[maxWidth, { 'scale-100': loading, 'scale-0': !loading }]"
+    >
+      <div class="container-loading overflow-hidden md:rounded">
+        <div class="max-h-full px-4 py-4 flex flex-col items-center gap-3">
+          <svg
+            aria-hidden="true"
+            class="w-8 h-8 text-blue-700 animate-spin fill-blue-800"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+          <p class="font-semibold text-white">Wait a minute ...</p>
+        </div>
       </div>
     </div>
   </div>
@@ -256,7 +292,7 @@ onMounted(() => {
 })
 const ggLogin = () => {
   console.log('gg login')
-  window.open('https://duymt.io.vn/api/v1/auth/google/', '_self')
+  window.open('http://localhost:8000/api/v1/auth/google', '_self')
 }
 const router = useRouter()
 const signInInfo = reactive({
@@ -273,18 +309,27 @@ const isSentEmail = ref(true)
 const classAdded = ref('')
 const isShowForgetPasswordPopUp = ref(false)
 const emailToGetPassword = ref()
-
-const sendEmailSuccess = () => {
-  isSentEmail.value = true
-}
+const loading = ref(false)
+// const sendEmailSuccess = () => {
+//   isSentEmail.value = true
+// }
 
 const handleForgotPassword = () => {
+  loading.value = true
   apiForgotPassword({ email: emailToGetPassword.value })
     .then((res) => {
-      sendEmailSuccess()
+      loading.value = false
+      notify('success', 'Please visit the link we sent to your email to reset your password!')
+      isShowForgetPasswordPopUp.value = false
+      emailToGetPassword.value = ''
       console.log(res)
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      loading.value = false
+      if (err.response.status === 400) {
+        notify('error', 'Email does not exist!')
+      }
+    })
 }
 const setIsShowForgetPasswordPopUp = (value) => {
   isSentEmail.value = false
@@ -306,13 +351,14 @@ const setClassAdded = (value) => {
 }
 
 const signIn = () => {
+  loading.value = true
   if (!signInInfo.email || !signInInfo.password) {
     notify('warning', 'Please complete all information !')
     return
   }
   apiSignIn(signInInfo)
     .then((res) => {
-      console.log(res)
+      loading.value = false
       localStorage.setItem('uname', res.data.data.user.username)
       localStorage.setItem('uid', res.data.data.user.id)
       localStorage.setItem('accessToken', res.data.data.tokens.accessToken)
@@ -323,9 +369,11 @@ const signIn = () => {
       }, 1000)
     })
     .catch((err) => {
-      console.log(err)
-      if (err?.response?.data?.statusCode === 400) {
-        notify('error', 'Email or password invalid !')
+      loading.value = false
+      if (err?.response?.status === 400) {
+        notify('error', 'Password incorrect!')
+      } else if (err?.response?.status === 409) {
+        notify('error', 'Account does not exist!')
       } else {
         console.log('some thing went wrong')
         notify('error', 'Something went wrong !')
@@ -334,7 +382,7 @@ const signIn = () => {
 }
 
 const signUp = () => {
-  console.log(signUpInfo)
+  loading.value = true
   if (
     !signUpInfo.email ||
     !signUpInfo.password ||
@@ -350,12 +398,14 @@ const signUp = () => {
   }
   apiSignUp(signUpInfo)
     .then((res) => {
+      loading.value = false
       notify('success', 'Sign up successfully, please sign in !')
       console.log(res)
       setClassAdded('')
       resetInfo()
     })
     .catch((err) => {
+      loading.value = false
       console.log('err: ', err.response.status)
       if (err.response.status === 409) {
         notify('error', 'Email existed !')
@@ -406,8 +456,8 @@ const signUp = () => {
 }
 
 .container button {
-  background-color: #afafaf;
-  color: #000000;
+  background-color: #7061d1;
+  color: #ffffff;
   font-size: 15px;
   padding: 8px 45px;
   border: 1px solid transparent;
@@ -420,7 +470,6 @@ const signUp = () => {
 
 .container button.hidden-button {
   background-color: transparent;
-  border-color: #000000;
 }
 
 .container button::before {
@@ -530,7 +579,7 @@ const signUp = () => {
 
 .toggle {
   height: 100%;
-  background: linear-gradient(to right, #f7f7f7, #818181);
+  background: linear-gradient(to right, #eff1f3, #5d4ca5);
   color: #000000;
   position: relative;
   left: -100%;

@@ -7,6 +7,8 @@ import {
   apiVoteUpIdea,
   apiGetRelatedIdeas
 } from '@/apis/idea.api'
+import { apiGetMyHideIdeaById } from '@/apis/user.api'
+
 import { convertTime } from '@/utils/convert-time'
 
 export const useIdeaStore = defineStore('idea', () => {
@@ -53,17 +55,32 @@ export const useIdeaStore = defineStore('idea', () => {
     } else return
   }
 
+function increaseComment(){
+  idea.value.commentCount ++
+}
+
   // const getAllCategory = computed(() => category)
   async function getDetailIdea(id) {
    await apiGetDetailIdea(id)
       .then((response) => {
         idea.value = response.data.data
-        idea.value.createdAt = convertTime(idea.value.createdAt)
+        idea.value.updatedAt = convertTime(idea.value.updatedAt)
       })
       .catch((err) => {
         console.log(err)
       })
   }
+
+  async function getDetailPendingIdea(id) {
+    await apiGetMyHideIdeaById(id)
+       .then((response) => {
+         idea.value = response.data.data
+         idea.value.updatedAt = convertTime(idea.value.updatedAt)
+       })
+       .catch((err) => {
+         console.log(err)
+       })
+   }
 
   async function getRelatedIdeas(ideaId) {
     return await apiGetRelatedIdeas(ideaId)
@@ -81,6 +98,8 @@ export const useIdeaStore = defineStore('idea', () => {
     getDetailIdea,
     increaseVote,
     decreaseVote,
-    getRelatedIdeas
+    getRelatedIdeas,
+    getDetailPendingIdea,
+    increaseComment
   }
 })

@@ -91,5 +91,14 @@
     ]
 
   }
+}
 
+
+{
+  "theme": {
+    "primaryColor": "#5d4ca5",
+    "secondaryColor": "#1d4ed8",
+    "backgroundColor": "#eff1f3",
+    "backgroundButtonColor": "#c9c6dd"
+  }
 }
