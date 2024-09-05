@@ -160,6 +160,7 @@ import 'vue3-toastify/dist/index.css'
 import { useUserStore } from '@/stores/user.store'
 import { useRoute } from 'vue-router'
 import { notify } from '@/utils/toast'
+import { useMyBoardStore } from '@/stores/my-board.store'
 
 const route = useRoute()
 const ideaId = route.params.id
@@ -167,13 +168,14 @@ const type = route.params.type
 
 const router = useRouter()
 const categoryStore = useCategoryStore()
+const myBoardStore = useMyBoardStore()
 const { categories } = storeToRefs(categoryStore)
 const { getAllCategory } = categoryStore
 
 const userStore = useUserStore()
 const { ideaToEdit } = storeToRefs(userStore)
 const { getDetailDraftIdea, getDetailReleaseIdea } = userStore
-
+const { setTab } = myBoardStore
 // const title = ref()
 const ideaData = reactive({
   categoryId: '',
@@ -240,6 +242,7 @@ const saveIdea = () => {
     apiSaveIdea(ideaData)
       .then(() => {
         notify('success', 'Your idea has been saved!')
+        setTab('draft')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
         }, 500)
@@ -268,6 +271,7 @@ const createIdea = () => {
   if (route.name === 'edit') {
     apiUpdateIdea(ideaId, { ...ideaData, isPublished: false, isDrafted: false })
       .then(() => {
+        setTab('hide')
         if (type === 'release') {
           notify('success', 'Update idea successfully!')
         } else {
@@ -284,6 +288,7 @@ const createIdea = () => {
   } else {
     apiCreateIdea(ideaData)
       .then(() => {
+        setTab('hide')
         notify('success', 'Create idea successfully!')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })

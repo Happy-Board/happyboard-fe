@@ -92,12 +92,12 @@
         </div>
         <div class="flex space-x-4 ms-5">
           <i
-            v-if="props.isDraft === true || props.isPublish === true"
+            v-if="props.isDraft === true || props.isPublish === false"
             @click="handleEdit"
             class="fa-solid fa-pen-to-square cursor-pointer text-secondaryColor hover:text-blue-800"
           ></i>
           <i
-            v-if="props.isPublish === false && props.isDraft === false"
+            v-if="props.isPublish === true"
             class="fa-solid fa-pen-to-square cursor-not-allowed text-gray-400"
           ></i>
           <i @click="onToggle" class="fa-solid fa-trash-can cursor-pointer text-red-600 hover:text-red-800"></i>

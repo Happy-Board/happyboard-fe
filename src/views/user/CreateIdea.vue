@@ -140,13 +140,14 @@ import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import 'vue3-toastify/dist/index.css'
 import { notify } from '@/utils/toast'
+import { useMyBoardStore } from '@/stores/my-board.store'
 
 const router = useRouter()
 const categoryStore = useCategoryStore()
+const myBoardStore = useMyBoardStore()
 const { categories } = storeToRefs(categoryStore)
 const { getAllCategory } = categoryStore
-
-console.log(categories.value)
+const { setTab } = myBoardStore
 
 onMounted(() => {
   getAllCategory()
@@ -177,6 +178,7 @@ const saveIdea = () => {
   apiSaveIdea(ideaData)
     .then(() => {
       notify('success', 'Your idea has been saved!')
+      setTab('draft')
       setTimeout(() => {
         router.push({ name: 'my-board-ideas' })
       }, 1000)
@@ -202,6 +204,7 @@ const createIdea = () => {
   }
   apiCreateIdea(ideaData)
     .then(() => {
+      setTab('hide')
       notify('success', 'Create idea successfully !')
       setTimeout(() => {
         router.push({ name: 'my-board-ideas' })
