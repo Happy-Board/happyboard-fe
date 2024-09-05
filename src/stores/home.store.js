@@ -10,6 +10,7 @@ export const useHomePageStore = defineStore('home', () => {
   const pageData = ref([])
   const pageDataBackup = ref([])
   const searchString = ref('')
+  const category = ref('')
   const currentPage = ref(1)
   const tab = ref('newest')
   const query = ref()
@@ -30,7 +31,7 @@ export const useHomePageStore = defineStore('home', () => {
       })
       .catch((error) => {
         console.log(error)
-        if(error.response.status === 401){
+        if (error.response.status === 401) {
           router.push({ name: 'sign-in' })
         }
       })
@@ -75,24 +76,29 @@ export const useHomePageStore = defineStore('home', () => {
         console.log(error)
       })
   }
+  function setCategory(checkedCategory) {
+    category.value = checkedCategory
+  }
+
   async function loadMore() {
     if (searchString.value !== '') {
       query.value = `?q=${searchString.value}&page=${currentPage.value}&option=${tab.value}`
     } else {
       query.value = `?page=${currentPage.value}`
     }
-    return await apiGetIdeas(query.value)
-      .then((response) => {
-        response.data.data.ideas.forEach((idea) => {
-          idea.updatedAt = convertTime(idea.updatedAt)
-        })
-        pageData.value = [...pageDataBackup.value, ...response.data.data.ideas]
-        if (response.data.data.ideas.length === 10) {
-          pageDataBackup.value = [...pageDataBackup.value, ...response.data.data.ideas]
-          currentPage.value++
-        }
+    if (category.value !== '') {
+      query.value = `${query.value}&categories=${category.value}`
+    }
+    return await apiGetIdeas(query.value).then((response) => {
+      response.data.data.ideas.forEach((idea) => {
+        idea.updatedAt = convertTime(idea.updatedAt)
       })
-      
+      pageData.value = [...pageDataBackup.value, ...response.data.data.ideas]
+      if (response.data.data.ideas.length === 10) {
+        pageDataBackup.value = [...pageDataBackup.value, ...response.data.data.ideas]
+        currentPage.value++
+      }
+    })
   }
 
   function setCurrentQuery(setCurrentQuery) {
@@ -113,6 +119,7 @@ export const useHomePageStore = defineStore('home', () => {
     loadMore,
     setCurrentQuery,
     getHotIdeas,
-    getRecentIdeas
+    getRecentIdeas,
+    setCategory
   }
 })

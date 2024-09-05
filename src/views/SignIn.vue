@@ -8,7 +8,13 @@
           <h1 class="font-bold text-2xl mb-3">Create Account</h1>
 
           <input name="username" type="text" placeholder="Name" v-model="signUpInfo.username" />
-          <input name="email" type="email" placeholder="Email" v-model="signUpInfo.email" />
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            v-model="signUpInfo.email"
+            :class="isValidEmailSignUp ? '' : '!text-red-700 !border !border-red-700'"
+          />
           <input
             name="password"
             type="password"
@@ -23,7 +29,7 @@
           />
           <button
             @click.prevent="signUp"
-            class="group overflow-hidden relative before:absolute before:inset-0 before:bg-gray-300 before:scale-x-0 before:origin-right before:transition before:duration-300 hover:before:scale-x-100 hover:before:origin-left hover:!bg-secondaryColor"
+            class="group overflow-hidden relative hover:!bg-secondaryColor"
           >
             <span class="relative !text-white font-bold">Sign Up</span>
           </button>
@@ -71,46 +77,13 @@
       <div class="form-container sign-in">
         <form>
           <h1 class="font-bold text-2xl !mb-4">Sign In</h1>
-          <!-- <div class="!text-center !w-full !mb-2">
-            <div class="flex mt-4 !items-center">
-              <button
-                @click="ggLogin"
-                class="gg-login !mb-3 !bg-gray-200 w-full flex border border-gray-300 !rounded-md px-2 py-1 font-medium hover:!bg-gray-300 hover:text-secondaryColor justify-center items-center"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1.5em"
-                  height="1.5em"
-                  viewBox="0 0 256 262"
-                  class="!mr-3"
-                >
-                  <path
-                    fill="#4285f4"
-                    d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"
-                  />
-                  <path
-                    fill="#34a853"
-                    d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"
-                  />
-                  <path
-                    fill="#fbbc05"
-                    d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602z"
-                  />
-                  <path
-                    fill="#eb4335"
-                    d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
-                  />
-                </svg>
-                <span class=""> Sign in with google</span>
-              </button>
-            </div>
-            <span class="font-light text-gray-300"
-              >---------------------------
-              <span class="text-gray-500 font-medium">or</span>
-              ---------------------------</span
-            >
-          </div> -->
-          <input name="email" type="email" placeholder="Email" v-model="signInInfo.email" />
+          <input
+            name="email"
+            type="text"
+            placeholder="Email"
+            v-model="signInInfo.email"
+            :class="isValidEmailSignIn ? '' : '!text-red-700 !border !border-red-700'"
+          />
           <input
             name="password"
             type="password"
@@ -210,9 +183,10 @@
           <p class="font-bold text-xl">Enter your Email to get new password.</p>
           <input
             class="bg-[#eee] !py-2 !px-3 w-full focus:outline-0 !my-4 rounded-sm"
-            type="email"
+            type="text"
             placeholder="example@gmail.com"
             v-model="emailToGetPassword"
+            :class="isValidEmailResetPassword ? '' : '!text-red-700 !border !border-red-700'"
           />
 
           <button
@@ -280,7 +254,7 @@
   </div>
 </template>
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { apiSignIn, apiSignUp } from '@/apis/auth.api'
 import { notify } from '../utils/toast'
@@ -310,9 +284,44 @@ const classAdded = ref('')
 const isShowForgetPasswordPopUp = ref(false)
 const emailToGetPassword = ref()
 const loading = ref(false)
+const isValidEmailSignIn = ref(false)
+const isValidEmailSignUp = ref(false)
+const isValidEmailResetPassword = ref(false)
 // const sendEmailSuccess = () => {
 //   isSentEmail.value = true
 // }
+
+watch(
+  () => signUpInfo.email,
+  (newEmail) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    isValidEmailSignUp.value = regex.test(newEmail) || newEmail === ''
+  },
+  {
+    immediate: true
+  }
+)
+
+watch(
+  () => signInInfo.email,
+  (newEmail) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    isValidEmailSignIn.value = regex.test(newEmail) || newEmail === ''
+  },
+  {
+    immediate: true
+  }
+)
+watch(
+  emailToGetPassword,
+  (newEmail) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    isValidEmailResetPassword.value = regex.test(newEmail) || newEmail === ''
+  },
+  {
+    immediate: true
+  }
+)
 
 const handleForgotPassword = () => {
   loading.value = true
@@ -334,6 +343,7 @@ const handleForgotPassword = () => {
 const setIsShowForgetPasswordPopUp = (value) => {
   isSentEmail.value = false
   isShowForgetPasswordPopUp.value = value
+  emailToGetPassword.value = ''
 }
 
 const resetInfo = () => {
@@ -382,7 +392,6 @@ const signIn = () => {
 }
 
 const signUp = () => {
-  loading.value = true
   if (
     !signUpInfo.email ||
     !signUpInfo.password ||
@@ -392,10 +401,16 @@ const signUp = () => {
     notify('warning', 'Please complete all information !')
     return
   }
+  if (!isValidEmailSignUp.value) {
+    notify('warning', 'Email is not valid !')
+    return
+  }
   if (signUpInfo.password !== signUpInfo.passwordConfirm) {
     notify('warning', 'Password and Password confirm is not the same !')
     return
   }
+
+  loading.value = true
   apiSignUp(signUpInfo)
     .then((res) => {
       loading.value = false
@@ -406,13 +421,16 @@ const signUp = () => {
     })
     .catch((err) => {
       loading.value = false
-      console.log('err: ', err.response.status)
       if (err.response.status === 409) {
         notify('error', 'Email existed !')
       } else {
         console.log('some thing went wrong')
         notify('error', 'Something went wrong !')
       }
+    })
+    .finally(() => {
+      console.log('finally')
+      loading.value = false
     })
 }
 </script>
@@ -492,7 +510,7 @@ const signUp = () => {
 
 .container input {
   background-color: #eee;
-  border: none;
+  border: 1px solid #ffffff;
   margin: 8px 0;
   padding: 10px 15px;
   font-size: 13px;

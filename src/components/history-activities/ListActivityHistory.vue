@@ -6,15 +6,8 @@ import { storeToRefs } from 'pinia'
 const userStore = useUserStore()
 
 const { historyActivities } = storeToRefs(userStore)
-const { getMyHistoryActivities } = userStore
 
 const router = useRouter()
-
-await getMyHistoryActivities().catch((error) => {
-  if (error.response.status === 401) {
-    router.push({ name: 'sign-in' })
-  }
-})
 
 const HISTORY_TYPE = {
   CI01: {

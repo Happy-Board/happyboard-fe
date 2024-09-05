@@ -14,7 +14,7 @@
       <div class="col-span-9 break-words line-clamp-1">{{ idea.title }}</div>
     </div>
     <div v-if="ideas?.length === 0" class="flex flex-col justify-center items-center gap-1 text-gray-400 pb-5">
-      <i class="fa-regular fa-newspaper fa-5x"></i>
+      <i class="fa-regular fa-newspaper fa-3x"></i>
       <div
           class="table text-center"
         >

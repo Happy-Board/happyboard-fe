@@ -9,56 +9,7 @@
       </Suspense>
     </div>
     <div class="flex-1">
-      <div
-        class="min-w-full border-t border-t-borderColor flex mb-1 pt-1 justify-start items-end mt-3"
-      >
-        <div class="px-1.5 py-1 rounded-md flex items-center">
-          <button
-            @click="setTab('newest')"
-            type="button"
-            :class="
-              tab === 'newest'
-                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
-                : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
-            "
-          >
-            Newest
-          </button>
-          <button
-            @click="setTab('highvote')"
-            type="button"
-            :class="
-              tab === 'highvote'
-                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
-                : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
-            "
-          >
-            Highest vote
-          </button>
-          <button
-            @click="setTab('highview')"
-            type="button"
-            :class="
-              tab === 'highview'
-                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
-                : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
-            "
-          >
-            Most view
-          </button>
-          <button
-            @click="setTab('highcomment')"
-            type="button"
-            :class="
-              tab === 'highcomment'
-                ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
-                : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg text-xs px-2 py-0.5 mx-1'
-            "
-          >
-            Most comment
-          </button>
-        </div>
-      </div>
+      <FilterComponent />
       <Suspense>
         <ListIdea />
 
@@ -104,6 +55,7 @@ import { storeToRefs } from 'pinia'
 import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
 import HotIdeaSkeleton from '@/components/skeletons/HotIdeaSkeleton.vue'
 import ActivityHistory from '@/components/history-activities/ActivityHistory.vue'
+import FilterComponent from '@/components/home/FilterComponent.vue'
 const HotIdea = defineAsyncComponent(() => import('@/components/hot-ideas/HotIdea.vue'))
 const SuggestIdeaComponent = defineAsyncComponent(
   () => import('@/components/home/SuggestIdeaComponent.vue')
@@ -111,8 +63,7 @@ const SuggestIdeaComponent = defineAsyncComponent(
 const ListIdea = defineAsyncComponent(() => import('@/components/home/ListIdea.vue'))
 
 const homePageStore = useHomePageStore()
-const { tab, recentIdeas } = storeToRefs(homePageStore)
-const { setTab } = homePageStore
+const { recentIdeas } = storeToRefs(homePageStore)
 </script>
 <style>
 .container.spinner {
