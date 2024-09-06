@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-9 pt-2 pb-1 border-t border-borderColor">
+  <!-- <div class="grid grid-cols-9 pt-2 pb-1 border-t border-borderColor">
     <div class="col-span-1 flex flex-col gap-1 mt-1.5 text-[12px]">
       <div class="flex justify-end font-medium text-gray-900">
         <span class="font-medium mr-0.5">{{ props.totalComment }}</span>
@@ -21,24 +21,6 @@
           class="text-wrap me-5 ms-1 font-bold text-xl text-primaryColor hover:text-secondaryColor hover:underline break-words cursor-pointer line-clamp-2"
           v-html="props?.title"
         ></div>
-        <!-- <div v-if="props.author === userName" class="dropdown h-[30px]">
-          <button
-            class="dropbtn px-2 aspect-square rounded-full bg-gray-50 hover:bg-gray-200 font-medium"
-          >
-            ⋯
-          </button>
-          <div class="dropdown-content rounded-md text-sm font-medium">
-            <p @click="handleEdit">Edit</p>
-            <p @click="handleDelete">Delete</p>
-          </div>
-        </div> -->
-        <!-- <OptionComponent
-          v-if="props.author === profile.username"
-          :target="'idea'"
-          :targetId="props.id"
-          @edit="handleEdit"
-          @delete="handleDelete"
-        /> -->
       </div>
       <div class="content mt-2 ms-1">
         <div class="content mt-2 mb-1 ms-1 border-0 break-words line-clamp-3">
@@ -70,6 +52,68 @@
 
         <div class="flex">
           <span class="ms-2 text-[11px]">{{ props.updatedAt }}</span>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <div class="grid grid-cols-9 pt-2 pb-1 border-t border-borderColor">
+    <div class="col-span-9">
+      <div class="title flex justify-between">
+        <div
+          @click="viewDetailIdea(props.id, 'publish')"
+          class="text-wrap me-5 font-bold text-xl text-primaryColor hover:text-secondaryColor hover:underline break-words cursor-pointer line-clamp-2"
+          v-html="props?.title"
+        ></div>
+      </div>
+      <div class="content mt-2">
+        <div class="content mt-2 mb-1 border-0 break-words line-clamp-3">
+          <div
+            class="line-clamp-3 text-sm"
+            data-gram="false"
+            contenteditable="false"
+            readonly="true"
+            v-html="props.description"
+          ></div>
+        </div>
+      </div>
+      <div class="flex flex-row justify-between items-center">
+        <div class="flex items-center gap-3 mt-1.5 text-[12px]">
+          <div class="flex items-center font-medium text-gray-900">
+            <span class="font-medium mr-0.5 text-sm">{{ props.totalComment }}</span>
+            <i class="fa-regular fa-comment-dots"></i>
+          </div>
+          <div class="flex items-center font-medium text-primaryColor">
+            <span class="font-medium mr-0.5 text-sm">{{ props.totalVote }}</span
+            >
+            <i class="fa-regular fa-circle-check"></i>
+          </div>
+          <div class="flex items-center font-medium text-secondaryColor">
+            <span class="font-medium mr-0.5 text-sm">{{ props.totalView }}</span
+            >
+            <i class="fa-regular fa-eye"></i>
+          </div>
+        </div>
+
+        <div class="flex justify-end items-center text-[12px]">
+          <img
+            :src="avatarURL"
+            alt="avatar"
+            class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3%]"
+          />
+          <span class="ms-2 me-6 font-semibold cursor-pointer">{{ props.author }}</span>
+
+          <div class="flex relative">
+            <i
+              :class="
+                props?.category?.icon + ' fa-solid absolute left-[-12px] bottom-[2px] text-gray-700'
+              "
+            ></i>
+            <span class="ps-1">{{ props?.category?.title }}</span>
+          </div>
+
+          <div class="flex">
+            <span class="ms-2 text-[11px]">{{ props.updatedAt }}</span>
+          </div>
         </div>
       </div>
     </div>

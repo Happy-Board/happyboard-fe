@@ -1,20 +1,22 @@
 <template>
   <div class="col-span-7 pt-[100px] ms-5 z-0 bg-white min-h-screen px-3">
-      <Suspense>
-        <DetailIdea />
-        <template #fallback>
-          <DetailIdeaSkeleton />
-        </template>
-      </Suspense>
+    <Suspense>
+      <DetailIdea />
+      <template #fallback>
+        <DetailIdeaSkeleton />
+      </template>
+    </Suspense>
+    <div v-if="typeIdea !== 'pending'">
       <Suspense>
         <CommentBlock :ideaId="ideaId" />
         <template #fallback>
           <CommentBlockSkeleton />
         </template>
       </Suspense>
+    </div>
   </div>
 
-  <div class="col-span-3 mt-[95px]  px-2 me-5">
+  <div class="col-span-3 mt-[95px] px-2 me-5">
     <Suspense>
       <SuggestIdeaComponent feature="Related ideas" :ideas="relatedIdeas" />
       <template #fallback>
@@ -41,8 +43,8 @@ const route = useRoute()
 // const router = useRouter()
 const ideaStore = useIdeaStore()
 const ideaId = route.params.id
+const typeIdea = route.params.type
 const { relatedIdeas } = storeToRefs(ideaStore)
-
 </script>
 <style scoped>
 .ql-toolbar {

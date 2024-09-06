@@ -1,7 +1,7 @@
 <template>
   <div
     @click="viewDetailIdea(props.id)"
-    class="px-2 py-1 my-3 mx-2 border border-borderColor rounded-lg overflow-hidden cursor-pointer hover:bg-slate-50"
+    class="px-2 py-1 mt-3 mx-2 border border-borderColor rounded-lg overflow-hidden cursor-pointer hover:bg-slate-50"
   >
     <img src="/animations/fire.gif" class="absolute top-0 right-0 w-7 h-7" alt="" />
 
@@ -31,9 +31,25 @@
         ></div>
       </div>
     </div>
-    <div class="flex flex-row justify-start items-center text-[12px] pt-1 ms-2">
-      <img :src="avatarURL" alt="avatar" class="w-[6%] aspect-square rounded-full" />
-      <span class="ms-1 me-6 font-semibold text-xs">{{ props.author }}</span>
+    <div class="flex justify-between items-center text-[12px] pt-1 mx-2">
+      <div class="flex justify-start items-center text-[12px]">
+        <img :src="avatarURL" alt="avatar" class="w-[6%] aspect-square rounded-full" />
+        <span class="ms-1 me-6 font-semibold text-xs">{{ props.author }}</span>
+      </div>
+      <div class="flex items-center gap-3 mt-1.5s text-[12px]">
+        <div class="flex items-center font-medium text-gray-900">
+          <span class="font-medium mr-0.5 text-sm">{{ props.totalComment }}</span>
+          <i class="fa-regular fa-comment-dots"></i>
+        </div>
+        <div class="flex items-center font-medium text-primaryColor">
+          <span class="font-medium mr-0.5 text-sm">{{ props.totalVote }}</span>
+          <i class="fa-regular fa-circle-check"></i>
+        </div>
+        <div class="flex items-center font-medium text-secondaryColor">
+          <span class="font-medium mr-0.5 text-sm">{{ props.totalView }}</span>
+          <i class="fa-regular fa-eye"></i>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +60,10 @@ const props = defineProps({
   content: String,
   author: String,
   id: Number,
-  avatar: String
+  avatar: String,
+  totalComment: Number,
+  totalView: Number,
+  totalVote: Number
 })
 
 const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar

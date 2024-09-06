@@ -61,21 +61,6 @@ export const useHomePageStore = defineStore('home', () => {
   function setSearchString(search) {
     searchString.value = search
   }
-  function setTab(tabSort) {
-    tab.value = tabSort
-    if (searchString.value !== '') {
-      query.value = `?q=${searchString.value}&option=${tab.value}`
-    } else {
-      query.value = `?option=${tab.value}&page=1`
-    }
-    apiGetIdeas(query.value)
-      .then((response) => {
-        pageData.value = response.data.data.ideas
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
   function setCategory(checkedCategory) {
     category.value = checkedCategory
   }
@@ -89,6 +74,9 @@ export const useHomePageStore = defineStore('home', () => {
     if (category.value !== '') {
       query.value = `${query.value}&categories=${category.value}`
     }
+    if (tab.value !== '') {
+      query.value = `${query.value}&option=${tab.value}`
+    }
     return await apiGetIdeas(query.value).then((response) => {
       response.data.data.ideas.forEach((idea) => {
         idea.updatedAt = convertTime(idea.updatedAt)
@@ -101,6 +89,11 @@ export const useHomePageStore = defineStore('home', () => {
     })
   }
 
+  function setTab(tabSort) {
+    tab.value = tabSort
+    currentPage.value = 1
+    loadMore()
+  }
   function setCurrentQuery(setCurrentQuery) {
     query.value = setCurrentQuery
   }

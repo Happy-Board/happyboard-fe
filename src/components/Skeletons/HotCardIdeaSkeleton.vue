@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-[36%] h-fit px-2 py-1 my-3 mx-2 border border-borderColor rounded-lg shadow-md shadow-gray-300 overflow-visible relative"
+    class="w-[36%] h-fit px-2 py-1.5 my-3 mx-2 border border-borderColor rounded-lg overflow-visible relative"
   >
     <img src="/animations/fire.gif" class="absolute -top-3 -right-3 w-7 h-7" alt="" />
 

@@ -21,7 +21,7 @@
   </div>
 
   <div class="col-span-3 px-2 me-5">
-    <div class="mt-[86px]">
+    <div class="mt-[86px] sticky top-[86px]">
       <Suspense>
         <div>
           <SuggestIdeaComponent

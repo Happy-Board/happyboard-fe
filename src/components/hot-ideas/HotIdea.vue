@@ -15,14 +15,20 @@
           :author="idea?.User?.username"
           :title="idea.title"
           :avatar="idea?.User.avatar"
+          :total-comment="idea?.commentCount"
+          :total-view="idea?.viewCount"
+          :total-vote="idea?.voteCount"
         />
       </slide>
+      <template #addons>
+      <pagination />
+    </template>
     </carousel>
   </div>
 </template>
 <script async setup>
 import 'vue3-carousel/dist/carousel.css'
-import { Carousel, Slide } from 'vue3-carousel'
+import { Carousel, Slide, Pagination  } from 'vue3-carousel'
 import { onMounted, ref, watch } from 'vue'
 import HotCardideaComponenet from './HotCardIdeaComponent.vue'
 import { useHomePageStore } from '@/stores/home.store'
@@ -59,4 +65,14 @@ onMounted(() => {
   addEvent()
 })
 </script>
-<style scoped></style>
+
+<style scoped>
+
+.carousel__pagination{
+  margin: 2px 0 0 !important;
+}
+
+.carousel__pagination :deep(.carousel__pagination-button--active)::after {
+  background-color: #5d4ca5 !important;
+}
+</style>

@@ -22,3 +22,8 @@ initializeGA();
 <template>
   <router-view></router-view>
 </template>
+<style>
+*{
+  font-family: "DM Sans", sans-serif;
+}
+</style>

@@ -1,13 +1,13 @@
 <template>
-  <div class="min-w-full border-t border-t-borderColor flex mb-1 justify-between items-end mt-3">
-    <div class="px-1.5 py-1 rounded-md flex items-center text-xs">
+  <div class="min-w-full border-t border-t-borderColor flex mb-1 justify-between items-end mt-1">
+    <div class="py-1 rounded-md flex items-center text-xs">
       <button
         @click="setTab('newest')"
         type="button"
         :class="
           tab === 'newest'
-            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 mx-1'
-            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 mx-1'
+            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 me-1'
+            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 me-1'
         "
       >
         Newest
@@ -46,7 +46,7 @@
         Most comment
       </button>
     </div>
-    <div class="pt-1 px-2 rounded-lg cursor-pointer relative">
+    <div class="pt-1 rounded-lg cursor-pointer relative">
       <button
         @click="showCheckBox"
         id="dropdownSearchButton"

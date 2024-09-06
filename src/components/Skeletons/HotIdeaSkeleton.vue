@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full">
+  <div class="flex w-full mb-2">
     <HotCardIdeaSkeleton />
     <HotCardIdeaSkeleton />
     <HotCardIdeaSkeleton />
