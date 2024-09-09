@@ -51,7 +51,7 @@
         </div>
 
         <div class="flex">
-          <span class="ms-2 text-[11px]">{{ props.updatedAt }}</span>
+          <span class="ms-2 text-[11px]">{{ props.createdAt }}</span>
         </div>
       </div>
     </div>
@@ -112,7 +112,7 @@
           </div>
 
           <div class="flex">
-            <span class="ms-2 text-[11px]">{{ props.updatedAt }}</span>
+            <span class="ms-2 text-[11px]">{{ props.createdAt }}</span>
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@ const props = defineProps({
   totalVote: Number,
   totalView: Number,
   description: String,
-  updatedAt: String,
+  createdAt: String,
   isPublish: Boolean,
   isDraft: Boolean,
   avatar: String

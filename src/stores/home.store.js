@@ -67,7 +67,7 @@ export const useHomePageStore = defineStore('home', () => {
 
   async function loadMore() {
     if (searchString.value !== '') {
-      query.value = `?q=${searchString.value}&page=${currentPage.value}&option=${tab.value}`
+      query.value = `?q=${searchString.value}&page=${currentPage.value}`
     } else {
       query.value = `?page=${currentPage.value}`
     }
@@ -79,7 +79,7 @@ export const useHomePageStore = defineStore('home', () => {
     }
     return await apiGetIdeas(query.value).then((response) => {
       response.data.data.ideas.forEach((idea) => {
-        idea.updatedAt = convertTime(idea.updatedAt)
+        idea.createdAt = convertTime(idea.createdAt)
       })
       pageData.value = [...pageDataBackup.value, ...response.data.data.ideas]
       if (response.data.data.ideas.length === 10) {

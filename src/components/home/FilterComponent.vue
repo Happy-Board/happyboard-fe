@@ -51,7 +51,7 @@
         @click="showCheckBox"
         id="dropdownSearchButton"
         data-dropdown-toggle="dropdownSearch"
-        class="inline-flex items-center px-4 py-1 text-xs font-medium text-center text-black bg-backgroundColor rounded-lg hover:bg-backgroundButtonColor"
+        class="inline-flex items-center px-4 py-1 text-xs font-medium text-center text-black bg-backgroundColor rounded-lg hover:bg-backgroundButtonColor border border-borderColor"
         type="button"
         :class="isShowCategoryCheckbox ? '!bg-backgroundButtonColor' : ''"
       >
@@ -92,19 +92,44 @@
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                 v-model="checkedCategory"
               />
-              <label :for="category.id" class="w-full ms-2 font-medium text-gray-900 rounded"
+              <label :for="category.id" class="ms-2 font-medium text-gray-900 rounded"
                 ><div class="flex items-center">
                   <i :class="category.icon + ' fa-solid'"></i>
 
-                  <span
-                    class="ml-3 block truncate"
-                    >{{ category.title }}</span
-                  >
+                  <span class="ml-3 block truncate line-clamp-1 break-words">{{
+                    category.title
+                  }}</span>
                 </div></label
               >
             </div>
           </li>
         </ul>
+        <div class="flex px-5 justify-between text-xs my-3 border-t-borderColor">
+          <div class="flex justify-center items-center">
+            <input
+              id="all"
+              type="checkbox"
+              value="all"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              v-model="isChooseAll"
+            />
+            <label for="all" class="font-medium text-gray-900 rounded">
+              <span class="ml-2 block truncate font-bold">Choose All</span>
+            </label>
+          </div>
+          <!-- <div class="flex justify-center items-center">
+            <input
+              id="clear"
+              type="checkbox"
+              value="clear"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              v-model="isClear"
+            />
+            <label for="clear" class="font-medium text-gray-900 rounded">
+              <span class="ml-2 block truncate">Clear</span>
+            </label>
+          </div> -->
+        </div>
         <div class="flex justify-center py-2">
           <button
             @click="handleApply"
@@ -131,19 +156,29 @@ const homePageStore = useHomePageStore()
 const { tab } = storeToRefs(homePageStore)
 const { setTab, setCategory, loadMore } = homePageStore
 const isShowCategoryCheckbox = ref(false)
-
+const isChooseAll = ref()
 const checkedCategory = ref([])
 onMounted(() => {
   getAllCategory()
 })
 
 watch(checkedCategory, (newCheckedCategory) => {
-    console.log('watch')
+  if (checkedCategory.value.length === categories.value.length) {
+    isChooseAll.value = true
+  } else {
+    isChooseAll.value = false
+  }
   setCategory(newCheckedCategory.toString())
 })
 const showCheckBox = () => {
   isShowCategoryCheckbox.value = !isShowCategoryCheckbox.value
 }
+
+watch(isChooseAll, () => {
+  if (isChooseAll.value) {
+    checkedCategory.value = categories.value.map((category) => category.title)
+  }
+})
 
 const handleApply = () => {
   loadMore()

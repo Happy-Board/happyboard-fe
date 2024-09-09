@@ -64,7 +64,7 @@ function increaseComment(){
    await apiGetDetailIdea(id)
       .then((response) => {
         idea.value = response.data.data
-        idea.value.updatedAt = convertTime(idea.value.updatedAt)
+        idea.value.createdAt = convertTime(idea.value.createdAt)
       })
       .catch((err) => {
         console.log(err)
@@ -75,7 +75,7 @@ function increaseComment(){
     await apiGetMyHideIdeaById(id)
        .then((response) => {
          idea.value = response.data.data
-         idea.value.updatedAt = convertTime(idea.value.updatedAt)
+         idea.value.createdAt = convertTime(idea.value.createdAt)
        })
        .catch((err) => {
          console.log(err)

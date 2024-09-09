@@ -1,24 +1,10 @@
 <template>
-  <div class="grid grid-cols-9 pt-2 pb-4 border-t border-borderColor">
-    <div class="col-span-1 flex flex-col gap-1 mt-1.5 text-[12px]">
-      <div class="flex justify-end font-medium text-gray-900">
-        <span class="font-medium mr-0.5">{{ props.totalComment }}</span>
-        {{ props.totalComment === 1 ? 'comment' : 'comments' }}
-      </div>
-      <div class="flex justify-end font-medium text-green-600">
-        <span class="font-medium mr-0.5">{{ props.totalVote }}</span
-        >{{ props.totalVote === 1 ? 'vote' : 'votes' }}
-      </div>
-      <div class="flex justify-end font-medium text-red-800">
-        <span class="font-medium mr-0.5">{{ props.totalView }}</span
-        >{{ props.totalView === 1 ? 'view' : 'views' }}
-      </div>
-    </div>
-    <div class="col-span-8 ms-3">
-      <div class="title ms-1 flex justify-between">
+  <div class="grid grid-cols-9 pt-2 border-t border-borderColor">
+    <div class="col-span-9">
+      <div class="title flex justify-between">
         <div
           @click="viewDetailIdea()"
-          class="text-wrap me-5 ms-1 font-bold text-xl text-primaryColor hover:text-secondaryColor break-words hover:underline cursor-pointer line-clamp-2"
+          class="text-wrap me-5 first-letter:font-bold text-xl text-primaryColor hover:text-secondaryColor break-words hover:underline cursor-pointer line-clamp-2"
           v-html="props?.title"
         ></div>
         <div
@@ -58,8 +44,8 @@
           @delete="handleDelete"
         /> -->
       </div>
-      <div class="content mt-2 ms-1">
-        <div class="content mt-2 mb-1 ms-1 border-0 line-clamp-3">
+      <div class="content mt-2">
+        <div class="content mt-2 mb-1 border-0 line-clamp-3">
           <div
             class="line-clamp-3 text-sm"
             data-gram="false"
@@ -70,43 +56,55 @@
         </div>
       </div>
 
-      <div class="flex flex-row justify-end items-center text-[12px] pt-1">
-        <!-- <img
-            :src="avatarURL"
-            alt="avatar"
-            class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3%]"
-          />
-          <span class="ms-2 me-6 font-semibold cursor-pointer">{{ props.author }}</span> -->
-
-        <div class="flex relative">
-          <i
-            :class="
-              props?.category?.icon + ' fa-solid absolute left-[-12px] bottom-[2px] text-gray-700'
-            "
-          ></i>
-          <span class="ps-1">{{ props?.category?.title }}</span>
+      <div class="flex flex-row justify-between items-center text-[12px] pt-1">
+        <div class="flex items-center gap-3 mt-1.5 text-[12px]">
+          <div class="flex items-center font-medium text-gray-900">
+            <span class="font-medium mr-0.5 text-sm">{{ props.totalComment }}</span>
+            <i class="fa-regular fa-comment-dots"></i>
+          </div>
+          <div class="flex items-center font-medium text-primaryColor">
+            <span class="font-medium mr-0.5 text-sm">{{ props.totalVote }}</span>
+            <i class="fa-regular fa-circle-check"></i>
+          </div>
+          <div class="flex items-center font-medium text-secondaryColor">
+            <span class="font-medium mr-0.5 text-sm">{{ props.totalView }}</span>
+            <i class="fa-regular fa-eye"></i>
+          </div>
         </div>
+        <div class="flex justify-end items-center text-[12px]">
+          <div class="flex relative">
+            <i
+              :class="
+                props?.category?.icon + ' fa-solid absolute left-[-12px] bottom-[2px] text-gray-700'
+              "
+            ></i>
+            <span class="ps-1">{{ props?.category?.title }}</span>
+          </div>
 
-        <div class="flex">
-          <span class="ms-2 text-[11px]">{{ props.updatedAt }}</span>
-        </div>
-        <div class="flex space-x-4 ms-5">
-          <i
-            v-if="props.isDraft === true || props.isPublish === false"
-            @click="handleEdit"
-            class="fa-solid fa-pen-to-square cursor-pointer text-secondaryColor hover:text-blue-800"
-          ></i>
-          <i
-            v-if="props.isPublish === true"
-            class="fa-solid fa-pen-to-square cursor-not-allowed text-gray-400"
-          ></i>
-          <i @click="onToggle" class="fa-solid fa-trash-can cursor-pointer text-red-600 hover:text-red-800"></i>
+          <div class="flex">
+            <span class="ms-2 text-[11px]">{{ props.createdAt }}</span>
+          </div>
+          <div class="flex space-x-4 ms-5">
+            <i
+              v-if="props.isDraft === true || props.isPublish === false"
+              @click="handleEdit"
+              class="fa-solid fa-pen-to-square cursor-pointer text-secondaryColor hover:text-blue-800"
+            ></i>
+            <i
+              v-if="props.isPublish === true"
+              class="fa-solid fa-pen-to-square cursor-not-allowed text-gray-400"
+            ></i>
+            <i
+              @click="onToggle"
+              class="fa-solid fa-trash-can cursor-pointer text-red-600 hover:text-red-800"
+            ></i>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <ModalConfirmDelete
-  v-if="visible"
+    v-if="visible"
     title="Confirm Action"
     maxWidth="sm"
     :visible="visible"
@@ -154,7 +152,7 @@ const props = defineProps({
   totalVote: Number,
   totalView: Number,
   description: String,
-  updatedAt: String,
+  createdAt: String,
   isPublish: Boolean,
   isDraft: Boolean,
   avatar: String
@@ -165,7 +163,7 @@ const props = defineProps({
 const visible = ref(false)
 
 const handleEdit = () => {
-  router.push({ name: 'edit', params: { type: props.isDraft ? 'draft' : 'release', id: props.id } })
+  router.push({ name: 'edit', params: { type: props.isDraft ? 'draft' : 'pending', id: props.id } })
 }
 // const handleDelete = () => {
 //   console.log('delete')
@@ -184,10 +182,10 @@ const handleDelete = () => {
       notify('success', 'Idea deleted successfully')
     })
     .catch((error) => {
-    if (error.response.status === 401) {
-      router.push({ name: 'sign-in' })
-    }
-  })
+      if (error.response.status === 401) {
+        router.push({ name: 'sign-in' })
+      }
+    })
 }
 const viewDetailIdea = () => {
   if (props.isDraft === true) {

@@ -1,7 +1,7 @@
 <template>
   <div
     @click="viewDetailIdea(props.id)"
-    class="px-2 py-1 mt-3 mx-2 border border-borderColor rounded-lg overflow-hidden cursor-pointer hover:bg-slate-50"
+    class="px-2 py-1 mt-3 mx-2 border border-borderColor rounded-lg overflow-hidden cursor-pointer hover:bg-slate-50 bg-backgroundColor"
   >
     <img src="/animations/fire.gif" class="absolute top-0 right-0 w-7 h-7" alt="" />
 

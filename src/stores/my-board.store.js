@@ -69,7 +69,7 @@ export const useMyBoardStore = defineStore('my-board', () => {
     if (tab.value === 'all') {
       return await apiGetMyIdeas(query.value).then((response) => {
         response.data.data.ideas.forEach((idea) => {
-          idea.updatedAt = convertTime(idea.updatedAt)
+          idea.createdAt = convertTime(idea.createdAt)
         })
         myIdeas.value = [...myIdeasBackup.value, ...response.data.data.ideas]
         if (response.data.data.ideas.length === 5) {
@@ -81,7 +81,7 @@ export const useMyBoardStore = defineStore('my-board', () => {
     if (tab.value === 'publish') {
       return await apiGetMyPublishIdeas(query.value).then((response) => {
         response.data.data.ideas.forEach((idea) => {
-          idea.updatedAt = convertTime(idea.updatedAt)
+          idea.createdAt = convertTime(idea.createdAt)
         })
         myIdeas.value = [...myIdeasBackup.value, ...response.data.data.ideas]
         if (response.data.data.ideas.length === 5) {
@@ -93,7 +93,7 @@ export const useMyBoardStore = defineStore('my-board', () => {
     if (tab.value === 'hide') {
       return await apiGetMyHideIdeas(query.value).then((response) => {
         response.data.data.ideas.forEach((idea) => {
-          idea.updatedAt = convertTime(idea.updatedAt)
+          idea.createdAt = convertTime(idea.createdAt)
         })
         myIdeas.value = [...myIdeasBackup.value, ...response.data.data.ideas]
         if (response.data.data.ideas.length === 5) {
@@ -105,7 +105,7 @@ export const useMyBoardStore = defineStore('my-board', () => {
     if (tab.value === 'draft') {
       return await apiGetMyDraftIdeas(query.value).then((response) => {
         response.data.data.ideas.forEach((idea) => {
-          idea.updatedAt = convertTime(idea.updatedAt)
+          idea.createdAt = convertTime(idea.createdAt)
         })
         myIdeas.value = [...myIdeasBackup.value, ...response.data.data.ideas]
         if (response.data.data.ideas.length === 5) {

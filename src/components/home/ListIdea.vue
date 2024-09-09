@@ -10,7 +10,7 @@
         :totalComment="idea.commentCount"
         :totalVote="idea.voteCount"
         :totalView="idea.viewCount"
-        :updatedAt="idea.updatedAt"
+        :createdAt="idea.createdAt"
       />
     </div>
     <InfiniteLoading @infinite="loadMore" />
@@ -27,17 +27,18 @@
         :totalComment="idea.commentCount"
         :totalVote="idea.voteCount"
         :totalView="idea.viewCount"
-        :updatedAt="idea.updatedAt"
+        :createdAt="idea.createdAt"
         :isDraft="idea.isDrafted"
         :avatar="idea.User.avatar"
       />
     </div>
     <InfiniteLoading @infinite="loadMore" />
   </div>
-  <div v-if="pageData?.length !== 0"
-    class="flex justify-center items-center gap-3 text-md text-gray-600 font-semibold mt-5 bg-backgroundColor py-1 mb-5"
+  <div
+    v-if="pageData?.length !== 0"
+    class="flex justify-center items-center gap-3 text-md text-gray-600 font-semibold mt-5 border-t border-t-borderColor py-2 mb-5"
   >
-  <img src="/icons/png/folder.png" class="w-5" alt="">
+    <img src="/icons/png/folder.png" class="w-5" alt="" />
     No more ideas to show
   </div>
 </template>

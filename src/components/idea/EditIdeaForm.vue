@@ -197,7 +197,7 @@ if (type === 'draft') await getDetailDraftIdea(ideaId).catch((error) => {
     }
   })
 
-if (type === 'release') await getDetailReleaseIdea(ideaId).catch((error) => {
+if (type === 'pending') await getDetailReleaseIdea(ideaId).catch((error) => {
     if (error.response.status === 401) {
       router.push({ name: 'sign-in' })
     }

@@ -73,6 +73,10 @@ onMounted(() => {
 }
 
 .carousel__pagination :deep(.carousel__pagination-button--active)::after {
-  background-color: #5d4ca5 !important;
+  background-color: #310cda !important;
+}
+.carousel__pagination :deep(.carousel__pagination-button)::after {
+  border-radius: 50%;
+
 }
 </style>

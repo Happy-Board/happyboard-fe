@@ -40,20 +40,13 @@
         ></i>
       </div>
     </div> -->
-    <div class="flex flex-col items-start ps-2 w-full">
+    <div class="flex flex-col items-start w-full">
       <div
         class="!text-3xl !font-bold overflow-hidden break-words line-clamp-2 w-[90%]"
         v-html="idea?.title"
       ></div>
       <div class="flex justify-between items-center">
         <div class="flex items-center mt-2">
-          <button
-            @click="handleVote"
-            class="me-5 text-sm font-semibold px-3 rounded-full border border-primaryColor min-w-[73px]"
-            :class="vote === null ? 'bg-white hover:bg-backgroundButtonColor text-black' : 'bg-primaryColor text-white'"
-            >
-            {{ idea?.voteCount === 1 ? `${idea?.voteCount} Vote` : `${idea?.voteCount} Votes` }}
-          </button>
           <img
             :src="idea?.User?.avatar === '' ? '/avatar/default-avatar.jpg' : idea?.User?.avatar"
             alt="avatar"
@@ -66,17 +59,36 @@
               <span class="ps-1">{{ idea?.Category?.title }}</span>
             </div>
             <div class="flex">
-              <span class="text-[12px] font-thin">{{ idea?.updatedAt }}</span>
-            </div>
-            <div v-if="typeIdea !== 'pending'"  class="flex">
-              <span class="text-[12px] font-thin">{{ idea?.commentCount === 1 ? `${idea?.commentCount} comment` : `${idea?.commentCount} comments` }}</span>
+              <span class="text-[12px]">{{ idea?.createdAt }}</span>
             </div>
             <div v-if="typeIdea !== 'pending'" class="flex">
-              <span class="text-[12px] font-thin">{{ idea?.viewCount === 0 ? `${idea?.viewCount + 1} view` : `${idea?.viewCount + 1} views` }}</span>
+              <span class="text-[12px]">{{
+                idea?.commentCount === 1
+                  ? `${idea?.commentCount} comment`
+                  : `${idea?.commentCount} comments`
+              }}</span>
+            </div>
+            <div v-if="typeIdea !== 'pending'" class="flex">
+              <span class="text-[12px]">{{
+                idea?.viewCount === 0
+                  ? `${idea?.viewCount + 1} view`
+                  : `${idea?.viewCount + 1} views`
+              }}</span>
             </div>
           </div>
-          <div class=""></div>
         </div>
+        <button
+          v-if="typeIdea !== 'pending'"
+          @click="handleVote"
+          class="text-sm font-semibold px-3 rounded-full border border-primaryColor min-w-[73px]"
+          :class="
+            vote === null
+              ? 'bg-white hover:bg-backgroundButtonColor text-black'
+              : 'bg-primaryColor text-white'
+          "
+        >
+          {{ idea?.voteCount === 1 ? `${idea?.voteCount} Vote` : `${idea?.voteCount} Votes` }}
+        </button>
       </div>
     </div>
   </div>
@@ -95,7 +107,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -103,13 +115,13 @@ const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const typeIdea = route.params.type
 const { idea } = storeToRefs(ideaStore)
-const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas, getDetailPendingIdea } = ideaStore
+const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas, getDetailPendingIdea } =
+  ideaStore
 
-
-if(typeIdea === 'pending'){
+if (typeIdea === 'pending') {
   await getDetailPendingIdea(ideaId)
 }
-if(typeIdea === 'publish'){
+if (typeIdea === 'publish') {
   await getDetailIdea(ideaId)
 }
 
@@ -139,7 +151,10 @@ const handleVote = () => {
   color: gray;
   cursor: text;
 }
-.ql-editor{
+.ql-editor {
   padding: 12px 0px;
+}
+.ql-toolbar.ql-snow {
+  padding: 0 !important;
 }
 </style>

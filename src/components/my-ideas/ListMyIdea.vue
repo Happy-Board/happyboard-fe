@@ -13,7 +13,7 @@
         :totalComment="idea.commentCount"
         :totalVote="idea.voteCount"
         :totalView="idea.viewCount"
-        :updatedAt="idea.updatedAt"
+        :createdAt="idea.createdAt"
         :isDraft="idea.isDrafted"
         :isPublish="idea.isPublished"
         :avatar="idea.User.avatar"
