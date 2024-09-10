@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-5 flex z-0 bg-white px-5 min-h-screen">
+  <div class="col-span-5 flex z-0 bg-white min-h-screen">
     <div class="flex flex-col gap-5 w-full">
       <p class="font-semibold text-3xl">Edit your idea</p>
 
@@ -23,7 +23,7 @@
         >
         <AnimatedPlaceholder width="" height="100px" border-radius="5px" />
       </div>
-      <div class="my-10 flex justify-end">
+      <!-- <div class="my-10 flex justify-end">
         <button
           type="button"
           class="text-black bg-gray-200 border border-borderColor focus:outline-none hover:bg-blue-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
@@ -36,7 +36,7 @@
         >
           Create
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

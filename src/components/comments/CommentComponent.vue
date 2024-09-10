@@ -63,7 +63,8 @@
                     class="comment-input rounded-lg border-0 bg-white border-white focus:border-0 focus:outline-0 py-1 px-3 pe-11 w-full"
                     contentEditable="true"
                     spellcheck="false"
-                    @keypress="handleComment"
+                   
+                    @keyup.enter="commitComment"
                     ref="editorRef"
                   ></div>
                   <span
@@ -117,10 +118,10 @@ const editorRef = ref()
 const isShowReactions = ref(false)
 const keepReactionsDisplay = ref(false)
 
-const handleComment = (event) => {
-  if (!event.ctrlKey || event.code !== 'Enter') return
-  commitComment(event)
-}
+// const handleComment = (event) => {
+//   if (!event.ctrlKey || event.code !== 'Enter') return
+//   commitComment(event)
+// }
 
 // const handleEditComment = () => {
 //   //handleEditComment

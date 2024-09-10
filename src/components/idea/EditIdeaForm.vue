@@ -119,20 +119,20 @@
           Create
         </button>
       </div>
-      <div v-if="route.params.type === 'release'" class="my-10 flex justify-end">
-        <button
+      <div v-if="route.params.type === 'pending'" class="my-10 flex justify-end">
+        <!-- <button
           @click.prevent="saveIdea"
           type="button"
           class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
         >
           Cancel
-        </button>
+        </button> -->
         <button
           @click.prevent="createIdea"
           type="button"
           class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
         >
-          Update
+          Release
         </button>
       </div>
     </div>

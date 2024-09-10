@@ -8,6 +8,7 @@
         contentEditable="true"
         spellcheck="false"
         @keypress="handleComment"
+        @keyup.enter="commitComment"
         ref="editorRef"
       ></div>
 
@@ -72,8 +73,11 @@ await getAllComments(props.ideaId)
 
 const editorRef = ref()
 const handleComment = (event) => {
-  if (!event.ctrlKey || event.code !== 'Enter') return
-  commitComment()
+  if (event.code === 'Enter'){
+    event.preventDefault()
+    return
+  } 
+
 }
 
 const commitComment = () => {

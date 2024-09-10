@@ -80,7 +80,7 @@
         <button
           v-if="typeIdea !== 'pending'"
           @click="handleVote"
-          class="text-sm font-semibold px-3 rounded-full border border-primaryColor min-w-[73px]"
+          class="text-sm font-semibold px-3 py-1 rounded-full border border-primaryColor min-w-[85px]"
           :class="
             vote === null
               ? 'bg-white hover:bg-backgroundButtonColor text-black'

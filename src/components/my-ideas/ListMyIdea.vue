@@ -23,7 +23,7 @@
   </div>
   <div
     v-if="myIdeas?.length !== 0"
-    class="flex justify-center items-center gap-3 text-md text-gray-600 font-semibold mt-5 border-t border-t-borderColor py-2 mb-5"
+    class="flex justify-center items-center gap-3 text-md text-gray-600 font-semibold border-t border-t-borderColor py-2 pt-5 mb-5"
   >
     <img src="/icons/png/folder.png" class="w-6" alt="" />
     No more ideas to show
