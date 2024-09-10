@@ -161,6 +161,7 @@ import { useUserStore } from '@/stores/user.store'
 import { useRoute } from 'vue-router'
 import { notify } from '@/utils/toast'
 import { useMyBoardStore } from '@/stores/my-board.store'
+import sanitizeHtml from 'sanitize-html'
 
 const route = useRoute()
 const ideaId = route.params.id
@@ -219,14 +220,16 @@ watch(
 )
 
 const saveIdea = () => {
-  // const title = document.querySelector('#title').innerHTML
-  // ideaData.title = title
+  if(ideaData.title && !sanitizeHtml(ideaData.title)){
+    notify('error', 'Invalid title!')
+    return
+  }
+  ideaData.title = sanitizeHtml(ideaData.title)
   if (!ideaData.categoryId && !ideaData.title && !ideaData.content) {
     notify('warning', 'Nothing to save')
     return
   }
   if (route.name === 'edit') {
-    console.log(route.name)
     apiUpdateIdea(ideaId, ideaData)
       .then(() => {
         notify('success', 'Idea saved successfully')
@@ -255,9 +258,11 @@ const saveIdea = () => {
 }
 
 const createIdea = () => {
-  // const title = document.querySelector('#title').innerHTML
-  // ideaData.title = title
-
+  if(ideaData.title && !sanitizeHtml(ideaData.title)){
+    notify('error', 'Invalid title!')
+    return
+  }
+  ideaData.title = sanitizeHtml(ideaData.title)
   if (!ideaData.categoryId) {
     notify('warning', 'Category is not empty !')
     return

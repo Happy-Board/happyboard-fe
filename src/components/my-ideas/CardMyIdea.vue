@@ -56,8 +56,8 @@
         </div>
       </div>
 
-      <div class="flex flex-row justify-between items-center text-[12px] pt-1">
-        <div class="flex items-center gap-3 mt-1.5 text-[12px]">
+      <div class="flex flex-row items-center text-[12px] pt-1" :class="isPublish ? 'justify-between' : 'justify-end'">
+        <div v-if="isPublish" class="flex items-center gap-3 mt-1.5 text-[12px]">
           <div class="flex items-center font-medium text-gray-900">
             <span class="font-medium mr-0.5 text-sm">{{ props.totalComment }}</span>
             <i class="fa-regular fa-comment-dots"></i>

@@ -5,7 +5,7 @@
       v-model="search"
       type="search"
       class="peer h-full w-full rounded-full border border-primaryColor px-3 py-2.5 pr-20 font-sans text-sm font-normal !text-black outline outline-0 placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-primaryColor focus:outline-0"
-      placeholder="Search title, idea,..."
+      placeholder="Search title, idea"
     />
     <button
       @click="handleShowResultsInHomePage"

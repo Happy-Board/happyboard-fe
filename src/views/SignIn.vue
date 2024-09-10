@@ -4,29 +4,70 @@
   >
     <div :class="`container${classAdded} z-10 mt-10`" id="container">
       <div class="form-container sign-up">
-        <form>
+        <form class="">
           <h1 class="font-bold text-2xl mb-3">Create Account</h1>
 
           <input name="username" type="text" placeholder="Name" v-model="signUpInfo.username" />
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            v-model="signUpInfo.email"
-            :class="isValidEmailSignUp ? '' : '!text-red-700 !border !border-red-700'"
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            v-model="signUpInfo.password"
-          />
-          <input
-            name="passwordConfirm"
-            type="password"
-            placeholder="Password confirm"
-            v-model="signUpInfo.passwordConfirm"
-          />
+          <div class="w-full relative !mt-1">
+            <span
+              v-if="!isValidEmail"
+              class="text-xs !pl-1 text-red-700 font-medium absolute -top-2 -left-1"
+              ><i class="fa-solid fa-circle-exclamation !mr-1"></i>Invalid email format</span
+            >
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              v-model="signUpInfo.email"
+              :class="isValidEmail ? '' : '!text-red-700 !border !border-red-700'"
+            />
+          </div>
+          <div class="w-full relative !my-1">
+            <span
+              v-if="!isValidPassword"
+              class="text-xs !pl-1 text-red-700 font-medium absolute -top-2 -left-1"
+              ><i class="fa-solid fa-circle-exclamation !mr-1"></i>Password must be at least 8
+              characters</span
+            >
+            <div class="relative w-full">
+              <i
+                @click="handleShowPassword"
+                v-if="isShowPassword"
+                class="fa-regular fa-eye-slash absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+              ></i>
+              <i
+                v-if="!isShowPassword"
+                @click="handleShowPassword"
+                class="fa-regular fa-eye absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+              ></i>
+              <input
+                name="password"
+                :type="isShowPassword ? 'text' : 'password'"
+                placeholder="Password"
+                v-model="signUpInfo.password"
+                class="!pr-10"
+                :class="isValidPassword ? '' : ' !border !border-red-700'"
+              />
+            </div>
+          </div>
+          <div class="relative w-full">
+            <i
+              @click="handleShowPasswordConfirm"
+              v-if="isShowPasswordConfirm"
+              class="fa-regular fa-eye-slash absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+            ></i>
+            <i
+              v-if="!isShowPasswordConfirm"
+              @click="handleShowPasswordConfirm"
+              class="fa-regular fa-eye absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+            ></i>
+            <input
+              name="passwordConfirm"
+             :type="isShowPasswordConfirm ? 'text' : 'password'"
+              placeholder="Password confirm"
+              v-model="signUpInfo.passwordConfirm"
+            />
+          </div>
           <button
             @click.prevent="signUp"
             class="group overflow-hidden relative hover:!bg-secondaryColor"
@@ -76,20 +117,50 @@
       </div>
       <div class="form-container sign-in">
         <form>
-          <h1 class="font-bold text-2xl !mb-4">Sign In</h1>
-          <input
-            name="email"
-            type="text"
-            placeholder="Email"
-            v-model="signInInfo.email"
-            :class="isValidEmailSignIn ? '' : '!text-red-700 !border !border-red-700'"
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            v-model="signInInfo.password"
-          />
+          <h1 class="font-bold text-2xl !mb-8">Sign In</h1>
+          <div class="w-full relative">
+            <span
+              v-if="!isValidEmail"
+              class="text-xs !pl-1 text-red-700 font-medium absolute -top-4 -left-1"
+              ><i class="fa-solid fa-circle-exclamation !mr-1"></i>Invalid email format</span
+            >
+            <input
+              name="email"
+              type="text"
+              placeholder="Email"
+              v-model="signInInfo.email"
+              class="!mt-0 w-full"
+              :class="isValidEmail ? '' : '!text-red-700 !border !border-red-700'"
+            />
+          </div>
+          <div class="w-full relative !mt-2">
+            <span
+              v-if="!isValidPassword"
+              class="text-xs !pl-1 text-red-700 font-medium absolute -top-2 -left-1"
+              ><i class="fa-solid fa-circle-exclamation !mr-1"></i>Password must be at least 8
+              characters</span
+            >
+            <div class="relative w-full">
+              <i
+                @click="handleShowPassword"
+                v-if="isShowPassword"
+                class="fa-regular fa-eye-slash absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+              ></i>
+              <i
+                v-if="!isShowPassword"
+                @click="handleShowPassword"
+                class="fa-regular fa-eye absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+              ></i>
+              <input
+                name="password"
+                :type="isShowPassword ? 'text' : 'password'"
+                placeholder="Password"
+                v-model="signInInfo.password"
+                class="!pr-10"
+                :class="isValidPassword ? '' : ' !border !border-red-700'"
+              />
+            </div>
+          </div>
           <span
             @click="setIsShowForgetPasswordPopUp(true)"
             class="my-2 font-medium hover:text-secondaryColor hover:cursor-pointer"
@@ -284,18 +355,28 @@ const classAdded = ref('')
 const isShowForgetPasswordPopUp = ref(false)
 const emailToGetPassword = ref()
 const loading = ref(false)
-const isValidEmailSignIn = ref(false)
-const isValidEmailSignUp = ref(false)
+const isValidEmail = ref(false)
 const isValidEmailResetPassword = ref(false)
+const isValidPassword = ref(false)
+const isShowPassword = ref(false)
+const isShowPasswordConfirm = ref(false)
 // const sendEmailSuccess = () => {
 //   isSentEmail.value = true
 // }
+
+const handleShowPassword = () => {
+  isShowPassword.value = !isShowPassword.value
+}
+
+const handleShowPasswordConfirm = () => {
+  isShowPasswordConfirm.value = !isShowPasswordConfirm.value
+}
 
 watch(
   () => signUpInfo.email,
   (newEmail) => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    isValidEmailSignUp.value = regex.test(newEmail) || newEmail === ''
+    isValidEmail.value = regex.test(newEmail) || newEmail === ''
   },
   {
     immediate: true
@@ -306,7 +387,7 @@ watch(
   () => signInInfo.email,
   (newEmail) => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    isValidEmailSignIn.value = regex.test(newEmail) || newEmail === ''
+    isValidEmail.value = regex.test(newEmail) || newEmail === ''
   },
   {
     immediate: true
@@ -317,6 +398,26 @@ watch(
   (newEmail) => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     isValidEmailResetPassword.value = regex.test(newEmail) || newEmail === ''
+  },
+  {
+    immediate: true
+  }
+)
+
+watch(
+  () => signInInfo.password,
+  (newPassword) => {
+    isValidPassword.value = newPassword.length >= 8 || newPassword.length === 0
+  },
+  {
+    immediate: true
+  }
+)
+
+watch(
+  () => signUpInfo.password,
+  (newPassword) => {
+    isValidPassword.value = newPassword.length >= 8 || newPassword.length === 0
   },
   {
     immediate: true
@@ -353,6 +454,8 @@ const resetInfo = () => {
   signUpInfo.username = ''
   signUpInfo.password = ''
   signUpInfo.passwordConfirm = ''
+  isShowPassword.value = false
+  isShowPasswordConfirm.value = false
 }
 
 const setClassAdded = (value) => {
@@ -401,7 +504,7 @@ const signUp = () => {
     notify('warning', 'Please complete all information !')
     return
   }
-  if (!isValidEmailSignUp.value) {
+  if (!isValidEmail.value) {
     notify('warning', 'Email is not valid !')
     return
   }

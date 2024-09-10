@@ -141,6 +141,7 @@ import { storeToRefs } from 'pinia'
 import 'vue3-toastify/dist/index.css'
 import { notify } from '@/utils/toast'
 import { useMyBoardStore } from '@/stores/my-board.store'
+import sanitizeHtml from 'sanitize-html'
 
 const router = useRouter()
 const categoryStore = useCategoryStore()
@@ -169,8 +170,11 @@ watch(
 )
 
 const saveIdea = () => {
-  // const title = document.querySelector('#title').innerHTML
-  // ideaData.title = title
+  if(ideaData.title && !sanitizeHtml(ideaData.title)){
+    notify('error', 'Invalid title!')
+    return
+  }
+  ideaData.title = sanitizeHtml(ideaData.title)
   if (!ideaData.categoryId && !ideaData.title && !ideaData.content) {
     notify('warning', 'Nothing to save')
     return
@@ -189,9 +193,11 @@ const saveIdea = () => {
     })
 }
 const createIdea = () => {
-  // const title = document.querySelector('#title').innerHTML
-  // ideaData.title = title
-
+  if(ideaData.title && !sanitizeHtml(ideaData.title)){
+    notify('error', 'Invalid title!')
+    return
+  }
+  ideaData.title = sanitizeHtml(ideaData.title)
   if (!ideaData.categoryId) {
     notify('warning', 'Category is not empty !')
     return
