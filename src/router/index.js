@@ -12,6 +12,7 @@ import MyHistoryActivity from '@/components/history-activities/MyHistoryActivity
 import ProfileView from '@/views/user/ProfilePage.vue'
 import ResetPassword from '@/views/user/ResetPassword.vue'
 import MainLayout from '@/components/layouts/MainLayout.vue'
+import NotFoundPage from '@/views/user/NotFoundPage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -68,7 +69,8 @@ const router = createRouter({
       path: '/reset-password/:token',
       name: 'reset-password',
       component: ResetPassword
-    }
+    },
+    { path: '/:pathMatch(.*)*', component: NotFoundPage }
     // {
     //   path: '/about',
     //   name: 'about',

@@ -2,11 +2,7 @@
   <section class="bg-gray-200">
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <a href="#" class="flex items-center mb-6 text-3xl font-semibold text-primaryColor">
-        <img
-          class="w-12 h-auto mr-2"
-          src="../../assets/icons//png/logo.png"
-          alt="logo"
-        />
+        <img class="w-12 h-auto mr-2" src="../../assets/icons//png/logo.png" alt="logo" />
         HAPPY BOARD
       </a>
       <div class="w-full p-6 bg-white rounded-lg shadow sm:max-w-md sm:p-8">
@@ -16,39 +12,56 @@
           Reset Password
         </h2>
         <form class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
-          <div>
-            <label for="password" class="block mb-2 text-sm font-medium text-gray-900"
-              >New Password</label
+          <div class="w-full relative !my-1">
+            <span
+              v-if="!isValidPassword"
+              class="text-xs !pl-1 text-red-700 font-medium absolute -top-2 -left-1"
+              ><i class="fa-solid fa-circle-exclamation !mr-1"></i>Password must be at least 8
+              characters</span
             >
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="••••••••"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-              required=""
-              v-model="password"
-            />
+            <div class="relative w-full">
+              <i
+                @click="handleShowPassword"
+                v-if="isShowPassword"
+                class="fa-regular fa-eye-slash absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+              ></i>
+              <i
+                v-if="!isShowPassword"
+                @click="handleShowPassword"
+                class="fa-regular fa-eye absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+              ></i>
+              <input
+                name="password"
+                :type="isShowPassword ? 'text' : 'password'"
+                placeholder="Password"
+                v-model="password"
+                class="!pr-10"
+                :class="isValidPassword ? '' : ' !border !border-red-700'"
+              />
+            </div>
           </div>
-          <div>
-            <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900"
-              >Confirm password</label
-            >
+          <div class="relative w-full">
+            <i
+              @click="handleShowPasswordConfirm"
+              v-if="isShowPasswordConfirm"
+              class="fa-regular fa-eye-slash absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+            ></i>
+            <i
+              v-if="!isShowPasswordConfirm"
+              @click="handleShowPasswordConfirm"
+              class="fa-regular fa-eye absolute right-3 cursor-pointer text-gray-600 fa-sm top-1/2 -translate-y-1/2"
+            ></i>
             <input
-              type="confirm-password"
-              name="confirm-password"
-              id="confirm-password"
-              placeholder="••••••••"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-              required=""
+              name="passwordConfirm"
+              :type="isShowPasswordConfirm ? 'text' : 'password'"
+              placeholder="Password confirm"
               v-model="confirmPassword"
             />
-          </div>
-
+          </div>        
           <div class="text-center">
             <button
               @click.prevent="handleResetPassWord"
-              class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2 "
+              class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
             >
               Reset passwod
             </button>
@@ -63,14 +76,36 @@ import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { notify } from '@/utils/toast'
 import { apiResetPassword } from '@/apis/user.api'
+import { watch } from 'vue'
 const router = useRouter()
 
 const route = useRoute()
 
 const token = route.params.token
 
-const password = ref()
-const confirmPassword = ref()
+const password = ref('')
+const confirmPassword = ref('')
+const isShowPassword = ref(false)
+const isShowPasswordConfirm = ref(false)
+const isValidPassword = ref(false)
+
+watch(
+  password,
+  (newPassword) => {
+    isValidPassword.value = newPassword.length >= 8 || newPassword.length === 0
+  },
+  {
+    immediate: true
+  }
+)
+
+const handleShowPassword = () => {
+  isShowPassword.value = !isShowPassword.value
+}
+
+const handleShowPasswordConfirm = () => {
+  isShowPasswordConfirm.value = !isShowPasswordConfirm.value
+}
 
 const handleResetPassWord = () => {
   if (!password.value || !confirmPassword.value) {
@@ -81,7 +116,7 @@ const handleResetPassWord = () => {
     notify('warning', 'Passwords do not match')
     return
   }
- console.log({ token: token, new_password: password.value })
+  console.log({ token: token, new_password: password.value })
   apiResetPassword({ token: token, new_password: password.value })
     .then(() => {
       notify('success', 'Password reset successfully')
@@ -92,3 +127,15 @@ const handleResetPassWord = () => {
     .catch((err) => console.log(err))
 }
 </script>
+<style scoped>
+input {
+  background-color: #eee;
+  border: 1px solid #ffffff;
+  margin: 8px 0;
+  padding: 10px 15px;
+  font-size: 13px;
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
+}
+</style>
