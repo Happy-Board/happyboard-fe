@@ -21,7 +21,7 @@ export const useNotificationStore = defineStore('notification', () => {
       notifications.value = res.data.data
       notifications.value.forEach((item) => {
         item['title'] = handleNotification(item)
-        item.updatedAt = convertTime2(item.updatedAt)
+        item.createdAt = convertTime2(item.createdAt)
         if (item.status === 0) count.value++
       })
       numNotification.value = count.value
@@ -34,7 +34,7 @@ export const useNotificationStore = defineStore('notification', () => {
       notifications.value = res.data.data
       notifications.value.forEach((item) => {
         item['title'] = handleNotification(item)
-        item.updatedAt = convertTime2(item.updatedAt)
+        item.createdAt = convertTime2(item.createdAt)
         if (item.status === 0) count.value++
       })
       numNotification.value = count.value

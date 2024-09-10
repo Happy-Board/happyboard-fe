@@ -24,7 +24,7 @@
         <div class="">
           <div v-html="notification.title"></div>
           <div class="text-[10px] font-semibold text-blue-900">
-            {{ notification.updatedAt }}
+            {{ notification.createdAt }}
           </div>
         </div>
       </div>
