@@ -142,6 +142,9 @@ import 'vue3-toastify/dist/index.css'
 import { notify } from '@/utils/toast'
 import { useMyBoardStore } from '@/stores/my-board.store'
 import sanitizeHtml from 'sanitize-html'
+import { SANITIZE_ALLOWED_TAGS } from '@/constants'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 const router = useRouter()
 const categoryStore = useCategoryStore()
@@ -170,11 +173,16 @@ watch(
 )
 
 const saveIdea = () => {
-  if(ideaData.title && !sanitizeHtml(ideaData.title)){
+  if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
+  } else if(ideaData.title !== sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
+    toast.warning('Your title is not allowed to contain html tags! We will strip your html tags', {
+          autoClose: 5000
+        })
+    ideaData.title = sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
+    return
   }
-  ideaData.title = sanitizeHtml(ideaData.title)
   if (!ideaData.categoryId && !ideaData.title && !ideaData.content) {
     notify('warning', 'Nothing to save')
     return
@@ -193,11 +201,16 @@ const saveIdea = () => {
     })
 }
 const createIdea = () => {
-  if(ideaData.title && !sanitizeHtml(ideaData.title)){
+  if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
+  } else if(ideaData.title !== sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
+    toast.warning('Your title is not allowed to contain html tags! We will strip your html tags', {
+          autoClose: 5000
+        })
+    ideaData.title = sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
+    return
   }
-  ideaData.title = sanitizeHtml(ideaData.title)
   if (!ideaData.categoryId) {
     notify('warning', 'Category is not empty !')
     return
@@ -228,7 +241,6 @@ const selected = ref({
 watch(selected, async () => {
   ideaData.categoryId = selected.value.id
 })
-
 </script>
 <style scoped>
 a {

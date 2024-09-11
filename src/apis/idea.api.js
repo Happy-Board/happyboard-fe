@@ -10,7 +10,7 @@ export const apiGetRecentIdeas = async () => await axiosInstance.get(`/ideas/rec
 
 export const apiGetRelatedIdeas = async (ideaId) => await axiosInstance.get(`/ideas/similar?id=${ideaId}`)
 
-export const apiGetDetailIdea = async (id) => await axiosInstance.get(`/ideas/${id}`)
+export const apiGetDetailIdea = async (id) => await axiosInstance.get(`/ideas/public/${id}`)
 
 export const apiVoteUpIdea = async (id) => await axiosInstance.post(`/ideas/${id}/up`)
 

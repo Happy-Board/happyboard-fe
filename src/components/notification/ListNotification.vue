@@ -37,11 +37,13 @@ import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import NotificationNotFound from '../notfound-data/NotificationNotFound.vue'
+import { useCommentStore } from '@/stores/comment.store'
 
 const router = useRouter()
 const ideaStore = useIdeaStore()
 const { getDetailIdea } = ideaStore
 const notificationStore = useNotificationStore()
+const {  getAllComments } = useCommentStore()
 
 const { notifications } = storeToRefs(notificationStore)
 const { getAllNotifications, getUnreadNotifications, markNotificationReaded } = notificationStore
@@ -72,6 +74,7 @@ const handleOnclickNotification = (notiId, ideaId, notificationStatus) => {
   emits('closeNotification')
   markNotificationReaded(notiId, notificationStatus)
   router.push({ name: 'detail-idea', params: { type: 'publish', id: ideaId } })
+  getAllComments(ideaId)
   getDetailIdea(ideaId)
 }
 </script>

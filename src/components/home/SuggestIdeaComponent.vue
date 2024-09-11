@@ -35,13 +35,13 @@ const commentStore = useCommentStore()
 const { getRecentIdeas } = homePageStore
 const ideaStore = useIdeaStore()
 const { getDetailIdea, getRelatedIdeas } = ideaStore
+const {  getAllComments } = commentStore
 
 const props = defineProps({
   feature: String,
   ideas: Array
 })
 
-const {  getAllComments } = commentStore
 const router = useRouter()
 const viewDetailIdea = (id) => {
   router.push({ name: 'detail-idea', params: { type: 'publish', id: id } })

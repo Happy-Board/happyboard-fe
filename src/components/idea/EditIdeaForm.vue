@@ -139,7 +139,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, reactive, onMounted, watch, onUpdated } from 'vue'
 import { useRouter } from 'vue-router'
@@ -162,6 +161,9 @@ import { useRoute } from 'vue-router'
 import { notify } from '@/utils/toast'
 import { useMyBoardStore } from '@/stores/my-board.store'
 import sanitizeHtml from 'sanitize-html'
+import { SANITIZE_ALLOWED_TAGS } from '@/constants'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 const route = useRoute()
 const ideaId = route.params.id
@@ -192,13 +194,15 @@ onMounted(() => {
   ideaData.content = ideaToEdit.value?.content
 })
 
-if (type === 'draft') await getDetailDraftIdea(ideaId).catch((error) => {
+if (type === 'draft')
+  await getDetailDraftIdea(ideaId).catch((error) => {
     if (error.response.status === 401) {
       router.push({ name: 'sign-in' })
     }
   })
 
-if (type === 'pending') await getDetailReleaseIdea(ideaId).catch((error) => {
+if (type === 'pending')
+  await getDetailReleaseIdea(ideaId).catch((error) => {
     if (error.response.status === 401) {
       router.push({ name: 'sign-in' })
     }
@@ -206,8 +210,8 @@ if (type === 'pending') await getDetailReleaseIdea(ideaId).catch((error) => {
 
 onUpdated(() => {
   document.querySelector('#title1').style.height = '5px'
-    document.querySelector('#title1').style.height =
-      document.querySelector('#title1').scrollHeight + 'px'
+  document.querySelector('#title1').style.height =
+    document.querySelector('#title1').scrollHeight + 'px'
 })
 
 watch(
@@ -220,11 +224,16 @@ watch(
 )
 
 const saveIdea = () => {
-  if(ideaData.title && !sanitizeHtml(ideaData.title)){
+  if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
+  } else if(ideaData.title !== sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
+    toast.warning('Your title is not allowed to contain html tags! We will strip your html tags', {
+          autoClose: 5000
+        })
+    ideaData.title = sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
+    return
   }
-  ideaData.title = sanitizeHtml(ideaData.title)
   if (!ideaData.categoryId && !ideaData.title && !ideaData.content) {
     notify('warning', 'Nothing to save')
     return
@@ -258,11 +267,16 @@ const saveIdea = () => {
 }
 
 const createIdea = () => {
-  if(ideaData.title && !sanitizeHtml(ideaData.title)){
+  if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
+  } else if(ideaData.title !== sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
+    toast.warning('Your title is not allowed to contain html tags! We will strip your html tags', {
+          autoClose: 5000
+        })
+    ideaData.title = sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
+    return
   }
-  ideaData.title = sanitizeHtml(ideaData.title)
   if (!ideaData.categoryId) {
     notify('warning', 'Category is not empty !')
     return

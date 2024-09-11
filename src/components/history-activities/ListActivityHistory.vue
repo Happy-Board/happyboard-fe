@@ -78,7 +78,7 @@ const handleShowAction = (targetId, type) => {
 </script>
 
 <template>
-  <div class="pb-2 max-h-[330px] overflow-x-auto">
+  <div class="pb-2 max-h-[300px] overflow-x-auto">
     <div v-for="ha in historyActivities" :key="ha.id" class="flex justify-between px-1 py-1">
       <div
         @click="handleShowAction(ha.objectTargetId, ha.type)"

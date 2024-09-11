@@ -20,3 +20,6 @@ export const NOTIFICATIONS_CODE = {
         reaction: 'NC01'
     }
 }
+
+
+export const SANITIZE_ALLOWED_TAGS = []
