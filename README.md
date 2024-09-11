@@ -1,6 +1,7 @@
-# admin
+# Happy Board
 
-This template should help get you started developing with Vue 3 in Vite.
+This is the frontend of the web application that allows users to create and manage ideas, comments, and user profiles.
+
 
 ## Recommended IDE Setup
 
@@ -15,6 +16,9 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ```sh
 npm install
 ```
+
+### Set up environment variables:
+Copy the `.env.example` file to `.env` and fill in the required values.
 
 ### Compile and Hot-Reload for Development
 
