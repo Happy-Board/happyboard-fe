@@ -3,12 +3,10 @@ import SignIn from '@/views/SignIn.vue'
 import CreateIdea from '@/views/user/CreateIdea.vue'
 import HomeView from '@/views/user/HomeView.vue'
 import DetailIdeaView from '@/views/user/DetailIdeaView.vue'
-import SkeletonView from '@/views/user/SkeletonView.vue'
 import MyBoardView from '@/views/user/MyBoardView.vue'
 import EditIdea from '@/components/idea/EditIdea.vue'
 import MyIdea from '@/components/my-ideas/MyIdea.vue'
 import MyHistoryActivity from '@/components/history-activities/MyHistoryActivity.vue'
-// import ProfileView from '@/views/user/ProfileView.vue'
 import ProfileView from '@/views/user/ProfilePage.vue'
 import ResetPassword from '@/views/user/ResetPassword.vue'
 import MainLayout from '@/components/layouts/MainLayout.vue'
@@ -43,12 +41,6 @@ const router = createRouter({
           component: ProfileView
         },
         {
-          path: 'skeleton',
-          name: 'skeleton',
-          component: SkeletonView
-        },
-
-        {
           path: 'my-board',
           name: 'my-board',
           component: MyBoardView,
@@ -71,14 +63,6 @@ const router = createRouter({
       component: ResetPassword
     },
     { path: '/:pathMatch(.*)*', component: NotFoundPage }
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
   ]
 })
 
