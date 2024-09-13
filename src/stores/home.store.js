@@ -1,7 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { apiGetIdeas, apiGetRecentIdeas, apiGetHotIdeas } from '@/apis/idea.api'
-import { apiGetIdeas, apiGetRecentIdeas, apiGetHotIdeas } from '@/apis/idea.api'
 import { convertTime } from '@/utils/convert-time'
 import { useRouter } from 'vue-router'
 
