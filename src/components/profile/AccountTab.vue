@@ -7,10 +7,17 @@ import Modal from './ModalComponent.vue'
 import { apiUpdateProfile } from '@/apis/user.api'
 import { notify } from '@/utils/toast'
 import { nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const userStore = useUserStore()
 const { getProfile } = userStore
-await getProfile()
+await getProfile().catch((error) => {
+  if (error.response.status === 401) {
+    localStorage.clear()
+    router.push({ name: 'sign-in' })
+  }
+})
 const { profile } = storeToRefs(userStore)
 
 let initialFullName = profile.value.username
@@ -146,7 +153,12 @@ const updateData = async (formData) => {
     .finally(() => {
       loading.value = false
     })
-  await getProfile()
+  await getProfile().catch((error) => {
+  if (error.response.status === 401) {
+    localStorage.clear()
+    router.push({ name: 'sign-in' })
+  }
+})
   initialFullName = profile.value.username
   initialEmail = profile.value.email
   initialAvatar = profile.value.avatar

@@ -64,6 +64,24 @@ const ListIdea = defineAsyncComponent(() => import('@/components/home/ListIdea.v
 
 const homePageStore = useHomePageStore()
 const { recentIdeas } = storeToRefs(homePageStore)
+
+const cookie = document.cookie.split('; ')
+
+const setTokenToLocalStorage = () => {
+  let token
+  if (cookie[0] !== '') {
+  cookie.forEach((element) => {
+    const subCookie = element.split('=')
+    if (subCookie[0] === 'access-token') {
+     token = subCookie[1]
+    }
+  })
+}
+localStorage.setItem('accessToken', token)
+}
+
+setTokenToLocalStorage()
+
 </script>
 <style>
 .container.spinner {

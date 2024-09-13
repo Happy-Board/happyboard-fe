@@ -197,6 +197,7 @@ onMounted(() => {
 if (type === 'draft')
   await getDetailDraftIdea(ideaId).catch((error) => {
     if (error.response.status === 401) {
+      localStorage.clear()
       router.push({ name: 'sign-in' })
     }
   })
@@ -204,6 +205,7 @@ if (type === 'draft')
 if (type === 'pending')
   await getDetailReleaseIdea(ideaId).catch((error) => {
     if (error.response.status === 401) {
+      localStorage.clear()
       router.push({ name: 'sign-in' })
     }
   })

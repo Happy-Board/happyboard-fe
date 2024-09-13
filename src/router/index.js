@@ -11,6 +11,7 @@ import ProfileView from '@/views/user/ProfilePage.vue'
 import ResetPassword from '@/views/user/ResetPassword.vue'
 import MainLayout from '@/components/layouts/MainLayout.vue'
 import NotFoundPage from '@/views/user/NotFoundPage.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -64,6 +65,12 @@ const router = createRouter({
     },
     { path: '/:pathMatch(.*)*', component: NotFoundPage }
   ]
+})
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('accessToken')
+  if (to.name === 'sign-in' && token) next({name: 'home'}) 
+  // if(to.name !== 'sign-in' && !token) next ({name: 'sign-in'})
+  next()
 })
 
 export default router

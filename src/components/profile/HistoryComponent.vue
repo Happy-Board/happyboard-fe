@@ -1,7 +1,7 @@
 <script setup>
 import { useUserStore } from '@/stores/user.store'
 import { storeToRefs } from 'pinia'
-import { convertHistoryCode } from '@/utils/convert-history-code'
+// import { convertHistoryCode } from '@/utils/convert-history-code'
 import { ref } from 'vue'
 
 const userStore = useUserStore()
@@ -14,6 +14,7 @@ const router = useRouter()
 
 await getMyHistoryActivities().catch((error) => {
   if (error.response.status === 401) {
+    localStorage.clear()
     router.push({ name: 'sign-in' })
   }
 })

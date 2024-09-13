@@ -14,13 +14,13 @@ export const useUserStore = defineStore('user', () => {
   const myIdeas = ref([])
   const historyActivities = ref([])
   const ideaToEdit = ref()
+  const accessToken = ref()
 
   async function getProfile() {
-    await apiGetProfile()
+    return await apiGetProfile()
       .then((response) => {
         profile.value = response.data.data
       })
-      .catch((err) => console.log(err))
   }
 
   function updateProfileState(newProfile) {
@@ -60,18 +60,22 @@ export const useUserStore = defineStore('user', () => {
       })
       .catch((err) => console.log(err))
   }
-
+  function setAccessToken(token) {
+    accessToken.value = token
+  }
   return {
     profile,
     historyActivities,
     myIdeas,
     ideaToEdit,
+    accessToken,
     getProfile,
     updateProfile,
     getMyHistoryActivities,
     getDetailDraftIdea,
     getDetailHideIdea,
     getDetailReleaseIdea,
-    updateProfileState
+    updateProfileState,
+    setAccessToken
   }
 })

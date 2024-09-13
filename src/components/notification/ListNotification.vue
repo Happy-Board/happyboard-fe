@@ -58,6 +58,7 @@ if (props.type === 'all') {
   console.log(props.type)
   await getAllNotifications().catch((error) => {
     if (error.response.status === 401) {
+      localStorage.clear()
       router.push({ name: 'sign-in' })
     }
   })
@@ -65,6 +66,7 @@ if (props.type === 'all') {
   console.log(props.type)
   await getUnreadNotifications().catch((error) => {
     if (error.response.status === 401) {
+      localStorage.clear()
       router.push({ name: 'sign-in' })
     }
   })
