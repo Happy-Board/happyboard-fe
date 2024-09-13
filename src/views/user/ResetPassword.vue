@@ -8,7 +8,6 @@
       <div class="w-full p-6 bg-white rounded-lg shadow sm:max-w-md sm:p-8">
         <h2
           class="text-center mb-1 text-xl font-bold leading-tight tracking-tight text-primaryColor md:text-2xl"
-          class="text-center mb-1 text-xl font-bold leading-tight tracking-tight text-primaryColor md:text-2xl"
         >
           Reset Password
         </h2>

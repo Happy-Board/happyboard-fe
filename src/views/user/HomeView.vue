@@ -1,8 +1,6 @@
 <template>
   <div class="col-span-7 pt-[75px] bg-white px-5 min-h-screen ms-5">
     <div>
-  <div class="col-span-7 pt-[75px] bg-white px-5 min-h-screen ms-5">
-    <div>
       <Suspense>
         <HotIdea />
         <template #fallback>
@@ -60,7 +58,6 @@
 <script setup>
 import { defineAsyncComponent } from 'vue'
 import SuggestIdeaSkeleton from '@/components/skeletons/SuggestIdeaSkeleton.vue'
-import SuggestIdeaSkeleton from '@/components/skeletons/SuggestIdeaSkeleton.vue'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
 import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
@@ -70,9 +67,7 @@ import FilterComponent from '@/components/home/FilterComponent.vue'
 const HotIdea = defineAsyncComponent(() => import('@/components/hot-ideas/HotIdea.vue'))
 const SuggestIdeaComponent = defineAsyncComponent(
   () => import('@/components/home/SuggestIdeaComponent.vue')
-  () => import('@/components/home/SuggestIdeaComponent.vue')
 )
-const ListIdea = defineAsyncComponent(() => import('@/components/home/ListIdea.vue'))
 const ListIdea = defineAsyncComponent(() => import('@/components/home/ListIdea.vue'))
 
 const homePageStore = useHomePageStore()
