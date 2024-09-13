@@ -36,7 +36,13 @@ import DetailIdeaSkeleton from '@/components/skeletons/DetailIdeaSkeleton.vue'
 import CommentBlockSkeleton from '@/components/skeletons/CommentBlockSkeleton.vue'
 const CommentBlock = defineAsyncComponent(() => import('@/components/comments/CommentBlock.vue'))
 const DetailIdea = defineAsyncComponent(() => import('@/components/idea/DetailIdea.vue'))
+import SuggestIdeaSkeleton from '@/components/skeletons/SuggestIdeaSkeleton.vue'
+import DetailIdeaSkeleton from '@/components/skeletons/DetailIdeaSkeleton.vue'
+import CommentBlockSkeleton from '@/components/skeletons/CommentBlockSkeleton.vue'
+const CommentBlock = defineAsyncComponent(() => import('@/components/comments/CommentBlock.vue'))
+const DetailIdea = defineAsyncComponent(() => import('@/components/idea/DetailIdea.vue'))
 const SuggestIdeaComponent = defineAsyncComponent(
+  () => import('@/components/home/SuggestIdeaComponent.vue')
   () => import('@/components/home/SuggestIdeaComponent.vue')
 )
 const route = useRoute()

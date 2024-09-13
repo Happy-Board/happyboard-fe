@@ -1,9 +1,12 @@
 <template>
   <div class="col-span-10 flex pt-[90px] z-0 bg-white px-5 min-h-screen ms-5">
     <div class="flex flex-col gap-5 w-[80%]">
+  <div class="col-span-10 flex pt-[90px] z-0 bg-white px-5 min-h-screen ms-5">
+    <div class="flex flex-col gap-5 w-[80%]">
       <p class="font-semibold text-3xl">Let's create your idea</p>
       <Listbox class="w-2/5" as="div" v-model="selected">
         <ListboxLabel class="block text-sm font-medium leading-6 text-black"
+          >Category <span class="text-red-600">*</span></ListboxLabel
           >Category <span class="text-red-600">*</span></ListboxLabel
         >
         <div class="relative mt-2">
@@ -41,6 +44,7 @@
                 <li
                   :class="[
                     active ? 'bg-primaryColor text-white' : 'text-gray-900',
+                    active ? 'bg-primaryColor text-white' : 'text-gray-900',
                     'relative cursor-pointer select-none py-2 pl-3 pr-9'
                   ]"
                 >
@@ -76,11 +80,27 @@
           }}</span>
         </label>
         <!-- <div
+          >Title <span class="text-red-600">*</span>
+          <span v-if="ideaData?.title?.length" class="ms-2 text-xs">{{
+            `(${ideaData?.title?.length}/200)`
+          }}</span>
+        </label>
+        <!-- <div
           id="title"
           placeholder="Write your title here..."
           class="comment-input rounded-lg border bg-white border-borderColor focus:outline-0 py-2 px-3 pe-11 w-full text-sm"
+          class="comment-input rounded-lg border bg-white border-borderColor focus:outline-0 py-2 px-3 pe-11 w-full text-sm"
           contentEditable="true"
           spellcheck="false"
+        ></div> -->
+        <textarea
+          v-model="ideaData.title"
+          placeholder="Write your title here..."
+          rows="1"
+          maxlength="200"
+          class="text-sm overflow-hidden border border-gray-300 focus:outline-0 px-3 py-2 resize-none rounded-lg w-full"
+          id="title1"
+        ></textarea>
         ></div> -->
         <textarea
           v-model="ideaData.title"
@@ -94,6 +114,7 @@
       <div class="mb-10">
         <label class="block text-sm font-medium text-black mb-3" for="content"
           >Content <span class="text-red-600">*</span></label
+          >Content <span class="text-red-600">*</span></label
         >
         <QuillEditor
           id="content"
@@ -106,14 +127,18 @@
       <div class="my-10 flex justify-end">
         <button
           @click.prevent="saveIdea"
+          @click.prevent="saveIdea"
           type="button"
           class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
         >
+          Save Draft
           Save Draft
         </button>
         <button
           @click.prevent="createIdea"
           type="button"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
           class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
         >
           Create
@@ -145,6 +170,7 @@ import sanitizeHtml from 'sanitize-html'
 import { SANITIZE_ALLOWED_TAGS } from '@/constants'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import { notify } from '@/utils/toast'
 
 const router = useRouter()
 const categoryStore = useCategoryStore()
@@ -172,6 +198,15 @@ watch(
   }
 )
 
+watch(
+  () => ideaData.title,
+  () => {
+    document.querySelector('#title1').style.height = '5px'
+    document.querySelector('#title1').style.height =
+      document.querySelector('#title1').scrollHeight + 'px'
+  }
+)
+
 const saveIdea = () => {
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
@@ -189,9 +224,12 @@ const saveIdea = () => {
   }
   apiSaveIdea(ideaData)
     .then(() => {
+  apiSaveIdea(ideaData)
+    .then(() => {
       notify('success', 'Your idea has been saved!')
       setTab('draft')
       setTimeout(() => {
+        router.push({ name: 'my-board-ideas' })
         router.push({ name: 'my-board-ideas' })
       }, 1000)
     })
@@ -227,6 +265,7 @@ const createIdea = () => {
       notify('success', 'Create idea successfully !')
       setTimeout(() => {
         router.push({ name: 'my-board-ideas' })
+        router.push({ name: 'my-board-ideas' })
       }, 1000)
     })
     .catch((err) => {
@@ -255,6 +294,10 @@ a {
   content: attr(placeholder);
   color: gray;
   cursor: text;
+}
+
+textarea::placeholder {
+  font-size: 14px;
 }
 
 textarea::placeholder {

@@ -10,8 +10,25 @@ import {
 } from '@/apis/user.api'
 import { apiDeleteIdea, apiGetDetailIdea } from '@/apis/idea.api'
 import { convertTime } from '@/utils/convert-time'
+import {
+  apiGetMyIdeas,
+  apiGetMyPublishIdeas,
+  apiGetMyDraftIdeas,
+  apiGetMyHideIdeas,
+  apiGetMyDraftIdeaById,
+  apiGetMyHideIdeaById
+} from '@/apis/user.api'
+import { apiDeleteIdea, apiGetDetailIdea } from '@/apis/idea.api'
+import { convertTime } from '@/utils/convert-time'
 
 export const useMyBoardStore = defineStore('my-board', () => {
+  const tab = ref('all')
+  const myIdeas = ref([])
+  const myIdeasBackup = ref([])
+  const currentPage = ref(1)
+  const ideaToEdit = ref()
+  const searchString = ref('')
+  const query = ref()
   const tab = ref('all')
   const myIdeas = ref([])
   const myIdeasBackup = ref([])

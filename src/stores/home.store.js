@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { apiGetIdeas, apiGetRecentIdeas, apiGetHotIdeas } from '@/apis/idea.api'
+import { apiGetIdeas, apiGetRecentIdeas, apiGetHotIdeas } from '@/apis/idea.api'
 import { convertTime } from '@/utils/convert-time'
 import { useRouter } from 'vue-router'
 
@@ -41,7 +42,9 @@ export const useHomePageStore = defineStore('home', () => {
   async function getHotIdeas() {
     //api get hot ideas
     await apiGetHotIdeas()
+    await apiGetHotIdeas()
       .then((response) => {
+        hotIdeas.value = response.data.data
         hotIdeas.value = response.data.data
       })
       .catch((err) => console.log(err))

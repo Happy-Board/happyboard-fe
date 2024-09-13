@@ -9,6 +9,8 @@ import {
 } from '@/apis/idea.api'
 import { apiGetMyHideIdeaById } from '@/apis/user.api'
 
+import { apiGetMyHideIdeaById } from '@/apis/user.api'
+
 import { convertTime } from '@/utils/convert-time'
 
 export const useIdeaStore = defineStore('idea', () => {
@@ -58,6 +60,11 @@ export const useIdeaStore = defineStore('idea', () => {
 function increaseComment(){
   idea.value.commentCount ++
 }
+  }
+
+function increaseComment(){
+  idea.value.commentCount ++
+}
 
   // const getAllCategory = computed(() => category)
   async function getDetailIdea(id) {
@@ -98,6 +105,9 @@ function increaseComment(){
     getDetailIdea,
     increaseVote,
     decreaseVote,
+    getRelatedIdeas,
+    getDetailPendingIdea,
+    increaseComment
     getRelatedIdeas,
     getDetailPendingIdea,
     increaseComment
