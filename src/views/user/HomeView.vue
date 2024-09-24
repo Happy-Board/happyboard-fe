@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-7 pt-[75px] bg-white px-5 min-h-screen ms-5">
+  <div class="md:col-span-7 col-span-12 pt-[75px] bg-white px-5 min-h-screen md:ms-5">
     <div>
       <Suspense>
         <HotIdea />

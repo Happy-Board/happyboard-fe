@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-7 pt-[100px] bg-white px-5 min-h-screen overflow-hidden space-y-5 ms-5">
+  <div class="md:col-span-7 col-span-12 pt-[100px] bg-white px-5 min-h-screen overflow-hidden space-y-5 ms-5">
     <router-view></router-view>
   </div>
   <div class="col-span-3 pt-[85px] px-2 me-5 sticky top-[85px]">
