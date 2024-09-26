@@ -25,6 +25,8 @@ export const apiCancelVoteIdea = async (id) => await axiosInstance.delete(`/idea
 
 export const apiCreateIdea = async (body) => await axiosInstance.post('/ideas', body)
 
+export const apiCreateMediaIdea = async (formData) => await axiosInstance.post('/ideas/media', formData)
+
 export const apiSaveIdea = async (body) => await axiosInstance.post('/ideas/draft', body)
 
 export const apiDeleteIdea = async (id) => await axiosInstance.delete(`/ideas/${id}`)
