@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-6 pt-[100px] z-0 bg-white px-5 h-screen overflow-hidden space-y-5">
+  <div class="md:col-span-6 col-span-12 pt-[100px] z-0 bg-white px-5 h-screen overflow-hidden space-y-5">
     <EditIdea />
   </div>
   <div class="col-span-2">

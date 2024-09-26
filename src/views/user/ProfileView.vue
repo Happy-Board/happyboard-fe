@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-6 flex pt-[90px] z-0 bg-white px-5 min-h-screen">
+  <div class="md:col-span-6 col-span-12 flex pt-[90px] z-0 bg-white px-5 min-h-screen">
     <Suspense>
       <ProfileForm />
       <template #fallback>

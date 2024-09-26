@@ -10,7 +10,7 @@ export const apiGetRecentIdeas = async () => await axiosInstance.get(`/ideas/rec
 
 export const apiGetRelatedIdeas = async (ideaId) => await axiosInstance.get(`/ideas/similar?id=${ideaId}`)
 
-export const apiGetDetailIdea = async (id) => await axiosInstance.get(`/ideas/public/${id}`)
+export const apiGetDetailIdea = async (id) => await axiosInstance.get(`/ideas/${id}`)
 
 export const apiVoteUpIdea = async (id) => await axiosInstance.post(`/ideas/${id}/up`)
 
@@ -24,6 +24,8 @@ export const apiGetComment = async (id) => await axiosInstance.get(`/ideas/${id}
 export const apiCancelVoteIdea = async (id) => await axiosInstance.delete(`/ideas/${id}/cancel`)
 
 export const apiCreateIdea = async (body) => await axiosInstance.post('/ideas', body)
+
+export const apiCreateMediaIdea = async (formData) => await axiosInstance.post('/ideas/media', formData)
 
 export const apiSaveIdea = async (body) => await axiosInstance.post('/ideas/draft', body)
 

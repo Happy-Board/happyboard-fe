@@ -1,13 +1,13 @@
 <template>
-  <div class="min-w-full border-t border-t-borderColor flex mb-1 justify-between items-end mt-1">
-    <div class="py-1 rounded-md flex items-center text-xs">
+  <div class="min-w-full border-t border-t-borderColor flex mb-1 justify-between md:items-end items-center mt-1">
+    <div class="py-1 rounded-md flex items-center md:text-xs text-[9px]">
       <button
         @click="setTab('newest')"
         type="button"
         :class="
           tab === 'newest'
-            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 me-1'
-            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 me-1'
+            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 me-1'
+            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 me-1'
         "
       >
         Newest
@@ -17,8 +17,8 @@
         type="button"
         :class="
           tab === 'highvote'
-            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 mx-1'
-            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 mx-1'
+            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 mx-1'
+            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 mx-1'
         "
       >
         Highest vote
@@ -28,8 +28,8 @@
         type="button"
         :class="
           tab === 'highview'
-            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 mx-1'
-            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 mx-1'
+            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 mx-1'
+            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 mx-1'
         "
       >
         Most view
@@ -46,12 +46,12 @@
         Most comment
       </button>
     </div>
-    <div class="pt-1 rounded-lg cursor-pointer relative">
+    <div class="md:pt-1 rounded-lg cursor-pointer relative">
       <button
         @click="showCheckBox"
         id="dropdownSearchButton"
         data-dropdown-toggle="dropdownSearch"
-        class="inline-flex items-center px-4 py-1 text-xs font-medium text-center text-black bg-backgroundColor rounded-lg hover:bg-backgroundButtonColor border border-borderColor"
+        class="inline-flex items-center px-4 py-1 text-[9px] md:text-xs font-medium text-center text-black bg-backgroundColor rounded-lg hover:bg-backgroundButtonColor border border-borderColor"
         type="button"
         :class="isShowCategoryCheckbox ? '!bg-backgroundButtonColor' : ''"
       >

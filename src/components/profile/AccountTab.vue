@@ -1,4 +1,4 @@
-<script async setup>
+  <script async setup>
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/user.store'
 import { storeToRefs } from 'pinia'
