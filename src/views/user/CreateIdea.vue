@@ -81,7 +81,7 @@
           placeholder="Write your title here..."
           rows="1"
           maxlength="200"
-          class="text-sm overflow-hidden border border-gray-300 focus:outline-0 px-3 py-2 resize-none rounded-lg w-full"
+          class="text-sm overflow-hidden border border-gray-300 focus:outline-0 px-3 py-2 rounded-lg w-full"
           id="title1"
         ></textarea>
       </div>
@@ -98,6 +98,73 @@
         />
       </div>
       <div v-if="tab === 'media'" class="">
+        <label class="block text-sm font-medium text-black mb-3" for="content">
+          Upload Image/Video <span class="text-red-600">*</span>
+        </label>
+        <div
+          class="relative flex flex-col items-center justify-center w-full border-1 border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600"
+        >
+          <div v-if="preDisplayImage.length > 0" class="flex items-center justify-center">
+            <button
+              @click="triggerFileInput"
+              class="absolute top-2 left-14 p-2 bg-blue-700 text-white rounded hover:bg-blue-800 z-10"
+            >
+              Add
+            </button>
+            <button @click="prevImage" class="p-2 m-2 bg-gray-300 rounded-full hover:bg-gray-400">
+              ◀
+            </button>
+            <div class="relative">
+              <img
+                :src="preDisplayImage[currentImageIndex]"
+                alt="Upload Image Preview"
+                class="w-100 h-70 object-cover"
+              />
+              <button
+                @click="removeFile(currentImageIndex)"
+                class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-700"
+                title="Delete Image"
+              >
+                🗑️
+              </button>
+            </div>
+            <button @click="nextImage" class="p-2 m-2 bg-gray-300 rounded-full hover:bg-gray-400">
+              ▶
+            </button>
+          </div>
+          <div
+            v-else
+            class="flex flex-col items-center justify-center pt-5 pb-6 cursor-pointer"
+            @click="triggerFileInput"
+            @dragover.prevent
+            @drop.prevent="handleDrop"
+          >
+            <svg
+              class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 16"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <span class="font-semibold">Click to upload</span> or drag and drop
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              SVG, PNG, JPG or GIF (MAX. 800x400px)
+            </p>
+          </div>
+          <input id="dropzone-file" type="file" multiple @change="onFilesChange" class="hidden" />
+        </div>
+      </div>
+      <!-- <div v-if="tab === 'media'" class="">
         <label class="block text-sm font-medium text-black mb-3" for="content"
           >Upload Image/Video <span class="text-red-600">*</span></label
         >
@@ -160,7 +227,7 @@
           </div>
           <input id="dropzone-file" type="file" @change="onFileChange" class="hidden" />
         </label>
-      </div>
+      </div> -->
       <div class="my-10 flex justify-end">
         <button
           @click.prevent="saveIdea"
@@ -225,7 +292,9 @@ const handleSetTab = (newTab) => {
 const ideaData = reactive({
   categoryId: '',
   title: '',
-  content: ''
+  content: '',
+  type: '',
+  linkImage: ''
 })
 
 watch(
@@ -237,24 +306,47 @@ watch(
   }
 )
 
-const imageUrl = ref(null)
+let selectedFiles = ref([])
+const preDisplayImage = ref([])
+const currentImageIndex = ref(0)
 
-const onFileChange = (event) => {
-  const file = event.target.files[0]
-  if (file && file.type.startsWith('image/')) {
-    imageUrl.value = URL.createObjectURL(file)
-    selectedFile.value = file
-  } else {
-    imageUrl.value = null
+const onFilesChange = (event) => {
+  const files = Array.from(event.target.files)
+  if (files && files.length > 0){
+    selectedFiles.value = Array.from(files)
+  }
+  files.forEach((file) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      preDisplayImage.value.push(e.target.result)
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+const removeFile = (index) => {
+  preDisplayImage.value.splice(index, 1)
+  if (currentImageIndex.value >= preDisplayImage.value.length) {
+    currentImageIndex.value = Math.max(0, preDisplayImage.value.length - 1)
   }
 }
 
-const removeFile = () => {
-  imageUrl.value = null
-  selectedFile.value = null
+const nextImage = () => {
+  if (currentImageIndex.value < preDisplayImage.value.length - 1) {
+    currentImageIndex.value++
+  }
 }
 
-const selectedFile = ref(null)
+const prevImage = () => {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--
+  }
+}
+
+const triggerFileInput = () => {
+  const fileInput = document.getElementById('dropzone-file')
+  fileInput.click()
+}
 
 const saveIdea = () => {
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
@@ -287,6 +379,7 @@ const saveIdea = () => {
     })
 }
 const createIdea = () => {
+  ideaData.type = tab.value === 'text' ? 'text' : 'image'
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
@@ -323,7 +416,7 @@ const createIdea = () => {
         notify('error', 'Create idea failed, some thing went wrong !')
       })
   } else if (tab.value === 'media') {
-    if (!imageUrl.value) {
+    if (!preDisplayImage.value) {
       notify('warning', 'Media is not empty !')
       return
     }
@@ -331,7 +424,12 @@ const createIdea = () => {
 
     formData.append('title', ideaData.title)
     formData.append('categoryId', ideaData.categoryId)
-    formData.append('file', selectedFile.value)
+    formData.append('type', ideaData.type)
+    selectedFiles.value.forEach((file) => {
+      console.log(file)
+      console.log('---------------------------')
+      formData.append('files', file)
+    })
 
     apiCreateMediaIdea(formData)
       .then(() => {
