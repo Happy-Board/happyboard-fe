@@ -312,7 +312,7 @@ const currentImageIndex = ref(0)
 
 const onFilesChange = (event) => {
   const files = Array.from(event.target.files)
-  if (files && files.length > 0){
+  if (files && files.length > 0) {
     selectedFiles.value = Array.from(files)
   }
   files.forEach((file) => {
@@ -349,6 +349,8 @@ const triggerFileInput = () => {
 }
 
 const saveIdea = () => {
+  ideaData.type = tab.value === 'text' ? 'text' : 'image'
+
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
@@ -365,18 +367,57 @@ const saveIdea = () => {
     notify('warning', 'Nothing to save')
     return
   }
-  apiSaveIdea(ideaData)
-    .then(() => {
-      notify('success', 'Your idea has been saved!')
-      setTab('draft')
-      setTimeout(() => {
-        router.push({ name: 'my-board-ideas' })
-      }, 1000)
+
+  if (ideaData.type === 'text') {
+    if (!ideaData.content) {
+      notify('warning', 'Content is not empty !')
+    }
+    const formData = new FormData()
+    formData.append('type', ideaData.type)
+    formData.append('title', ideaData.title)
+    formData.append('categoryId', ideaData.categoryId)
+    formData.append('content', ideaData.content)
+
+    apiSaveIdea(formData)
+      .then(() => {
+        setTab('hide')
+        notify('success', 'Create idea successfully !')
+        setTimeout(() => {
+          router.push({ name: 'my-board-ideas' })
+        }, 1000)
+      })
+      .catch((err) => {
+        console.log(err)
+        notify('error', 'Create idea failed, some thing went wrong !')
+      })
+  }
+
+  if (ideaData.type === 'image') {
+    if (!preDisplayImage.value) {
+      notify('warning', 'Media is not empty !')
+      return
+    }
+    const formData = new FormData()
+
+    formData.append('title', ideaData.title)
+    formData.append('categoryId', ideaData.categoryId)
+    formData.append('type', ideaData.type)
+    selectedFiles.value.forEach((file) => {
+      formData.append('files', file)
     })
-    .catch((err) => {
-      console.log(err)
-      notify('error', 'Save idea failed, some thing went wrong !')
-    })
+    apiSaveIdea(formData)
+      .then(() => {
+        setTab('hide')
+        notify('success', 'Create media content idea successfully !')
+        setTimeout(() => {
+          router.push({ name: 'my-board-ideas' })
+        }, 1000)
+      })
+      .catch((err) => {
+        console.log(err)
+        notify('error', 'Create idea failed, some thing went wrong !')
+      })
+  }
 }
 const createIdea = () => {
   ideaData.type = tab.value === 'text' ? 'text' : 'image'
