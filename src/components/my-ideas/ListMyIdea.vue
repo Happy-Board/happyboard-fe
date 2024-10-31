@@ -8,7 +8,7 @@
         :id="idea.id"
         :author="idea.User.username"
         :category="idea.Category"
-        :description="idea.content"
+        :content="idea.content"
         :title="idea.title"
         :totalComment="idea.commentCount"
         :totalVote="idea.voteCount"
@@ -16,6 +16,7 @@
         :createdAt="idea.createdAt"
         :isDraft="idea.isDrafted"
         :isPublish="idea.isPublished"
+        :imageUrls="idea.linkImage"
         :avatar="idea.User.avatar"
       />
     </div>

@@ -22,13 +22,14 @@
         :id="idea.id"
         :author="idea.User.username"
         :category="idea?.Category"
-        :description="idea.content"
         :title="idea.title"
+        :content="idea.content"
         :totalComment="idea.commentCount"
         :totalVote="idea.voteCount"
         :totalView="idea.viewCount"
         :createdAt="idea.createdAt"
         :isDraft="idea.isDrafted"
+        :imageUrls="idea.linkImage"
         :avatar="idea.User.avatar"
       />
     </div>
