@@ -18,17 +18,18 @@
           :total-comment="idea?.commentCount"
           :total-view="idea?.viewCount"
           :total-vote="idea?.voteCount"
+          :imageUrls="idea.linkImage"
         />
       </slide>
       <template #addons>
-      <pagination />
-    </template>
+        <pagination />
+      </template>
     </carousel>
   </div>
 </template>
 <script async setup>
 import 'vue3-carousel/dist/carousel.css'
-import { Carousel, Slide, Pagination  } from 'vue3-carousel'
+import { Carousel, Slide, Pagination } from 'vue3-carousel'
 import { onMounted, ref, watch } from 'vue'
 import HotCardideaComponenet from './HotCardIdeaComponent.vue'
 import { useHomePageStore } from '@/stores/home.store'
@@ -67,8 +68,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
-.carousel__pagination{
+.carousel__pagination {
   margin: 2px 0 0 !important;
 }
 
@@ -77,6 +77,5 @@ onMounted(() => {
 }
 .carousel__pagination :deep(.carousel__pagination-button)::after {
   border-radius: 50%;
-
 }
 </style>

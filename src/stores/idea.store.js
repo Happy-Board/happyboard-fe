@@ -19,25 +19,25 @@ export const useIdeaStore = defineStore('idea', () => {
 
   async function increaseVote(id) {
     //call api increaseVote
-    console.log(idea.value.vote)
-    if (idea.value.vote === 'down') {
-      apiCancelVoteIdea(id)
-        .then(() => {
-          idea.value.voteCount += 1
-          idea.value.vote = null
-        })
-        .catch((err) => console.log(err))
-    } else if (idea.value.vote === null) {
-      apiVoteUpIdea(id)
-        .then(() => {
-          idea.value.voteCount += 1
-          idea.value.vote = 'up'
-        })
-        .catch((err) => console.log(err))
-    } else return
+    apiVoteUpIdea(id)
+      .then(() => {
+        idea.value.voteCount += 1
+        idea.value.vote = 'up'
+      })
+      .catch((err) => console.log(err))
   }
   async function decreaseVote(id) {
     //call api decreaseVote
+    apiVoteDownIdea(id)
+      .then(() => {
+        idea.value.voteCount -= 1
+        idea.value.vote = 'down'
+      })
+      .catch((err) => console.log(err))
+  }
+
+  async function cancelVote(id) {
+    //call api cancelVote
     if (idea.value.vote === 'up') {
       apiCancelVoteIdea(id)
         .then(() => {
@@ -45,23 +45,24 @@ export const useIdeaStore = defineStore('idea', () => {
           idea.value.vote = null
         })
         .catch((err) => console.log(err))
-    } else if (idea.value.vote === null) {
-      apiVoteDownIdea(id)
+    }
+    if (idea.value.vote === 'down') {
+      apiCancelVoteIdea(id)
         .then(() => {
-          idea.value.voteCount -= 1
-          idea.value.vote = 'down'
+          idea.value.voteCount += 1
+          idea.value.vote = null
         })
         .catch((err) => console.log(err))
-    } else return
+    }
   }
 
-function increaseComment(){
-  idea.value.commentCount ++
-}
+  function increaseComment() {
+    idea.value.commentCount++
+  }
 
   // const getAllCategory = computed(() => category)
   async function getDetailIdea(id) {
-   await apiGetDetailIdea(id)
+    await apiGetDetailIdea(id)
       .then((response) => {
         idea.value = response.data.data
         idea.value.createdAt = convertTime(idea.value.createdAt)
@@ -73,21 +74,19 @@ function increaseComment(){
 
   async function getDetailPendingIdea(id) {
     await apiGetMyHideIdeaById(id)
-       .then((response) => {
-         idea.value = response.data.data
-         idea.value.createdAt = convertTime(idea.value.createdAt)
-       })
-       .catch((err) => {
-         console.log(err)
-       })
-   }
+      .then((response) => {
+        idea.value = response.data.data
+        idea.value.createdAt = convertTime(idea.value.createdAt)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
   async function getRelatedIdeas(ideaId) {
-    return await apiGetRelatedIdeas(ideaId)
-      .then((response) => {
-        relatedIdeas.value = response.data.data
-      })
-      
+    return await apiGetRelatedIdeas(ideaId).then((response) => {
+      relatedIdeas.value = response.data.data
+    })
   }
 
   return {
@@ -98,6 +97,7 @@ function increaseComment(){
     getDetailIdea,
     increaseVote,
     decreaseVote,
+    cancelVote,
     getRelatedIdeas,
     getDetailPendingIdea,
     increaseComment
