@@ -9,6 +9,7 @@
           width: '150px',
           height: '100px'
         }"
+        @click="showLightbox = true"
       >
         <!-- Slideshow Container -->
         <div
@@ -45,11 +46,11 @@
             padding: '4px 8px',
             borderRadius: '12px',
             fontSize: '12px',
-            zIndex: '1' /* Ensures the indicator is on top */
+            zIndex: '1'
           }"
         >
           {{ currentIndex + 1 }} / {{ imagesArray.length }}
-        </div>  
+        </div>
       </div>
 
       <!-- Content Section on the Right -->
@@ -66,11 +67,11 @@
 
         <!-- Stats and Description Section -->
         <div class="content-section flex-grow border-0 break-words">
-          <div 
+          <div
             class="idea-content text-xl text-gray-600"
             :style="{ fontSize: '16px', textAlign: 'left' }"
             v-html="truncatedContent"
-            ></div>
+          ></div>
         </div>
 
         <!-- Footer Section aligned to the bottom-right -->
@@ -108,12 +109,22 @@
         </div>
       </div>
     </div>
+
+      <!-- Lightbox Component -->
+      <VueEasyLightbox
+        :visible="showLightbox"
+        :imgs="imagesArray"
+        :index="currentIndex"
+        @hide="showLightbox = false"
+      />
   </div>
 </template>
+
 
 <script setup>
 import { useRouter } from 'vue-router'
 import { defineProps, computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import VueEasyLightbox from 'vue-easy-lightbox'
 
 const router = useRouter()
 
@@ -142,6 +153,7 @@ const imagesArray = computed(() => props.imageUrls.split(',').map((url) => url.t
 
 // Track the index of the currently displayed image
 const currentIndex = ref(0)
+const showLightbox = ref(false)
 
 // Function to update the image index every 3 seconds
 let intervalId
@@ -157,6 +169,7 @@ onMounted(() => {
   startSlideshow()
 })
 
+
 onBeforeUnmount(() => {
   clearInterval(intervalId)
 })
@@ -170,7 +183,7 @@ const viewDetailIdea = (id, type) => {
 }
 
 const truncatedTitle = computed(() => {
-  const maxTitleLength = 60
+  const maxTitleLength = 40
   return props.title.length > maxTitleLength
     ? props.title.slice(0, maxTitleLength) + '...'
     : props.title
@@ -182,7 +195,6 @@ const truncatedContent = computed(() => {
     ? props.title.slice(0, maxContentLength) + '...'
     : props.title
 })
-
 </script>
 
 <style scoped>

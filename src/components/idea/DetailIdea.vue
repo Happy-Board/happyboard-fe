@@ -1,113 +1,140 @@
 <template>
-  <div class="flex items-start border-b border-borderColor pb-2">
-    <!-- <div class="flex flex-col items-center pr-2 border-r gap-1 w-32">
-      <div
-        class="border border-gray-500 px-2 py-1 rounded-full"
-        :class="
-          idea.vote === 'up'
-            ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
-            : ' text-gray-900  cursor-pointer hover:text-gray-900 hover:bg-blue-100'
-        "
-      >
-        <i
-          @click="increaseVote(ideaId)"
-          class="fa-solid fa-caret-up fa-xl"
-          :class="
-            idea.vote === 'up'
-              ? ' text-gray-900 cursor-pointer hover:text-gray-900'
-              : ' text-gray-900  cursor-pointer hover:text-gray-900'
-          "
-        ></i>
-      </div>
-      <div class="px-2 font-medium text-green-900">{{ idea?.voteCount }}</div>
-
-      <div
-        class="px-2 py-1 border border-gray-500 rounded-full"
-        :class="
-          idea.vote === 'down'
-            ? ' text-gray-900 cursor-pointer hover:text-gray-900 bg-blue-300'
-            : ' text-gray-900 cursor-pointer hover:text-gray-900 hover:bg-blue-100'
-        "
-      >
-        <i
-          @click="decreaseVote(ideaId)"
-          class="fa-solid fa-caret-down fa-xl"
-          :class="
-            idea.vote === 'down'
-              ? ' text-gray-900 cursor-pointer hover:text-gray-900'
-              : ' text-gray-900 cursor-pointer hover:text-gray-900'
-          "
-        ></i>
-      </div>
-    </div> -->
-    <div class="flex flex-col items-start w-full">
-      <div
-        class="!text-3xl !font-bold overflow-hidden break-words line-clamp-2 w-[90%]"
-        v-html="idea?.title"
-      ></div>
-      <div class="flex justify-between items-center">
-        <div class="flex items-center mt-2">
-          <img
-            :src="idea?.User?.avatar === '' ? '/avatar/default-avatar.jpg' : idea?.User?.avatar"
-            alt="avatar"
-            class="w-[2%] aspect-square rounded-full cursor-pointer lg:w-[3%] md:w-[4%] sm:w-[6%] xl:w-[3%]"
-          />
-          <span class="ms-2 text-[12px] cursor-pointer">{{ idea?.User?.username }}</span>
-          <div class="flex gap-5 ms-5">
-            <div class="flex items-center text-[12px]">
-              <i :class="idea?.Category?.icon + ' fa-solid text-gray-700'"></i>
-              <span class="ps-1">{{ idea?.Category?.title }}</span>
-            </div>
-            <div class="flex">
-              <span class="text-[12px]">{{ idea?.createdAt }}</span>
-            </div>
-            <div v-if="typeIdea !== 'pending'" class="flex">
-              <span class="text-[12px]">{{
-                idea?.commentCount === 1
-                  ? `${idea?.commentCount} comment`
-                  : `${idea?.commentCount} comments`
-              }}</span>
-            </div>
-            <div v-if="typeIdea !== 'pending'" class="flex">
-              <span class="text-[12px]">{{
-                idea?.viewCount === 0
-                  ? `${idea?.viewCount + 1} view`
-                  : `${idea?.viewCount + 1} views`
-              }}</span>
-            </div>
-          </div>
+  <div class="flex flex-col border-borderColor pb-2">
+    <!-- Avatar, Username, Category, and Created Date -->
+    <div class="flex items-center mb-3">
+      <img
+        :src="idea?.User?.avatar === '' ? '/avatar/default-avatar.jpg' : idea?.User?.avatar"
+        alt="avatar"
+        class="w-10 h-10 rounded-full cursor-pointer mr-2"
+      />
+      <span class="text-sm font-semibold cursor-pointer">{{ idea?.User?.username }}</span>
+      <div class="flex gap-3 items-center ml-4 text-gray-600 text-sm">
+        <div class="flex items-center">
+          <i :class="idea?.Category?.icon + ' fa-solid text-gray-700'"></i>
+          <span class="ml-1">{{ idea?.Category?.title }}</span>
         </div>
+        <div>
+          <span>{{ idea?.createdAt }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <div class="text-3xl font-bold overflow-hidden break-words mb-3" v-html="idea?.title"></div>
+
+    <!-- Content or Image Display -->
+    <div class="ql-toolbar ql-snow border-0 pb-5 border-b h-96">
+      <div
+        v-if="idea?.content"
+        class="ql-editor"
+        data-gram="false"
+        contenteditable="false"
+        readonly="true"
+        v-html="idea?.content"
+      ></div>
+
+      <div v-else class="image-container">
         <button
-          v-if="typeIdea !== 'pending'"
-          @click="handleVote"
-          class="text-sm font-semibold px-3 py-1 rounded-full border border-primaryColor min-w-[85px]"
-          :class="
-            vote === null
-              ? 'bg-white hover:bg-backgroundButtonColor text-black'
-              : 'bg-primaryColor text-white'
-          "
+          v-if="imagesArray.length > 1 && currentIndex > 0"
+          @click="prevImage"
+          class="arrow-button left-arrow"
         >
-          {{ idea?.voteCount === 1 ? `${idea?.voteCount} Vote` : `${idea?.voteCount} Votes` }}
+          <i class="fas fa-arrow-left"></i>
+        </button>
+
+        <img :src="currentImage" alt="idea image" class="image" @click="openLightbox" />
+
+        <button
+          v-if="imagesArray.length > 1 && currentIndex < imagesArray.length - 1"
+          @click="nextImage"
+          class="arrow-button right-arrow"
+        >
+          <i class="fas fa-arrow-right"></i>
         </button>
       </div>
     </div>
-  </div>
-  <div class="ql-toolbar ql-snow border-0 pb-5 border-b mb-3">
-    <div
-      class="ql-editor"
-      data-gram="false"
-      contenteditable="false"
-      readonly="true"
-      v-html="idea?.content"
-    ></div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-4 mt-3 action-bar">
+      <div
+        class="action-container"
+        :class="{
+          'action-container-color-up': vote === 'up',
+          'action-container-color-down': vote === 'down'
+        }"
+      >
+        <div
+          class="arrow-container upvote-container"
+          :class="{
+            'active-background-up': vote === 'up'
+          }"
+        >
+          <font-awesome-icon
+            v-if="typeIdea !== 'pending'"
+            :icon="['fas', 'arrow-up']"
+            class="vote-icon upvote-icon"
+            :class="{
+              'hover-color-up': vote === 'up'
+            }"
+            @click="toggleUpvote"
+          />
+        </div>
+
+        <span class="action-count">{{ idea.voteCount !== 0  ? idea.voteCount : 'Vote' }}</span>
+
+        <div
+          class="arrow-container downvote-container"
+          :class="{
+            'active-background-down': vote === 'down'
+          }"
+        >
+          <font-awesome-icon
+            :icon="['fas', 'arrow-down']"
+            class="vote-icon downvote-icon"
+            :class="{
+              'hover-color-down': vote === 'down'
+            }"
+            @click="toggleDownvote"
+          />
+        </div>
+      </div>
+      <!-- Comment Count -->
+      <button class="action-container flex items-center bg-gray-200 p-2">
+        <i class="fa-regular fa-comment-dots"></i>
+        <span class="action-count">{{
+          idea.commentCount > 0 ? idea.commentCount : 'Comment'
+        }}</span>
+      </button>
+
+      <!-- View Count -->
+      <button class="action-container">
+        <i class="fa-regular fa-eye"></i>
+        <span class="action-count">{{ idea.viewCount }}</span>
+      </button>
+    </div>
+
+    <!-- Lightbox Component -->
+    <VueEasyLightbox
+      :visible="showLightbox"
+      :imgs="imagesArray"
+      :index="currentIndex"
+      @hide="showLightbox = false"
+    />
   </div>
 </template>
+
 <script setup>
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faArrowUp, faArrowDown, faComment } from '@fortawesome/free-solid-svg-icons'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import VueEasyLightbox from 'vue-easy-lightbox'
+
+library.add(faArrowUp, faArrowDown, faComment)
 
 const route = useRoute()
 const router = useRouter()
@@ -115,8 +142,14 @@ const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const typeIdea = route.params.type
 const { idea } = storeToRefs(ideaStore)
-const { getDetailIdea, increaseVote, decreaseVote, getRelatedIdeas, getDetailPendingIdea } =
-  ideaStore
+const {
+  getDetailIdea,
+  increaseVote,
+  decreaseVote,
+  cancelVote,
+  getRelatedIdeas,
+  getDetailPendingIdea
+} = ideaStore
 
 if (typeIdea === 'pending') {
   await getDetailPendingIdea(ideaId)
@@ -131,31 +164,225 @@ await getRelatedIdeas(ideaId).catch((error) => {
     router.push({ name: 'sign-in' })
   }
 })
+
+const isVotingAllowed = ref(true)
+const debounceTime = 2000
 const vote = ref(idea.value?.vote)
-const handleVote = () => {
-  if (vote.value === null) {
+
+const toggleUpvote = () => {
+  if (!isVotingAllowed.value) return
+
+  if (vote.value === 'up') {
+    // If already upvoted, clicking will cancel the upvote
+    cancelVote(ideaId)
+    vote.value = null // Clear the vote
+  } else if (vote.value === 'down') {
+    cancelVote(ideaId)
+    vote.value = null
+  } else {
+    // Set vote to up
     increaseVote(ideaId)
     vote.value = 'up'
-  } else {
-    decreaseVote(ideaId)
+  }
+
+  // Prevent rapid multiple votes
+  isVotingAllowed.value = false
+  setTimeout(() => {
+    isVotingAllowed.value = true
+  }, debounceTime)
+}
+
+const toggleDownvote = () => {
+  if (!isVotingAllowed.value) return
+
+  if (vote.value === 'down') {
+    // If already downvoted, clicking will cancel the downvote
+    cancelVote(ideaId)
+    vote.value = null // Clear the vote
+  } else if (vote.value === 'up') {
+    cancelVote(ideaId)
     vote.value = null
+  } else {
+    // Set vote to down
+    decreaseVote(ideaId)
+    vote.value = 'down'
+  }
+
+  // Prevent rapid multiple votes
+  isVotingAllowed.value = false
+  setTimeout(() => {
+    isVotingAllowed.value = true
+  }, debounceTime)
+}
+
+const imagesArray = computed(() =>
+  idea.value.linkImage.includes(',')
+    ? idea.value.linkImage.split(',').map((url) => url.trim())
+    : [idea.value.linkImage]
+)
+
+const showLightBox = ref(false)
+const currentIndex = ref(0)
+const currentImage = computed(() => imagesArray.value[currentIndex.value])
+
+const nextImage = () => {
+  if (currentIndex.value < imagesArray.value.length - 1) {
+    currentIndex.value++
   }
 }
+
+const prevImage = () => {
+  if (currentIndex.value > 0) {
+    currentIndex.value--
+  }
+}
+
+const openLightbox = () => {
+  showLightBox.value = true
+}
+
+// const closeLightbox = () => {
+//   showLightBox.value = false
+// }
 </script>
+
 <style scoped>
+.image-container {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.image {
+  max-width: 90%; 
+  max-height: 90%; 
+  object-fit: cover;
+}
+
+.image-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0);
+  color: black;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  outline: none;
+  transition: background 0.8s ease;
+}
+
+.arrow-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.fa-arrow-left:before {
+  content: '\f053';
+  font-size: 24px;
+}
+
+.fa-arrow-right:before {
+  content: '\f054';
+  font-size: 24px;
+}
+
+.left-arrow {
+  left: 15px; 
+}
+
+.right-arrow {
+  right: 15px; 
+}
+
 .ql-toolbar {
   border: 0 !important;
-  border-bottom: 1px solid rgb(218, 218, 218) !important;
 }
+
 .comment-input[contentEditable='true']:empty:before {
   content: attr(placeholder);
   color: gray;
   cursor: text;
 }
+
 .ql-editor {
   padding: 12px 0px;
 }
 .ql-toolbar.ql-snow {
   padding: 0 !important;
+}
+
+.action-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgb(239 241 243 / var(--tw-bg-opacity));
+  border-radius: 20px;
+  padding: 3px 9px;
+}
+
+.arrow-container {
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.active-background-up {
+  background-color: #d0e3ff; 
+}
+.active-background-down {
+  background-color: #ffe3e0;
+}
+
+
+
+.action-container-color-up {
+  background-color: #7193ff;
+}
+
+.action-container-color-down {
+  background-color: #ff4500;
+}
+
+.vote-icon {
+  cursor: pointer;
+  font-size: 18px;
+  color: black;
+}
+
+.action-count {
+  font-size: 18px;
+}
+
+.upvote-icon:hover {
+  color: #7193ff;
+}
+
+.hover-color-up {
+  color: #8b71ff;
+}
+
+.downvote-icon:hover {
+  color: #ff0000;
+}
+
+.hover-color-down {
+  color: #ff0000;
 }
 </style>
