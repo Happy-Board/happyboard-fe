@@ -42,7 +42,15 @@
           <i class="fas fa-arrow-left"></i>
         </button>
 
-        <img :src="currentImage" alt="idea image" class="image" @click="openLightbox" />
+        <!-- <div class='img-display-container' @click=> -->
+
+        <img
+          :src="currentImage"
+          alt="idea image"
+          class="image"
+          @click="openLightBox"
+        />
+        <!-- </div> -->
 
         <button
           v-if="imagesArray.length > 1 && currentIndex < imagesArray.length - 1"
@@ -80,7 +88,7 @@
           />
         </div>
 
-        <span class="action-count">{{ idea.voteCount !== 0  ? idea.voteCount : 'Vote' }}</span>
+        <span class="action-count">{{ idea.voteCount !== 0 ? idea.voteCount : 'Vote' }}</span>
 
         <div
           class="arrow-container downvote-container"
@@ -115,10 +123,11 @@
 
     <!-- Lightbox Component -->
     <VueEasyLightbox
-      :visible="showLightbox"
+      style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999"
+      :visible="showLightBox"
       :imgs="imagesArray"
       :index="currentIndex"
-      @hide="showLightbox = false"
+      @hide="closeLightBox"
     />
   </div>
 </template>
@@ -133,6 +142,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowUp, faArrowDown, faComment } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import VueEasyLightbox from 'vue-easy-lightbox'
+import { nextTick } from 'vue'
 
 library.add(faArrowUp, faArrowDown, faComment)
 
@@ -214,6 +224,7 @@ const toggleDownvote = () => {
     isVotingAllowed.value = true
   }, debounceTime)
 }
+const currentIndex = ref(0)
 
 const imagesArray = computed(() =>
   idea.value.linkImage.includes(',')
@@ -221,29 +232,35 @@ const imagesArray = computed(() =>
     : [idea.value.linkImage]
 )
 
-const showLightBox = ref(false)
-const currentIndex = ref(0)
 const currentImage = computed(() => imagesArray.value[currentIndex.value])
+
+const showLightBox = ref(false)
+
+const openLightBox = async () => {
+  await nextTick()
+  showLightBox.value = true
+  console.log('currentIndex in openLightBox func: ', currentIndex.value)
+  console.log('currentImage in openLightBox func: ', currentImage.value)
+}
+
+console.log('imagesArray.value: ', imagesArray.value[currentIndex.value])
+
+const closeLightBox = () => {
+  showLightBox.value = false
+}
 
 const nextImage = () => {
   if (currentIndex.value < imagesArray.value.length - 1) {
-    currentIndex.value++
+    ++currentIndex.value
+    console.log('currentIndex: ', currentIndex.value)
   }
 }
 
 const prevImage = () => {
   if (currentIndex.value > 0) {
-    currentIndex.value--
+    --currentIndex.value
   }
 }
-
-const openLightbox = () => {
-  showLightBox.value = true
-}
-
-// const closeLightbox = () => {
-//   showLightBox.value = false
-// }
 </script>
 
 <style scoped>
@@ -260,8 +277,8 @@ const openLightbox = () => {
 }
 
 .image {
-  max-width: 90%; 
-  max-height: 90%; 
+  max-width: 90%;
+  max-height: 90%;
   object-fit: cover;
 }
 
@@ -301,11 +318,11 @@ const openLightbox = () => {
 }
 
 .left-arrow {
-  left: 15px; 
+  left: 15px;
 }
 
 .right-arrow {
-  right: 15px; 
+  right: 15px;
 }
 
 .ql-toolbar {
@@ -342,15 +359,12 @@ const openLightbox = () => {
   justify-content: center;
 }
 
-
 .active-background-up {
-  background-color: #d0e3ff; 
+  background-color: #d0e3ff;
 }
 .active-background-down {
   background-color: #ffe3e0;
 }
-
-
 
 .action-container-color-up {
   background-color: #7193ff;
@@ -367,7 +381,7 @@ const openLightbox = () => {
 }
 
 .action-count {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .upvote-icon:hover {
