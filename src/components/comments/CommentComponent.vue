@@ -114,7 +114,7 @@ const props = defineProps({
   react: String,
   avatar: String
 })
-const editorRef = ref()
+const editorRef = ref(null)
 const isShowReactions = ref(false)
 const keepReactionsDisplay = ref(false)
 
@@ -127,14 +127,49 @@ const keepReactionsDisplay = ref(false)
 //   //handleEditComment
 // }
 
+// const commitComment = (event) => {
+//   let content = editorRef.value.innerHTML
+//   content = content.replace(/&nbsp;/g, '')
+//   console.log('content', content)
+//   content = `<div><strong>@${props.author}</strong> ${content}</div>`
+//   addComment(props.ideaId, { content: content, parentId: props.id })
+//   increaseComment()
+//   event.target.closest('.input-box').querySelector('.comment-input').innerHTML = ''
+//   handleCloseReply()
+// }
+
 const commitComment = (event) => {
-  if (event.target.closest('.input-box').querySelector('.comment-input').innerHTML === '') return
-  const content = `<div><strong>@${props.author}</strong> ${event.target.closest('.input-box').querySelector('.comment-input').innerHTML}`
-  addComment(props.ideaId, { content: content, parentId: props.id })
-  increaseComment()
-  event.target.closest('.input-box').querySelector('.comment-input').innerHTML = ''
-  handleCloseReply()
-}
+  let contentElement = event.target.closest('.input-box').querySelector('.comment-input');
+  
+  if (!contentElement) {
+    console.log('Input element not found');
+    return;
+  }
+  
+  // Get the innerHTML and replace non-breaking spaces with normal spaces, then trim
+  let content = contentElement.innerHTML.replace(/(?:&nbsp;|\s)+/g, ' ').trim();
+
+  // Check if content is empty after trimming
+  if (content === '') {
+    console.log('Content is empty after trimming spaces');
+    return;
+  }
+
+  // Format content and add mention of the author
+  content = `<div><strong>@${props.author}</strong> ${content}</div>`;
+  
+  // Add the comment and increment the comment count
+  addComment(props.ideaId, { content: content, parentId: props.id });
+  increaseComment();
+  
+  // Clear the content of the editor element
+  contentElement.innerHTML = '';
+  
+  // Close the reply box
+  handleCloseReply();
+};
+
+
 const isOpenReply = ref(false)
 
 const handleOpenReply = () => {

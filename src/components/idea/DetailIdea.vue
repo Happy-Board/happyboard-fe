@@ -3,7 +3,7 @@
     <!-- Avatar, Username, Category, and Created Date -->
     <div class="flex items-center mb-3">
       <img
-        :src="idea?.User?.avatar === '' ? '/avatar/default-avatar.jpg' : idea?.User?.avatar"
+        :src="idea?.User?.avatar === '' ? 'https://res.cloudinary.com/daokqrkdk/image/upload/v1730884402/default-avatar_shzypu.jpg' : idea?.User?.avatar"
         alt="avatar"
         class="w-10 h-10 rounded-full cursor-pointer mr-2"
       />
@@ -239,11 +239,8 @@ const showLightBox = ref(false)
 const openLightBox = async () => {
   await nextTick()
   showLightBox.value = true
-  console.log('currentIndex in openLightBox func: ', currentIndex.value)
-  console.log('currentImage in openLightBox func: ', currentImage.value)
 }
 
-console.log('imagesArray.value: ', imagesArray.value[currentIndex.value])
 
 const closeLightBox = () => {
   showLightBox.value = false
@@ -252,7 +249,6 @@ const closeLightBox = () => {
 const nextImage = () => {
   if (currentIndex.value < imagesArray.value.length - 1) {
     ++currentIndex.value
-    console.log('currentIndex: ', currentIndex.value)
   }
 }
 
@@ -261,6 +257,7 @@ const prevImage = () => {
     --currentIndex.value
   }
 }
+
 </script>
 
 <style scoped>

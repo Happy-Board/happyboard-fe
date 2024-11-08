@@ -28,6 +28,7 @@
             feature="Recently ideas"
             :titleIdeas="titleIdea"
             :ideas="recentIdeas"
+            :imageUrls="imageUrls"
           />
         </div>
         <template #fallback>

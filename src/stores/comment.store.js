@@ -20,6 +20,7 @@ export const useCommentStore = defineStore('comment', () => {
   }
 
   function addComment(ideaId, body) {
+    console.log('body', body)
     apiCreateComment(ideaId, body)
       .then(() => {
         getAllComments(ideaId)
