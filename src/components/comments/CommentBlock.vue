@@ -81,8 +81,16 @@ const handleComment = (event) => {
 }
 
 const commitComment = () => {
-  if(editorRef.value.innerHTML === '') return
-  addComment(props.ideaId, { content: editorRef.value.innerHTML })
+  const contentElement = editorRef.value.innerHTML
+  if(contentElement === '') return
+  let content = contentElement.replace(/(?:&nbsp;|\s)+/g, ' ').trim();
+
+  if (content === '') {
+    console.log('Content is empty after trimming spaces');
+    return;
+  }
+  console.log(content)
+  addComment(props.ideaId, { content })
   increaseComment()
   const comment = document.querySelector('#comment-input')
   comment.innerHTML = ''
