@@ -23,7 +23,7 @@
     <div class="text-3xl font-bold overflow-hidden break-words mb-3" v-html="idea?.title"></div>
 
     <!-- Content or Image Display -->
-    <div class="ql-toolbar ql-snow border-0 pb-5 border-b h-96">
+    <div class="ql-toolbar ql-snow border-0 pb-5 border-b h-auto">
       <div
         v-if="idea?.content"
         class="ql-editor"
@@ -222,14 +222,16 @@ const toggleDownvote = () => {
   isVotingAllowed.value = false
   setTimeout(() => {
     isVotingAllowed.value = true
-  }, debounceTime)
+  }, debounceTime)  
 }
 const currentIndex = ref(0)
 
 const imagesArray = computed(() =>
-  idea.value.linkImage.includes(',')
-    ? idea.value.linkImage.split(',').map((url) => url.trim())
-    : [idea.value.linkImage]
+  idea.value.linkImage ? 
+    idea.value.linkImage.includes(',')
+      ? idea.value.linkImage.split(',').map((url) => url.trim())
+      : [idea.value.linkImage]
+  : null
 )
 
 const currentImage = computed(() => imagesArray.value[currentIndex.value])
@@ -395,5 +397,15 @@ const prevImage = () => {
 
 .hover-color-down {
   color: #ff0000;
+}
+
+.content {
+  /* Điều chỉnh chiều cao tối đa và cuộn nếu content quá dài */
+  max-height: 400px;
+  overflow-y: auto;
+
+  /* Tự động điều chỉnh padding khi content ngắn */
+  padding: 16px;
+  margin-bottom: 8px;
 }
 </style>

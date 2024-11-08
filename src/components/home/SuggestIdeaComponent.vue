@@ -1,6 +1,6 @@
 <template>
   <div
-    class="hidden md:block w-full bg-white p-2 px-4 rounded-lg mb-2 border border-borderColor mx-auto bg-backgroundColor"
+    class="hidden md:block w-full p-2 px-4 rounded-lg mb-2 border border-borderColor mx-auto bg-backgroundColor"
   >
     <div class="flex justify-between border-b border-b-borderColor mb-3 items-end">
       <span class="font-semibold text-[18px]">{{ props.feature }}</span>
@@ -10,7 +10,7 @@
       v-for="(idea, index) in props.ideas"
       :key="index"
       @click="viewDetailIdea(idea.id)"
-      class="my-2 flex items-center justify-between p-2 rounded hover:bg-gray-100"
+      class="my-2 flex items-center justify-between p-2 rounded hover:bg-gray-100 border-b border-gray-300"
     >
       <!-- Left side with icon, title, and meta information -->
       <div class="flex flex-col flex-grow pr-4">
