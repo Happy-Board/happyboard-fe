@@ -16,7 +16,6 @@ export const useHomePageStore = defineStore('home', () => {
   const query = ref()
   const hotIdeas = ref([])
   const recentIdeas = ref([])
-  const imageUrls = ref([])
 
   // const getAllCategory = computed(() => category)
   async function getPageData() {
@@ -99,14 +98,6 @@ export const useHomePageStore = defineStore('home', () => {
     query.value = setCurrentQuery
   }
 
-  async function getImageUrls() {
-    await apiGetIdeas()
-      .then((response) => {
-        imageUrls.value = response.data.data[0].linkImage
-      })
-      .catch((err) => console.log(err))
-  }
-
   return {
     pageData,
     searchString,
@@ -114,7 +105,6 @@ export const useHomePageStore = defineStore('home', () => {
     tab,
     hotIdeas,
     recentIdeas,
-    imageUrls,
     getPageData,
     setCurrentPage,
     setSearchString,
@@ -124,6 +114,5 @@ export const useHomePageStore = defineStore('home', () => {
     getHotIdeas,
     getRecentIdeas,
     setCategory,
-    getImageUrls
   }
 })
