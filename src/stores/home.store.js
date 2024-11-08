@@ -113,6 +113,6 @@ export const useHomePageStore = defineStore('home', () => {
     setCurrentQuery,
     getHotIdeas,
     getRecentIdeas,
-    setCategory
+    setCategory,
   }
 })
