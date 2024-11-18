@@ -8,7 +8,9 @@
     </Suspense>
     <div v-if="typeIdea !== 'pending'">
       <Suspense>
-        <CommentBlock :ideaId="ideaId" />
+        <CommentBlock 
+          :ideaId="ideaId"
+          />
         <template #fallback>
           <CommentBlockSkeleton />
         </template>
@@ -40,7 +42,6 @@ const SuggestIdeaComponent = defineAsyncComponent(
   () => import('@/components/home/SuggestIdeaComponent.vue')
 )
 const route = useRoute()
-// const router = useRouter()
 const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const typeIdea = route.params.type

@@ -1,12 +1,11 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { apiGetComment, apiCreateComment } from '@/apis/idea.api'
+import { apiGetComment, apiCreateComment, apiEditComment } from '@/apis/idea.api'
 import { apiCancelReaction, apiCreateReaction } from '@/apis/comment.api'
 import { convertTime1 } from '@/utils/convert-time'
 
 export const useCommentStore = defineStore('comment', () => {
   const comments = ref()
-  // const getAllCategory = computed(() => category)
   async function getAllComments(ideaId) {
     await apiGetComment(ideaId)
       .then((response) => {
@@ -20,7 +19,6 @@ export const useCommentStore = defineStore('comment', () => {
   }
 
   function addComment(ideaId, body) {
-    console.log('body', body)
     apiCreateComment(ideaId, body)
       .then(() => {
         getAllComments(ideaId)
@@ -28,8 +26,17 @@ export const useCommentStore = defineStore('comment', () => {
       })
       .catch((err) => console.log(err))
   }
+
   function addReplyComment(ideaId, body) {
     apiCreateComment(ideaId, body)
+      .then(() => {
+        getAllComments(ideaId)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  function editComment(id, ideaId, body) {
+    apiEditComment(id, body)
       .then(() => {
         getAllComments(ideaId)
       })
@@ -53,5 +60,5 @@ export const useCommentStore = defineStore('comment', () => {
       .catch((err) => console.log(err))
   }
 
-  return { comments, getAllComments, addComment, addReplyComment, createReaction, cancelReaction }
+  return { comments, getAllComments, addComment, editComment, addReplyComment, createReaction, cancelReaction, }
 })
