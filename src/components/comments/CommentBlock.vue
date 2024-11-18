@@ -35,6 +35,7 @@
         :updatedAt="comment?.updatedAt"
         :react="comment?.reaction"
         :avatar="comment?.User?.avatar"
+        :userId="comment?.userId"
       />
       <div
         v-for="(reply, index) in comment?.children"
@@ -49,6 +50,7 @@
           :updatedAt="reply?.updatedAt"
           :react="reply?.reaction"
           :avatar="reply?.User?.avatar"
+          :userId="reply?.userId"
         />
       </div>
     </div>
@@ -77,7 +79,6 @@ const handleComment = (event) => {
     event.preventDefault()
     return
   } 
-
 }
 
 const commitComment = () => {

@@ -68,6 +68,7 @@
           </transition>
         </div>
       </Listbox>
+      <TabTypeCreateIdea :tab="tab" @setTab="handleSetTab"> </TabTypeCreateIdea>
       <div class="">
         <label for="message" class="block text-sm font-medium text-black mb-3"
           >Title <span class="text-red-600">*</span>
@@ -75,23 +76,16 @@
             `(${ideaData?.title?.length}/200)`
           }}</span>
         </label>
-        <!-- <div
-          id="title"
-          placeholder="Write your title here..."
-          class="comment-input rounded-lg border bg-white border-borderColor focus:outline-0 py-2 px-3 pe-11 w-full text-sm"
-          contentEditable="true"
-          spellcheck="false"
-        ></div> -->
         <textarea
           v-model="ideaData.title"
           placeholder="Write your title here..."
           rows="1"
           maxlength="200"
-          class="text-sm overflow-hidden h-fit border border-gray-300 focus:outline-0 px-3 py-2 resize-none rounded-lg w-full"
+          class="text-sm overflow-hidden border border-gray-300 focus:outline-0 px-3 py-2 rounded-lg w-full"
           id="title1"
         ></textarea>
       </div>
-      <div class="mb-10">
+      <div v-if="tab === 'text'" class="mb-10">
         <label class="block text-sm font-medium text-black mb-3" for="content"
           >Content <span class="text-red-600">*</span></label
         >
@@ -103,42 +97,92 @@
           contentType="html"
         />
       </div>
-      <div v-if="route.params.type === 'draft'" class="my-10 flex justify-end">
+      <div v-if="tab === 'media'" class="">
+        <label class="block text-sm font-medium text-black mb-3" for="content">
+          Upload Image/Video <span class="text-red-600">*</span>
+        </label>
+        <div
+          class="relative flex flex-col items-center justify-center w-full border-1 border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600"
+        >
+          <div v-if="preDisplayImage.length > 0" class="flex items-center justify-center">
+            <button
+              @click="triggerFileInput"
+              class="absolute top-2 left-14 p-2 bg-blue-700 text-white rounded hover:bg-blue-800 z-10"
+            >
+              Add
+            </button>
+            <button @click="prevImage" class="p-2 m-2 bg-gray-300 rounded-full hover:bg-gray-400">
+              ◀
+            </button>
+            <div class="relative">
+              <img
+                :src="preDisplayImage[currentImageIndex]"
+                alt="Upload Image Preview"
+                class="w-100 h-70 object-cover"
+              />
+              <button
+                @click="removeFile(currentImageIndex)"
+                class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-700"
+                title="Delete Image"
+              >
+                🗑️
+              </button>
+            </div>
+            <button @click="nextImage" class="p-2 m-2 bg-gray-300 rounded-full hover:bg-gray-400">
+              ▶
+            </button>
+          </div>
+          <div
+            v-else
+            class="flex flex-col items-center justify-center pt-5 pb-6 cursor-pointer"
+            @click="triggerFileInput"
+            @dragover.prevent
+            @drop.prevent="handleDrop"
+          >
+            <svg
+              class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 16"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <span class="font-semibold">Click to upload</span> or drag and drop
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              SVG, PNG, JPG or GIF (MAX. 800x400px)
+            </p>
+          </div>
+          <input id="dropzone-file" type="file" multiple @change="onFilesChange" class="hidden" />
+        </div>
+      </div>
+      <div class="my-10 flex justify-end">
         <button
           @click.prevent="saveIdea"
           type="button"
-          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 md:mb-2 mt-5"
         >
           Save Draft
         </button>
         <button
           @click.prevent="createIdea"
           type="button"
-          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 md:mb-2 mt-5"
         >
           Create
-        </button>
-      </div>
-      <div v-if="route.params.type === 'pending'" class="my-10 flex justify-end">
-        <!-- <button
-          @click.prevent="saveIdea"
-          type="button"
-          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
-        >
-          Cancel
-        </button> -->
-        <button
-          @click.prevent="createIdea"
-          type="button"
-          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 mb-2"
-        >
-          Release
         </button>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, reactive, onMounted, watch, onUpdated } from 'vue'
 import { useRouter } from 'vue-router'
@@ -152,48 +196,54 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { apiCreateIdea, apiSaveIdea, apiUpdateIdea } from '@/apis/idea.api'
+import { apiCreateIdea, apiCreateMediaIdea, apiSaveIdea } from '@/apis/idea.api'
 import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import 'vue3-toastify/dist/index.css'
-import { useUserStore } from '@/stores/user.store'
-import { useRoute } from 'vue-router'
 import { notify } from '@/utils/toast'
 import { useMyBoardStore } from '@/stores/my-board.store'
 import sanitizeHtml from 'sanitize-html'
 import { SANITIZE_ALLOWED_TAGS } from '@/constants'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-
+import TabTypeCreateIdea from '../../components/idea/TabTypeCreateIdea.vue'
+import { useUserStore } from '@/stores/user.store'
+import { useRoute } from 'vue-router'
 const route = useRoute()
 const ideaId = route.params.id
-const type = route.params.type
-
+const type = route.params.TabTypeCreateIdea
 const router = useRouter()
 const categoryStore = useCategoryStore()
 const myBoardStore = useMyBoardStore()
 const { categories } = storeToRefs(categoryStore)
 const { getAllCategory } = categoryStore
-
 const userStore = useUserStore()
 const { ideaToEdit } = storeToRefs(userStore)
 const { getDetailDraftIdea, getDetailReleaseIdea } = userStore
 const { setTab } = myBoardStore
-// const title = ref()
+
 const ideaData = reactive({
   categoryId: '',
   title: '',
-  content: ''
+  content: '',
+  type: '',
+  linkImage: ''
 })
-
 onMounted(() => {
   getAllCategory()
-  // document.querySelector('#title').innerHTML = ideaToEdit.value.title
-  ideaData.title = ideaToEdit.value.title
+  ideaData.title = ideaToEdit.value?.title
   ideaData.categoryId = ideaToEdit.value?.Category.id
   ideaData.content = ideaToEdit.value?.content
+  ideaData.linkImage = ideaToEdit.value?.linkImage
+
 })
 
+const tab = ref('text')
+console.log('ideaToEdit', ideaToEdit.value)
+
+const handleSetTab = (newTab) => {
+  tab.value = newTab
+}
 if (type === 'draft')
   await getDetailDraftIdea(ideaId).catch((error) => {
     if (error.response.status === 401) {
@@ -225,14 +275,60 @@ watch(
   }
 )
 
+let selectedFiles = ref([])
+const preDisplayImage = ref([])
+const currentImageIndex = ref(0)
+
+const onFilesChange = (event) => {
+  const files = Array.from(event.target.files)
+  if (files && files.length > 0) {
+    selectedFiles.value = Array.from(files)
+  }
+  files.forEach((file) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      preDisplayImage.value.push(e.target.result)
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+const removeFile = (index) => {
+  preDisplayImage.value.splice(index, 1)
+  if (currentImageIndex.value >= preDisplayImage.value.length) {
+    currentImageIndex.value = Math.max(0, preDisplayImage.value.length - 1)
+  }
+}
+
+const nextImage = () => {
+  if (currentImageIndex.value < preDisplayImage.value.length - 1) {
+    currentImageIndex.value++
+  }
+}
+
+const prevImage = () => {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--
+  }
+}
+
+const triggerFileInput = () => {
+  const fileInput = document.getElementById('dropzone-file')
+  fileInput.click()
+}
+
 const saveIdea = () => {
+  ideaData.type = tab.value === 'text' ? 'text' : 'image'
+
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
-  } else if(ideaData.title !== sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
+  } else if (
+    ideaData.title !== sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
+  ) {
     toast.warning('Your title is not allowed to contain html tags! We will strip your html tags', {
-          autoClose: 5000
-        })
+      autoClose: 5000
+    })
     ideaData.title = sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
     return
   }
@@ -240,42 +336,69 @@ const saveIdea = () => {
     notify('warning', 'Nothing to save')
     return
   }
-  if (route.name === 'edit') {
-    apiUpdateIdea(ideaId, ideaData)
+
+  if (ideaData.type === 'text') {
+    if (!ideaData.content) {
+      notify('warning', 'Content is not empty !')
+    }
+    const formData = new FormData()
+    formData.append('type', ideaData.type)
+    formData.append('title', ideaData.title)
+    formData.append('categoryId', ideaData.categoryId)
+    formData.append('content', ideaData.content)
+
+    apiSaveIdea(formData)
       .then(() => {
-        notify('success', 'Idea saved successfully')
+        setTab('hide')
+        notify('success', 'Create idea successfully !')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
-        }, 500)
-      })
-      .catch((error) => {
-        console.error(error)
-        notify('error', 'Save idea failed, some thing went wrong !')
-      })
-  } else {
-    apiSaveIdea(ideaData)
-      .then(() => {
-        notify('success', 'Your idea has been saved!')
-        setTab('draft')
-        setTimeout(() => {
-          router.push({ name: 'my-board-ideas' })
-        }, 500)
+        }, 1000)
       })
       .catch((err) => {
         console.log(err)
-        notify('error', 'Save idea failed, some thing went wrong !')
+        notify('error', 'Create idea failed, some thing went wrong !')
+      })
+  }
+
+  if (ideaData.type === 'image') {
+    if (!preDisplayImage.value) {
+      notify('warning', 'Media is not empty !')
+      return
+    }
+    const formData = new FormData()
+
+    formData.append('title', ideaData.title)
+    formData.append('categoryId', ideaData.categoryId)
+    formData.append('type', ideaData.type)
+    selectedFiles.value.forEach((file) => {
+      formData.append('files', file)
+    })
+    apiSaveIdea(formData)
+      .then(() => {
+        setTab('hide')
+        notify('success', 'Create media content idea successfully !')
+        setTimeout(() => {
+          router.push({ name: 'my-board-ideas' })
+        }, 1000)
+      })
+      .catch((err) => {
+        console.log(err)
+        notify('error', 'Create idea failed, some thing went wrong !')
       })
   }
 }
-
 const createIdea = () => {
+  ideaData.type = tab.value === 'text' ? 'text' : 'image'
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
-  } else if(ideaData.title !== sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
+  } else if (
+    ideaData.title !== sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
+  ) {
     toast.warning('Your title is not allowed to contain html tags! We will strip your html tags', {
-          autoClose: 5000
-        })
+      autoClose: 5000
+    })
     ideaData.title = sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
     return
   }
@@ -285,52 +408,57 @@ const createIdea = () => {
   } else if (!ideaData.title) {
     notify('warning', 'Title is not empty !')
     return
-  } else if (!ideaData.content) {
-    notify('warning', 'Content is not empty !')
-    return
   }
-  if (route.name === 'edit') {
-    apiUpdateIdea(ideaId, { ...ideaData, isPublished: false, isDrafted: false })
-      .then(() => {
-        setTab('hide')
-        if (type === 'release') {
-          notify('success', 'Update idea successfully!')
-        } else {
-          notify('success', 'Create idea successfully!')
-        }
-        setTimeout(() => {
-          router.push({ name: 'my-board-ideas' })
-        }, 500)
-      })
-      .catch((error) => {
-        console.error(error)
-        notify('error', 'Create idea failed, some thing went wrong!')
-      })
-  } else {
+  if (tab.value === 'text') {
+    if (!ideaData.content) {
+      notify('warning', 'Content is not empty !')
+    }
     apiCreateIdea(ideaData)
       .then(() => {
         setTab('hide')
-        notify('success', 'Create idea successfully!')
+        notify('success', 'Create idea successfully !')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
-        }, 500)
+        }, 1000)
       })
-      .catch((error) => {
-        console.log(error)
-        notify('error', 'Create idea failed, some thing went wrong!')
+      .catch((err) => {
+        console.log(err)
+        notify('error', 'Create idea failed, some thing went wrong !')
+      })
+  } else if (tab.value === 'media') {
+    if (!preDisplayImage.value) {
+      notify('warning', 'Media is not empty !')
+      return
+    }
+    const formData = new FormData()
 
-        if (error.response.status === 403) {
-          notify('warning', `You don't have permision!`)
-        }
+    formData.append('title', ideaData.title)
+    formData.append('categoryId', ideaData.categoryId)
+    formData.append('type', ideaData.type)
+    selectedFiles.value.forEach((file) => {
+      console.log(file)
+      console.log('---------------------------')
+      formData.append('files', file)
+    })
+
+    apiCreateMediaIdea(formData)
+      .then(() => {
+        setTab('hide')
+        notify('success', 'Create media content idea successfully !')
+        setTimeout(() => {
+          router.push({ name: 'my-board-ideas' })
+        }, 1000)
+      })
+      .catch((err) => {
+        console.log(err)
+        notify('error', 'Create idea failed, some thing went wrong !')
       })
   }
 }
 const selected = ref({
-  id: ideaToEdit.value.Category.id,
-  title: ideaToEdit.value.Category.title,
-  icon: ideaToEdit.value.Category.icon
+  title: 'Choose a category for your idea',
+  icon: ''
 })
-
 watch(selected, async () => {
   ideaData.categoryId = selected.value.id
 })
@@ -349,9 +477,7 @@ a {
   color: gray;
   cursor: text;
 }
-textarea {
-  resize: none;
-}
+
 textarea::placeholder {
   font-size: 14px;
 }
