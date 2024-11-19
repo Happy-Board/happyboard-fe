@@ -57,7 +57,7 @@ export const useIdeaStore = defineStore('idea', () => {
   }
 
   function increaseComment() {
-    --idea.value.commentCount
+    ++idea.value.commentCount
   }
 
   
