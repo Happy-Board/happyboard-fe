@@ -90,7 +90,6 @@ const commitComment = () => {
     console.log('Content is empty after trimming spaces');
     return;
   }
-  console.log(content)
   addComment(props.ideaId, { content })
   increaseComment()
   const comment = document.querySelector('#comment-input')

@@ -57,7 +57,12 @@ export const useIdeaStore = defineStore('idea', () => {
   }
 
   function increaseComment() {
-    idea.value.commentCount++
+    ++idea.value.commentCount
+  }
+
+  
+  function decreaseComment() {
+    --idea.value.commentCount
   }
 
   // const getAllCategory = computed(() => category)
@@ -100,6 +105,7 @@ export const useIdeaStore = defineStore('idea', () => {
     cancelVote,
     getRelatedIdeas,
     getDetailPendingIdea,
-    increaseComment
+    increaseComment,
+    decreaseComment
   }
 })
