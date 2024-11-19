@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { apiGetComment, apiCreateComment, apiEditComment } from '@/apis/idea.api'
+import { apiGetComment, apiCreateComment, apiEditComment, apiDeleteComment } from '@/apis/idea.api'
 import { apiCancelReaction, apiCreateReaction } from '@/apis/comment.api'
 import { convertTime1 } from '@/utils/convert-time'
 
@@ -22,7 +22,6 @@ export const useCommentStore = defineStore('comment', () => {
     apiCreateComment(ideaId, body)
       .then(() => {
         getAllComments(ideaId)
-        console.log('add comment')
       })
       .catch((err) => console.log(err))
   }
@@ -37,6 +36,14 @@ export const useCommentStore = defineStore('comment', () => {
 
   function editComment(id, ideaId, body) {
     apiEditComment(id, body)
+      .then(() => {
+        getAllComments(ideaId)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  function deleteComment(id, ideaId) {
+    apiDeleteComment(id)
       .then(() => {
         getAllComments(ideaId)
       })
@@ -60,5 +67,5 @@ export const useCommentStore = defineStore('comment', () => {
       .catch((err) => console.log(err))
   }
 
-  return { comments, getAllComments, addComment, editComment, addReplyComment, createReaction, cancelReaction, }
+  return { comments, getAllComments, addComment, editComment, addReplyComment, createReaction, cancelReaction, deleteComment }
 })

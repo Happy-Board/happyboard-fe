@@ -157,9 +157,9 @@ import { useIdeaStore } from '@/stores/idea.store'
 
 const userStore = useUserStore()
 const { profile } = storeToRefs(userStore)
-const { increaseComment } = useIdeaStore()
+const { increaseComment, decreaseComment } = useIdeaStore()
 const commentStore = useCommentStore()
-const { addComment, createReaction, cancelReaction, editComment } = commentStore
+const { addComment, createReaction, cancelReaction, editComment, deleteComment } = commentStore
 const props = defineProps({
   ideaId: Number,
   id: Number,
@@ -300,6 +300,13 @@ const handleSaveEdit = () => {
   } else {
     editComment(props.id, props.ideaId, { content: editedComment.value })  
   }
+  isEditing.value = false
+  globalEditingId.value = null
+}
+
+const handleDelete = () => {
+  deleteComment(props.id, props.ideaId)
+  decreaseComment()
   isEditing.value = false
   globalEditingId.value = null
 }
