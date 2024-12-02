@@ -9,7 +9,7 @@
       </Suspense>
     </div>
     <div class="flex-1">
-      <FilterComponent />
+      <FilterComponent :store="homePageStore" />
       <Suspense>
         <ListIdea />
 
@@ -42,8 +42,6 @@
           <SuggestIdeaSkeleton />
         </template>
       </Suspense>
-
-      <!-- <SuggestIdeaComponent feature="History activity" :ideas="titleIdea" /> -->
     </div>
   </div>
 </template>

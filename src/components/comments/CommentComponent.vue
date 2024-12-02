@@ -2,7 +2,10 @@
   <div>
     <div class="">
       <div>
-        <div id="comment-block" class="comment-level-1 mt-5 flex items-start gap-1 min-w-[50%]">
+        <div
+          :id="`comment-${props.id}`"
+          class="comment-level-1 mt-5 flex items-start gap-1 min-w-[50%]"
+        >
           <img
             :src="props.avatar === '' ? '../../avatar/default-avatar.jpg' : props.avatar"
             alt="avatar"
@@ -154,7 +157,9 @@ import ReactionComponent from './ReactionComponent.vue'
 import { useUserStore } from '@/stores/user.store'
 import { storeToRefs } from 'pinia'
 import { useIdeaStore } from '@/stores/idea.store'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const userStore = useUserStore()
 const { profile } = storeToRefs(userStore)
 const { increaseComment, decreaseComment } = useIdeaStore()
@@ -294,11 +299,11 @@ const handleCancelEdit = () => {
 
 const handleSaveEdit = () => {
   console.log('isReply: ', isReply.value)
-  if (isReply.value){
+  if (isReply.value) {
     const content = `<div><strong>@${props.author}</strong>${editedComment.value}</div>`
     editComment(props.id, props.ideaId, { content: content })
   } else {
-    editComment(props.id, props.ideaId, { content: editedComment.value })  
+    editComment(props.id, props.ideaId, { content: editedComment.value })
   }
   isEditing.value = false
   globalEditingId.value = null
@@ -313,6 +318,16 @@ const handleDelete = () => {
 
 const isCommentOwner = computed(() => {
   return profile.value.id === props.userId
+})
+
+onMounted(() => {
+  const commentId = route.params.commentId; // Lấy từ params
+  if (commentId) {
+    const commentElement = document.getElementById(`comment-${commentId}`);
+    if (commentElement) {
+      commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
 })
 </script>
 <style scoped>

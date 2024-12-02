@@ -17,7 +17,6 @@ export const useHomePageStore = defineStore('home', () => {
   const hotIdeas = ref([])
   const recentIdeas = ref([])
 
-  // const getAllCategory = computed(() => category)
   async function getPageData() {
     if (searchString.value !== '') {
       query.value = `?q=${searchString.value}&page=${currentPage.value}`
@@ -89,11 +88,12 @@ export const useHomePageStore = defineStore('home', () => {
     })
   }
 
-  function setTab(tabSort) {
+  function setOption(tabSort) {
     tab.value = tabSort
     currentPage.value = 1
     loadMore()
   }
+
   function setCurrentQuery(setCurrentQuery) {
     query.value = setCurrentQuery
   }
@@ -108,7 +108,7 @@ export const useHomePageStore = defineStore('home', () => {
     getPageData,
     setCurrentPage,
     setSearchString,
-    setTab,
+    setOption,
     loadMore,
     setCurrentQuery,
     getHotIdeas,

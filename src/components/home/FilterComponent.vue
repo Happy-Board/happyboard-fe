@@ -1,51 +1,55 @@
 <template>
-  <div class="min-w-full border-t border-t-borderColor flex mb-1 justify-between md:items-end items-center mt-1">
-    <div class="py-1 rounded-md flex items-center md:text-xs text-[9px]">
+  <div class="min-w-full flex mb-1 justify-between md:items-end items-center mt-1">
+    <!-- Dropdown menu for sorting -->
+    <div class="md:pt-1 rounded-lg cursor-pointer relative">
       <button
-        @click="setTab('newest')"
+        @click="toggleSortMenu"
+        id="dropdownSortButton"
+        data-dropdown-toggle="dropdownSort"
+        class="inline-flex items-center px-4 py-1 text-[9px] md:text-xs font-medium text-center text-black bg-backgroundColor rounded-2xl hover:bg-backgroundButtonColor"
         type="button"
-        :class="
-          tab === 'newest'
-            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 me-1'
-            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 me-1'
-        "
+        :class="isShowSortMenu ? '!bg-backgroundButtonColor' : ''"
       >
-        Newest
+        Sort by
+        <svg
+          class="w-2.5 h-2.5 ms-2.5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 10 6"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m1 1 4 4 4-4"
+          />
+        </svg>
       </button>
-      <button
-        @click="setTab('highvote')"
-        type="button"
-        :class="
-          tab === 'highvote'
-            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 mx-1'
-            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 mx-1'
-        "
+
+      <!-- Dropdown menu -->
+      <div
+        v-if="isShowSortMenu"
+        id="dropdownSort"
+        class="z-10 bg-white rounded-lg shadow absolute left-0 top-10 border border-borderColor min-w-40"
       >
-        Highest vote
-      </button>
-      <button
-        @click="setTab('highview')"
-        type="button"
-        :class="
-          tab === 'highview'
-            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 mx-1'
-            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg md:px-2 px-1 py-0.5 mx-1'
-        "
-      >
-        Most view
-      </button>
-      <button
-        @click="setTab('highcomment')"
-        type="button"
-        :class="
-          tab === 'highcomment'
-            ? 'text-gray-900 bg-backgroundButtonColor focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 mx-1'
-            : 'text-gray-900 bg-white focus:outline-none hover:bg-gray-200  font-medium rounded-lg px-2 py-0.5 mx-1'
-        "
-      >
-        Most comment
-      </button>
+        <ul class="px-3 py-2 text-sm text-gray-700" aria-labelledby="dropdownSortButton">
+          <li
+            v-for="(sortOption, index) in sortOptions"
+            :key="index"
+            @click="selectSortOption(sortOption)"
+            class="flex items-center p-2 rounded hover:bg-backgroundColor cursor-pointer text-xs"
+          >
+            <span :class="sortOption.value === tab ? 'font-bold text-primaryColor' : ''">
+              {{ sortOption.label }}
+            </span>
+          </li>
+        </ul>
+      </div>
     </div>
+
+    <!-- filter by category -->
     <div class="md:pt-1 rounded-lg cursor-pointer relative">
       <button
         @click="showCheckBox"
@@ -117,18 +121,6 @@
               <span class="ml-2 block truncate font-bold">Choose All</span>
             </label>
           </div>
-          <!-- <div class="flex justify-center items-center">
-            <input
-              id="clear"
-              type="checkbox"
-              value="clear"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-              v-model="isClear"
-            />
-            <label for="clear" class="font-medium text-gray-900 rounded">
-              <span class="ml-2 block truncate">Clear</span>
-            </label>
-          </div> -->
         </div>
         <div class="flex justify-center py-2">
           <button
@@ -143,21 +135,30 @@
     </div>
   </div>
 </template>
+
+
 <script setup>
 import { useCategoryStore } from '@/stores/category.store'
-import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+
+const props = defineProps({
+  store: {
+    type: Object,
+    required: true,
+  },
+})
 
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
 const { getAllCategory } = categoryStore
-const homePageStore = useHomePageStore()
-const { tab } = storeToRefs(homePageStore)
-const { setTab, setCategory, loadMore } = homePageStore
+const { tab } = storeToRefs(props.store)
+const { setOption, setCategory, loadMore } = props.store
 const isShowCategoryCheckbox = ref(false)
 const isChooseAll = ref()
 const checkedCategory = ref([])
+const dropdownRef = ref(null)
+
 onMounted(() => {
   getAllCategory()
 })
@@ -170,9 +171,10 @@ watch(checkedCategory, (newCheckedCategory) => {
   }
   setCategory(newCheckedCategory.toString())
 })
+
 const showCheckBox = () => {
   isShowCategoryCheckbox.value = !isShowCategoryCheckbox.value
-}
+} 
 
 watch(isChooseAll, () => {
   if (isChooseAll.value) {
@@ -184,4 +186,35 @@ const handleApply = () => {
   loadMore()
   showCheckBox()
 }
+
+const isShowSortMenu = ref(false)
+const sortOptions = ref([
+  { label: 'Newest', value: 'newest' },
+  { label: 'Highest vote', value: 'highvote' },
+  { label: 'Most view', value: 'highview' },
+  { label: 'Most comment', value: 'highcomment' }
+])
+
+const toggleSortMenu = () => {
+  isShowSortMenu.value = !isShowSortMenu.value
+}
+
+const selectSortOption = (option) => {
+  setOption(option.value) 
+  isShowSortMenu.value = false
+}
+
+const handleClickOutside = (event) => {
+  if (!dropdownRef.value.contains(event.target)) {
+    isShowSortMenu.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>

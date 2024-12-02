@@ -7,10 +7,11 @@ import MyBoardView from '@/views/user/MyBoardView.vue'
 import EditIdea from '@/components/idea/EditIdea.vue'
 import MyIdea from '@/components/my-ideas/MyIdea.vue'
 import MyHistoryActivity from '@/components/history-activities/MyHistoryActivity.vue'
-import ProfileView from '@/views/user/ProfilePage.vue'
+import SettingsView from '@/views/user/SettingsPage.vue'
 import ResetPassword from '@/views/user/ResetPassword.vue'
 import MainLayout from '@/components/layouts/MainLayout.vue'
 import NotFoundPage from '@/views/user/NotFoundPage.vue'
+import ProfilePage from '@/views/user/ProfilePage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,14 +33,19 @@ const router = createRouter({
           component: CreateIdea
         },
         {
-          path: 'idea/:type/:id',
+          path: 'idea/:type/:id/:commentId?',
           name: 'detail-idea',
           component: DetailIdeaView
         },
         {
+          path: 'settings',
+          name: 'settings',
+          component: SettingsView
+        },
+        {
           path: 'profile',
           name: 'profile',
-          component: ProfileView
+          component: ProfilePage
         },
         {
           path: 'my-board',
