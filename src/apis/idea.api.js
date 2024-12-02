@@ -39,5 +39,9 @@ export const apiDeleteIdea = async (id) => await axiosInstance.delete(`/ideas/${
 
 export const apiUpdateIdea = async (id, body) => await axiosInstance.put(`/ideas/${id}`, body)
 
+export const apiGetAllUpvotedIdeas = async (url) => await axiosInstance.get(`/ideas/upvoted${url}`)
+
+export const apiGetAllDownvotedIdeas = async (url) => await axiosInstance.get(`/ideas/downvoted${url}`)
+
 
 

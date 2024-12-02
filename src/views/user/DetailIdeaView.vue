@@ -28,7 +28,7 @@
   </div>
 </template>
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
@@ -45,7 +45,19 @@ const route = useRoute()
 const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const typeIdea = route.params.type
+const commentId = route.params.commentId
 const { relatedIdeas } = storeToRefs(ideaStore)
+
+onMounted(() => {
+  if (commentId) {
+    // Tìm phần tử comment dựa trên commentId
+    const commentElement = document.getElementById(`comment-${commentId}`);
+    if (commentElement) {
+      commentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+});
+
 </script>
 <style scoped>
 .ql-toolbar {

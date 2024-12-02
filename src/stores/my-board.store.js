@@ -16,103 +16,80 @@ export const useMyBoardStore = defineStore('my-board', () => {
   const myIdeas = ref([])
   const myIdeasBackup = ref([])
   const currentPage = ref(1)
-  const ideaToEdit = ref()
+  const ideaToEdit = ref(null)
   const searchString = ref('')
-  const query = ref()
 
-  function setTab(tabType) {
-    tab.value = tabType
+  const apiMap = {
+    all: apiGetMyIdeas,
+    publish: apiGetMyPublishIdeas,
+    hide: apiGetMyHideIdeas,
+    draft: apiGetMyDraftIdeas
+  }
+
+  const resetState = () => {
     myIdeasBackup.value = []
+    myIdeas.value = []
     currentPage.value = 1
   }
 
- 
+  function setTab(tabType) {
+    tab.value = tabType
+    resetState()
+  }
+
+  async function getIdeaDetails(apiFunc, id) {
+    try {
+      const response = await apiFunc(id)
+      ideaToEdit.value = response.data.data
+      console.log(ideaToEdit.value)
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   async function getDetailDraftIdea(id) {
-    await apiGetMyDraftIdeaById(id)
-      .then((response) => {
-        ideaToEdit.value = response.data.data
-        console.log(ideaToEdit.value)
-      })
-      .catch((err) => console.log(err))
+    await getIdeaDetails(apiGetMyDraftIdeaById, id)
   }
+
   async function getDetailReleaseIdea(id) {
-    await apiGetDetailIdea(id)
-      .then((response) => {
-        ideaToEdit.value = response.data.data
-        console.log(ideaToEdit.value)
-      })
-      .catch((err) => console.log(err))
+    await getIdeaDetails(apiGetDetailIdea, id)
   }
+
   async function getDetailHideIdea(id) {
-    await apiGetMyHideIdeaById(id)
-      .then((response) => {
-        ideaToEdit.value = response.data.data
-        console.log(response.data.data)
-      })
-      .catch((err) => console.log(err))
+    await getIdeaDetails(apiGetMyHideIdeaById, id)
   }
 
   async function deleteIdea(id, index) {
-    return await apiDeleteIdea(id)
-    .then(() => {
+    try {
+      await apiDeleteIdea(id)
       myIdeas.value.splice(index, 1)
-      })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   async function loadMore() {
-    if (searchString.value !== '') {
-      query.value = `?q=${searchString.value}&page=${currentPage.value}&option=${tab.value}`
-    } else {
-      query.value = `?page=${currentPage.value}`
-    }
-    if (tab.value === 'all') {
-      return await apiGetMyIdeas(query.value).then((response) => {
-        response.data.data.ideas.forEach((idea) => {
-          idea.createdAt = convertTime(idea.createdAt)
-        })
-        myIdeas.value = [...myIdeasBackup.value, ...response.data.data.ideas]
-        if (response.data.data.ideas.length === 5) {
-          myIdeasBackup.value = [...myIdeasBackup.value, ...response.data.data.ideas]
-          currentPage.value++
-        }
-      })
-    }
-    if (tab.value === 'publish') {
-      return await apiGetMyPublishIdeas(query.value).then((response) => {
-        response.data.data.ideas.forEach((idea) => {
-          idea.createdAt = convertTime(idea.createdAt)
-        })
-        myIdeas.value = [...myIdeasBackup.value, ...response.data.data.ideas]
-        if (response.data.data.ideas.length === 5) {
-          myIdeasBackup.value = [...myIdeasBackup.value, ...response.data.data.ideas]
-          currentPage.value++
-        }
-      })
-    }
-    if (tab.value === 'hide') {
-      return await apiGetMyHideIdeas(query.value).then((response) => {
-        response.data.data.ideas.forEach((idea) => {
-          idea.createdAt = convertTime(idea.createdAt)
-        })
-        myIdeas.value = [...myIdeasBackup.value, ...response.data.data.ideas]
-        if (response.data.data.ideas.length === 5) {
-          myIdeasBackup.value = [...myIdeasBackup.value, ...response.data.data.ideas]
-          currentPage.value++
-        }
-      })
-    }
-    if (tab.value === 'draft') {
-      return await apiGetMyDraftIdeas(query.value).then((response) => {
-        response.data.data.ideas.forEach((idea) => {
-          idea.createdAt = convertTime(idea.createdAt)
-        })
-        myIdeas.value = [...myIdeasBackup.value, ...response.data.data.ideas]
-        if (response.data.data.ideas.length === 5) {
-          myIdeasBackup.value = [...myIdeasBackup.value, ...response.data.data.ideas]
-          currentPage.value++
-        }
-      })
+    const query = searchString.value
+      ? `?q=${searchString.value}&page=${currentPage.value}&option=${tab.value}`
+      : `?page=${currentPage.value}`
+
+    const fetchApi = apiMap[tab.value]
+    if (!fetchApi) return
+
+    try {
+      const response = await fetchApi(query)
+      const newIdeas = response.data.data.ideas.map((idea) => ({
+        ...idea,
+        createdAt: convertTime(idea.createdAt)
+      }))
+
+      myIdeas.value = [...myIdeasBackup.value, ...newIdeas]
+      if (newIdeas.length === 10) {
+        myIdeasBackup.value = [...myIdeasBackup.value, ...newIdeas]
+        currentPage.value++
+      }
+    } catch (err) {
+      console.error(err)
     }
   }
 
@@ -120,11 +97,11 @@ export const useMyBoardStore = defineStore('my-board', () => {
     tab,
     myIdeas,
     ideaToEdit,
-    getDetailDraftIdea,
-    getDetailHideIdea,
-    getDetailReleaseIdea,
     setTab,
     loadMore,
-    deleteIdea
+    deleteIdea,
+    getDetailDraftIdea,
+    getDetailReleaseIdea,
+    getDetailHideIdea
   }
 })
