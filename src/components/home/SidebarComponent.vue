@@ -7,7 +7,7 @@
     >
       <div class="h-full px-3 pb-4 overflow-y-auto bg-backgroundColor">
         <ul class="space-y-2 font-medium">
-          <!-- Home -->
+          <!-- Các mục khác -->
           <li>
             <router-link
               to="/"
@@ -31,7 +31,6 @@
             </router-link>
           </li>
 
-          <!-- My Board -->
           <li>
             <router-link
               to="/my-board"
@@ -53,19 +52,39 @@
               <span class="ms-3">My Board</span>
             </router-link>
           </li>
-
           <!-- Đường kẻ ngăn cách -->
           <li>
             <hr class="border-gray-300 my-3" />
           </li>
-
           <!-- Category Dropdown -->
           <li>
-            <div @click="toggleCategoryDropdown" class="flex items-center justify-between p-2 cursor-pointer text-gray-600 rounded-lg hover:bg-backgroundButtonColor">
-              <span class="font-semibold">Category</span>
+            <div
+              @click="toggleCategoryDropdown"
+              class="flex items-center justify-between p-2 cursor-pointer text-gray-600 rounded-lg hover:bg-backgroundButtonColor"
+            >
+              <!-- Icon kính lúp và text Category -->
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="flex-shrink-0 w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm4.29-4.29l4.3 4.3"
+                  />
+                </svg>
+                <span class="ml-2">Category</span>
+              </div>
+
+              <!-- Icon dropdown -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5 transition-transform"
+                class="w-5 h-5 transition-transform duration-200"
                 :class="{ 'rotate-180': isDropdownOpen }"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -80,29 +99,53 @@
               </svg>
             </div>
 
-            <ul v-if="isDropdownOpen" class="mt-2 space-y-1">
-              <li
-                v-for="(category, index) in categories"
-                :key="index"
-                class="flex items-center p-2 text-sm text-gray-600 rounded-lg hover:bg-backgroundButtonColor group"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-4 h-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+            <!-- Dropdown với hiệu ứng -->
+            <transition name="dropdown">
+              <div v-if="isDropdownOpen">
+                <!-- Input tìm kiếm -->
+                <input
+                  v-model="searchText"
+                  type="text"
+                  placeholder="Search categories..."
+                  class="w-full px-3 py-2 mb-2 text-sm border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                />
+                <!-- Danh sách categories -->
+                <ul class="mt-2 space-y-1 overflow-hidden bg-white rounded-lg shadow-lg">
+                  <li
+                    v-for="(category, index) in displayedCategories"
+                    :key="index"
+                    :class="[
+                      'flex items-center p-2 text-sm text-gray-600 rounded-lg group cursor-pointer',
+                      selectedCategory === category.title
+                        ? 'bg-backgroundButtonColor text-white'
+                        : 'hover:bg-backgroundButtonColor'
+                    ]"
+                    @click="selectCategory(category)"
+                  >
+                    <i :class="category.icon + ' fa-solid'"></i>
+                    <span class="ml-3 block truncate line-clamp-1 break-words">{{
+                      category.title
+                    }}</span>
+                  </li>
+
+                  <!-- Mục "Others" -->
+                  <li
+                    v-if="hasMoreCategories"
+                    class="flex items-center p-2 text-sm text-gray-600 rounded-lg hover:bg-backgroundButtonColor group cursor-pointer"
+                  >
+                    <span class="ml-3">...Others</span>
+                  </li>
+                </ul>
+                <!-- Nút hiển thị tất cả -->
+                <button
+                  v-if="!showAll"
+                  @click="showAllCategories"
+                  class="block w-full px-3 py-2 mb-2 text-sm text-center text-gray-600 bg-blue-500 rounded-lg hover:underline"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                <span>{{ category.title }}</span>
-              </li>
-            </ul>
+                  Show All Categories
+                </button>
+              </div>
+            </transition>
           </li>
         </ul>
       </div>
@@ -111,21 +154,88 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted } from 'vue'
+import { useCategoryStore } from '@/stores/category.store'
+import { storeToRefs } from 'pinia'
+import { useHomePageStore } from '@/stores/home.store'
 
-// Dữ liệu categories
-const categories = ref([
-  { id: 1, title: "Work" },
-  { id: 2, title: "Study" },
-  { id: 3, title: "Happy Break" },
-  { id: 4, title: "Travel" },
-  { id: 5, title: "Other" },
-]);
+const categoryStore = useCategoryStore()
+const { categories } = storeToRefs(categoryStore)
+const { getAllCategory } = categoryStore
+const homePageStore = useHomePageStore()
+const { setCategory, loadMore } = homePageStore
 
-const isDropdownOpen = ref(false);
+onMounted(() => {
+  getAllCategory()
+})
+
+const isDropdownOpen = ref(false)
+const searchText = ref('')
+const selectedCategory = ref('')
+const showAll = ref(true)
 
 // Toggle dropdown
 const toggleCategoryDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
-};
+  isDropdownOpen.value = !isDropdownOpen.value
+}
+
+// Filter categories based on search text
+const filteredCategories = computed(() => {
+  // Nếu không có nội dung tìm kiếm, trả về toàn bộ danh sách hoặc danh sách giới hạn tùy thuộc vào showAll
+  if (!searchText.value) {
+    return showAll.value ? categories.value : categories.value.slice(0, 5);
+  }
+  // Nếu có nội dung tìm kiếm, chỉ trả về các category khớp với từ khóa
+  return categories.value.filter((category) =>
+    category.title.toLowerCase().includes(searchText.value.toLowerCase())
+  );
+});
+
+// Only show up to 5 categories, and add "Others" if there are more
+const displayedCategories = computed(() => {
+  return filteredCategories.value.slice(0, 5);
+});
+
+const hasMoreCategories = computed(() => {
+  return filteredCategories.value.length > 5
+})
+
+// Xử lý khi chọn category
+const selectCategory = (categoryItem) => {
+  selectedCategory.value = categoryItem.title
+  searchText.value = '' // Xóa nội dung tìm kiếm
+  showAll.value = false // Vô hiệu hóa chế độ hiển thị tất cả
+  setCategory(categoryItem.title) // Cập nhật store
+  loadMore()
+  isDropdownOpen.value = false
+}
+
+const showAllCategories = () => {
+  selectedCategory.value = ''
+  searchText.value = ''
+  showAll.value = true // Kích hoạt chế độ hiển thị tất cả
+  setCategory('') // Gửi lên store rằng không có category nào được chọn
+  loadMore()
+     isDropdownOpen.value = false
+}
 </script>
+
+<style>
+/* Hiệu ứng dropdown mở/đóng */
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
+}
+.dropdown-enter-from,
+.dropdown-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+.dropdown-enter-to,
+.dropdown-leave-from {
+  max-height: 200px; /* Đặt giới hạn phù hợp với nội dung */
+  opacity: 1;
+}
+</style>

@@ -50,7 +50,8 @@
     </div>
 
     <!-- filter by category -->
-    <div class="md:pt-1 rounded-lg cursor-pointer relative">
+    <!-- <div class="md:pt-1 rounded-lg cursor-pointer relative">
+      
       <button
         @click="showCheckBox"
         id="dropdownSearchButton"
@@ -77,7 +78,6 @@
         </svg>
       </button>
 
-      <!-- Dropdown menu -->
       <div
         v-if="isShowCategoryCheckbox"
         id="dropdownSearch"
@@ -132,7 +132,7 @@
         </div>
       </div>
       <div v-if="isShowCategoryCheckbox" class="absolute top-10 right-0 w-full"></div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -153,7 +153,7 @@ const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
 const { getAllCategory } = categoryStore
 const { tab } = storeToRefs(props.store)
-const { setOption, setCategory, loadMore } = props.store
+const { setOption, setCategory } = props.store
 const isShowCategoryCheckbox = ref(false)
 const isChooseAll = ref()
 const checkedCategory = ref([])
@@ -172,9 +172,9 @@ watch(checkedCategory, (newCheckedCategory) => {
   setCategory(newCheckedCategory.toString())
 })
 
-const showCheckBox = () => {
-  isShowCategoryCheckbox.value = !isShowCategoryCheckbox.value
-} 
+// const showCheckBox = () => {
+//   isShowCategoryCheckbox.value = !isShowCategoryCheckbox.value
+// } 
 
 watch(isChooseAll, () => {
   if (isChooseAll.value) {
@@ -182,10 +182,10 @@ watch(isChooseAll, () => {
   }
 })
 
-const handleApply = () => {
-  loadMore()
-  showCheckBox()
-}
+// const handleApply = () => {
+//   loadMore()
+//   showCheckBox()
+// }
 
 const isShowSortMenu = ref(false)
 const sortOptions = ref([
@@ -205,8 +205,9 @@ const selectSortOption = (option) => {
 }
 
 const handleClickOutside = (event) => {
-  if (!dropdownRef.value.contains(event.target)) {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
     isShowSortMenu.value = false
+    isShowCategoryCheckbox.value = false
   }
 }
 
