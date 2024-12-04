@@ -22,17 +22,6 @@
     >
       Image & Video
     </div>
-    <div
-      @click="handleSetTab('link')"
-      class="cursor-pointer hover:text-red-700 hover:underline hover:decoration-red-700 hover:underline-offset-8 hover:decoration-4 px-2 bg-white w-fit flex items-center gap-2"
-      :class="
-        tab === 'link'
-          ? 'underline decoration-red-700 underline-offset-8 decoration-4 text-red-700'
-          : ''
-      "
-    >
-      Link
-    </div>
   </div>
 </template>
 <script setup>

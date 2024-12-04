@@ -17,10 +17,9 @@ export const useUserStore = defineStore('user', () => {
   const accessToken = ref()
 
   async function getProfile() {
-    return await apiGetProfile()
-      .then((response) => {
-        profile.value = response.data.data
-      })
+    return await apiGetProfile().then((response) => {
+      profile.value = response.data.data
+    })
   }
 
   function updateProfileState(newProfile) {
@@ -41,11 +40,19 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function getDetailDraftIdea(id) {
-    return await apiGetMyDraftIdeaById(id).then((response) => {
-      ideaToEdit.value = response.data.data
-      console.log(ideaToEdit.value)
-    })
+    try {
+      const response = await apiGetMyDraftIdeaById(id) 
+
+      if (response && response.data && response.data.data) {
+        ideaToEdit.value = response.data.data
+      } else {
+        console.warn('No data found in response') 
+      }
+    } catch (error) {
+      console.error('Error fetching draft idea:', error) 
+    }
   }
+
   async function getDetailReleaseIdea(id) {
     return await apiGetDetailIdea(id).then((response) => {
       ideaToEdit.value = response.data.data

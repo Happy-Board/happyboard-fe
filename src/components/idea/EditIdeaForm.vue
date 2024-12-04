@@ -2,19 +2,19 @@
   <div class="col-span-5 flex z-0 bg-white min-h-screen">
     <div class="flex flex-col gap-5 w-full">
       <p class="font-semibold text-3xl">Edit your idea</p>
-      <Listbox class="w-2/5" as="div" v-model="selected">
-        <ListboxLabel class="block text-sm font-medium leading-6 text-black"
-          >Category <span class="text-red-600">*</span></ListboxLabel
-        >
+      <Listbox class="w-2/5" as="div" v-model="selectedCategory">
+        <ListboxLabel class="block text-sm font-medium leading-6 text-black">
+          Category <span class="text-red-600">*</span>
+        </ListboxLabel>
         <div class="relative mt-2">
           <ListboxButton
             class="relative w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 cursor-pointer focus:ring-gray-500 sm:text-sm sm:leading-6"
           >
             <span class="flex items-center">
-              <i :class="selected.icon + ' fa-solid'" v-if="selected.id"></i>
-              <span :class="selected.id ? 'ml-3 block truncate' : 'block truncate'">{{
-                selected.title
-              }}</span>
+              <i v-if="selectedCategory?.icon" :class="selectedCategory.icon + ' fa-solid'"></i>
+              <span :class="selectedCategory?.id ? 'ml-3 block truncate' : 'block truncate'">
+                {{ selectedCategory?.title || 'Select a category' }}
+              </span>
             </span>
             <span
               class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"
@@ -46,13 +46,12 @@
                 >
                   <div class="flex items-center">
                     <i :class="category.icon + ' fa-solid'"></i>
-
                     <span
                       :class="[selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']"
-                      >{{ category.title }}</span
                     >
+                      {{ category.title }}
+                    </span>
                   </div>
-
                   <span
                     v-if="selected"
                     :class="[
@@ -105,16 +104,25 @@
           class="relative flex flex-col items-center justify-center w-full border-1 border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600"
         >
           <div v-if="preDisplayImage.length > 0" class="flex items-center justify-center">
-            <button
-              @click="triggerFileInput"
-              class="absolute top-2 left-14 p-2 bg-blue-700 text-white rounded hover:bg-blue-800 z-10"
-            >
-              Add
-            </button>
             <button @click="prevImage" class="p-2 m-2 bg-gray-300 rounded-full hover:bg-gray-400">
-              ◀
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
             <div class="relative">
+              <button
+                @click="triggerFileInput"
+                class="absolute top-2 left-3 p-2 bg-primaryColor text-white text-xs hover:bg-secondaryColor z-10 rounded-full"
+              >
+                Add
+              </button>
               <img
                 :src="preDisplayImage[currentImageIndex]"
                 alt="Upload Image Preview"
@@ -122,14 +130,32 @@
               />
               <button
                 @click="removeFile(currentImageIndex)"
-                class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-700"
+                class="absolute top-2 right-2 p-2 bg-red-500 text-white text-xs rounded-full hover:bg-red-700"
                 title="Delete Image"
               >
-                🗑️
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
             <button @click="nextImage" class="p-2 m-2 bg-gray-300 rounded-full hover:bg-gray-400">
-              ▶
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
             </button>
           </div>
           <div
@@ -196,7 +222,7 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { apiCreateIdea, apiCreateMediaIdea, apiSaveIdea } from '@/apis/idea.api'
+import { apiCreateIdea, apiCreateMediaIdea, apiSaveIdea, apiDeleteIdea } from '@/apis/idea.api'
 import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import 'vue3-toastify/dist/index.css'
@@ -211,7 +237,7 @@ import { useUserStore } from '@/stores/user.store'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 const ideaId = route.params.id
-const type = route.params.TabTypeCreateIdea
+const type = route.params.type
 const router = useRouter()
 const categoryStore = useCategoryStore()
 const myBoardStore = useMyBoardStore()
@@ -229,23 +255,61 @@ const ideaData = reactive({
   type: '',
   linkImage: ''
 })
+
+const selectedCategory = ref(null)
+const tab = ref('text')
+let selectedFiles = ref([])
+const preDisplayImage = ref([])
+const currentImageIndex = ref(0)
+
+// Định nghĩa populateFormData trước
+const populateFormData = (idea) => {
+  if (!idea) return
+
+  // Điền dữ liệu form từ ideaToEdit
+  ideaData.title = idea.title || ''
+  ideaData.categoryId = idea.Category?.id || ''
+  ideaData.content = idea.content || ''
+  ideaData.linkImage = idea.linkImage || ''
+
+  // Cập nhật danh mục
+  if (idea.Category?.id) {
+    const matchingCategory = categories.value.find((category) => category.id === idea.Category.id)
+    selectedCategory.value = matchingCategory || null
+  }
+
+  // Xử lý tab media và preDisplayImage
+  if (idea.linkImage) {
+    tab.value = 'media'
+    preDisplayImage.value = idea.linkImage.split(',').map((url) => url.trim())
+  } else {
+    tab.value = 'text'
+    preDisplayImage.value = []
+  }
+}
+
+// Sử dụng trong onMounted và watch
 onMounted(() => {
   getAllCategory()
-  ideaData.title = ideaToEdit.value?.title
-  ideaData.categoryId = ideaToEdit.value?.Category.id
-  ideaData.content = ideaToEdit.value?.content
-  ideaData.linkImage = ideaToEdit.value?.linkImage
-
+  // Lần đầu tải form
+  populateFormData(ideaToEdit.value)
 })
 
-const tab = ref('text')
-console.log('ideaToEdit', ideaToEdit.value)
+watch(
+  () => ideaToEdit.value,
+  (newValue) => {
+    // Khi ideaToEdit thay đổi
+    populateFormData(newValue)
+  },
+  { immediate: true } // Gọi ngay lập tức
+)
 
 const handleSetTab = (newTab) => {
   tab.value = newTab
 }
+
 if (type === 'draft')
-  await getDetailDraftIdea(ideaId).catch((error) => {
+  getDetailDraftIdea(ideaId).catch((error) => {
     if (error.response.status === 401) {
       localStorage.clear()
       router.push({ name: 'sign-in' })
@@ -253,7 +317,7 @@ if (type === 'draft')
   })
 
 if (type === 'pending')
-  await getDetailReleaseIdea(ideaId).catch((error) => {
+  getDetailReleaseIdea(ideaId).catch((error) => {
     if (error.response.status === 401) {
       localStorage.clear()
       router.push({ name: 'sign-in' })
@@ -274,10 +338,6 @@ watch(
       document.querySelector('#title1').scrollHeight + 'px'
   }
 )
-
-let selectedFiles = ref([])
-const preDisplayImage = ref([])
-const currentImageIndex = ref(0)
 
 const onFilesChange = (event) => {
   const files = Array.from(event.target.files)
@@ -332,14 +392,20 @@ const saveIdea = () => {
     ideaData.title = sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
     return
   }
-  if (!ideaData.categoryId && !ideaData.title && !ideaData.content) {
+  if (
+    !ideaData.categoryId &&
+    !ideaData.title &&
+    !ideaData.content &&
+    preDisplayImage.value.length === 0
+  ) {
     notify('warning', 'Nothing to save')
     return
   }
 
   if (ideaData.type === 'text') {
-    if (!ideaData.content) {
+    if (!ideaData.content || !(ideaData.content && preDisplayImage.value.length === 0)) {
       notify('warning', 'Content is not empty !')
+      return
     }
     const formData = new FormData()
     formData.append('type', ideaData.type)
@@ -349,7 +415,7 @@ const saveIdea = () => {
 
     apiSaveIdea(formData)
       .then(() => {
-        setTab('hide')
+        setTab('draft')
         notify('success', 'Create idea successfully !')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
@@ -362,7 +428,7 @@ const saveIdea = () => {
   }
 
   if (ideaData.type === 'image') {
-    if (!preDisplayImage.value) {
+    if (!preDisplayImage.value || !(ideaData.content && preDisplayImage.value.length === 0)) {
       notify('warning', 'Media is not empty !')
       return
     }
@@ -376,7 +442,7 @@ const saveIdea = () => {
     })
     apiSaveIdea(formData)
       .then(() => {
-        setTab('hide')
+        setTab('draft')
         notify('success', 'Create media content idea successfully !')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
@@ -425,8 +491,12 @@ const createIdea = () => {
         console.log(err)
         notify('error', 'Create idea failed, some thing went wrong !')
       })
+    apiDeleteIdea(ideaToEdit.value?.id).catch((err) => {
+      console.log(err)
+      notify('error', 'Create idea failed, some thing went wrong !')
+    })
   } else if (tab.value === 'media') {
-    if (!preDisplayImage.value) {
+    if (preDisplayImage.value.length === 0) {
       notify('warning', 'Media is not empty !')
       return
     }
@@ -453,6 +523,10 @@ const createIdea = () => {
         console.log(err)
         notify('error', 'Create idea failed, some thing went wrong !')
       })
+    apiDeleteIdea(ideaToEdit.value?.id).catch((err) => {
+      console.log(err)
+      notify('error', 'Create idea failed, some thing went wrong !')
+    })
   }
 }
 const selected = ref({

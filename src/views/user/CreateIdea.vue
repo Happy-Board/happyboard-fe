@@ -196,7 +196,7 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { apiCreateIdea, apiCreateMediaIdea, apiSaveIdea } from '@/apis/idea.api'
+import { apiCreateIdea, apiCreateMediaIdea, apiSaveIdea, apiDeleteIdea } from '@/apis/idea.api'
 import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import 'vue3-toastify/dist/index.css'
@@ -299,14 +299,15 @@ const saveIdea = () => {
     ideaData.title = sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
     return
   }
-  if (!ideaData.categoryId && !ideaData.title && !ideaData.content) {
+  if (!ideaData.categoryId && !ideaData.title && !ideaData.content && (preDisplayImage.value.length === 0)) {
     notify('warning', 'Nothing to save')
     return
   }
 
   if (ideaData.type === 'text') {
-    if (!ideaData.content) {
+    if (!ideaData.content || !(ideaData.content && preDisplayImage.value.length === 0)) {
       notify('warning', 'Content is not empty !')
+      return
     }
     const formData = new FormData()
     formData.append('type', ideaData.type)
@@ -316,7 +317,7 @@ const saveIdea = () => {
 
     apiSaveIdea(formData)
       .then(() => {
-        setTab('hide')
+        setTab('draft')
         notify('success', 'Create idea successfully !')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
@@ -326,10 +327,11 @@ const saveIdea = () => {
         console.log(err)
         notify('error', 'Create idea failed, some thing went wrong !')
       })
+      apiDeleteIdea()
   }
 
   if (ideaData.type === 'image') {
-    if (!preDisplayImage.value) {
+    if (!preDisplayImage.value || !(ideaData.content && preDisplayImage.value.length === 0)) {
       notify('warning', 'Media is not empty !')
       return
     }
@@ -343,7 +345,7 @@ const saveIdea = () => {
     })
     apiSaveIdea(formData)
       .then(() => {
-        setTab('hide')
+        setTab('draft')
         notify('success', 'Create media content idea successfully !')
         setTimeout(() => {
           router.push({ name: 'my-board-ideas' })
