@@ -32,8 +32,7 @@ export const useMyBoardStore = defineStore('my-board', () => {
     currentPage.value = 1
   }
 
-  function 
-  (tabType) {
+  function setTab(tabType) {
     tab.value = tabType
     resetState()
   }
