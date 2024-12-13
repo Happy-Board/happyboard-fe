@@ -42,11 +42,11 @@ const profilePageStore = useProfileStore()
 const { myComments } = storeToRefs(profilePageStore)
 const { loadMore } = profilePageStore
 
-// Gọi API hoặc nhận dữ liệu từ props
 onMounted(async () => {
-  await loadMore()  // Đảm bảo rằng loadMore đã hoàn tất
-  console.log('myComments after loadMore:', myComments.value)
+  await loadMore()
 })
+
+console.log('Rendered comments:', myComments.value);
 
 await loadMore().catch((error) => {
   if (error.response.status === 401) {

@@ -1,9 +1,18 @@
 <template>
   <div class="flex flex-col border-borderColor pb-2">
+    <!-- Pending Notification -->
+    <div v-if="typeIdea === 'pending'" class="pending-notification">
+      <i class="fa-solid fa-clock text-yellow-500 text-2xl mr-2"></i>
+      <span class="text-yellow-700 font-semibold">This idea is currently under review.</span>
+    </div>
     <!-- Avatar, Username, Category, and Created Date -->
     <div class="flex items-center mb-3">
       <img
-        :src="idea?.User?.avatar === '' ? 'https://res.cloudinary.com/daokqrkdk/image/upload/v1730884402/default-avatar_shzypu.jpg' : idea?.User?.avatar"
+        :src="
+          idea?.User?.avatar === ''
+            ? 'https://res.cloudinary.com/daokqrkdk/image/upload/v1730884402/default-avatar_shzypu.jpg'
+            : idea?.User?.avatar
+        "
         alt="avatar"
         class="w-10 h-10 rounded-full cursor-pointer mr-2"
       />
@@ -44,12 +53,7 @@
 
         <!-- <div class='img-display-container' @click=> -->
 
-        <img
-          :src="currentImage"
-          alt="idea image"
-          class="image"
-          @click="openLightBox"
-        />
+        <img :src="currentImage" alt="idea image" class="image" @click="openLightBox" />
         <!-- </div> -->
 
         <button
@@ -63,7 +67,7 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="flex gap-4 mt-3 action-bar">
+    <div v-if="typeIdea !== 'pending'" class="flex gap-4 mt-3 action-bar">
       <div
         class="action-container"
         :class="{
@@ -222,16 +226,16 @@ const toggleDownvote = () => {
   isVotingAllowed.value = false
   setTimeout(() => {
     isVotingAllowed.value = true
-  }, debounceTime)  
+  }, debounceTime)
 }
 const currentIndex = ref(0)
 
 const imagesArray = computed(() =>
-  idea.value.linkImage ? 
-    idea.value.linkImage.includes(',')
+  idea.value.linkImage
+    ? idea.value.linkImage.includes(',')
       ? idea.value.linkImage.split(',').map((url) => url.trim())
       : [idea.value.linkImage]
-  : null
+    : null
 )
 
 const currentImage = computed(() => imagesArray.value[currentIndex.value])
@@ -242,7 +246,6 @@ const openLightBox = async () => {
   await nextTick()
   showLightBox.value = true
 }
-
 
 const closeLightBox = () => {
   showLightBox.value = false
@@ -259,7 +262,6 @@ const prevImage = () => {
     --currentIndex.value
   }
 }
-
 </script>
 
 <style scoped>
@@ -407,5 +409,17 @@ const prevImage = () => {
   /* Tự động điều chỉnh padding khi content ngắn */
   padding: 16px;
   margin-bottom: 8px;
+}
+
+.pending-notification {
+  background-color: #fff4e5;
+  border: 1px solid #ffe3b3;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 16px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 </style>

@@ -6,14 +6,10 @@
       </Suspense>
     </header>
     <div class="flex-1">
-      <FilterComponent :store="profilePageStore"/>
+      <FilterComponent :store="profilePageStore" />
       <Suspense>
-        <template v-if="currentTab === 'Comments'">
-          <ListCommentProfileComponent />
-        </template>
-        <template v-else>
-          <ListIdeaProfileComponent :activeTab="currentTab" />
-        </template>
+        <ListIdeaProfileComponent v-if="currentTab !== 'Comments'" :activeTab="currentTab" />
+        <ListCommentProfileComponent v-else />
         <template #fallback>
           <ListIdeaSkeleton />
         </template>
@@ -70,22 +66,20 @@ const ListCommentProfileComponent = defineAsyncComponent(
 )
 
 // Current active tab
-const currentTab = ref('Posts')
-
+const currentTab = ref('Comments')
 // Recent ideas store
 const homePageStore = useHomePageStore()
 const { recentIdeas } = storeToRefs(homePageStore)
 
 const profilePageStore = useProfileStore()
 const { setTab, loadMore } = profilePageStore
+// const profileStoreTab = profilePageStore.tab
+// const currentTab = ref(profileStoreTab)
 
 watch(currentTab, async (newTab) => {
-  setTab(newTab) // Thay đổi tab
-  await loadMore() // Tải dữ liệu mới theo tab
+  setTab(newTab)
+  loadMore()
 })
-
-// const profilePageStore = useProfileStore()
-// const { loadMore, setTab } = storeToRefs(profilePageStore)
 
 // Token management
 const cookie = document.cookie.split('; ')
@@ -101,16 +95,6 @@ const setTokenToLocalStorage = () => {
   }
   localStorage.setItem('accessToken', token)
 }
-
-// watch(currentTab, async (newTab) => {
-//   setTab(newTab)
-//   await loadMore() 
-// })
-
-// onActivated(async () => {
-//   await loadMore()
-// })
-
 setTokenToLocalStorage()
 </script>
 

@@ -6,7 +6,7 @@ import { apiGetAllUpvotedIdeas, apiGetAllDownvotedIdeas } from '@/apis/idea.api'
 import { convertTime } from '@/utils/convert-time'
 
 export const useProfileStore = defineStore('profile', () => {
-  const tab = ref('Posts')
+  const tab = ref('Comments')
   const option = ref('newest')
   const myComments = ref([])
   const myCommentsBackup = ref([])
@@ -62,7 +62,6 @@ export const useProfileStore = defineStore('profile', () => {
     try {
       const response = await fetchApi(query)
       if (tab.value === 'Comments') {
-        console.log('tab.value in loadmore function: ', tab.value)
         const newComments = response.data.data.comments.map((comment) => ({
           ...comment,
           updatedAt: convertTime(comment.updatedAt),
@@ -74,7 +73,6 @@ export const useProfileStore = defineStore('profile', () => {
           myCommentsBackup.value = [...myCommentsBackup.value, ...newComments]
           currentPage.value++
         }
-        console.log('myComments: ', myComments.value)
       } else {
         const newIdeas = response.data.data.ideas.map((idea) => ({
           ...idea,

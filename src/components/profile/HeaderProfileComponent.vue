@@ -34,17 +34,22 @@ import { useProfileStore } from '@/stores/profile.store'
 import { storeToRefs } from 'pinia'
 
 // Tabs
-const tabs = ['Posts', 'Comments', 'Upvoted', 'Downvoted']
+const tabs = ['Comments', 'Posts', 'Upvoted', 'Downvoted']
 
 // Profile Store
 const profileStore = useProfileStore()
-const { tab: activeTab } = storeToRefs(profileStore) // Bind trực tiếp `tab` từ store
+const { tab: activeTab } = storeToRefs(profileStore) 
 
 // Change tab
 const changeTab = (tab) => {
-  profileStore.setTab(tab) // Gọi `setTab` từ store
-  console.log('HeaderProfileComponent - Tab changed to:', tab)
+  profileStore.setTab(tab)  // Update the tab in the store
+  console.log('profileStore.tab: ', profileStore.tab)
 }
+
+// Watch for activeTab change
+// watch(activeTab, (newTab) => {
+//   console.log('Active Tab changed to: ', newTab)  // Log when activeTab changes
+// })
 
 // Fetch user profile
 const router = useRouter()

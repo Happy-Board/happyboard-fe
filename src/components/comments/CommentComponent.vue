@@ -4,12 +4,12 @@
       <div>
         <div
           :id="`comment-${props.id}`"
-          class="comment-level-1 mt-5 flex items-start gap-1 min-w-[50%]"
+          class="comment-level-1 mt-5 flex items-start gap-1 relative"
         >
           <img
             :src="props.avatar === '' ? '../../avatar/default-avatar.jpg' : props.avatar"
             alt="avatar"
-            class="w-[3%] aspect-square rounded-full cursor-pointer lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3.5%]"
+            class="w-[3%] lg:w-[5%] md:w-[7%] sm:w-[8%] xl:w-[3.5%] aspect-square rounded-full cursor-pointer"
           />
           <div>
             <div class="relative">
@@ -298,7 +298,6 @@ const handleCancelEdit = () => {
 }
 
 const handleSaveEdit = () => {
-  console.log('isReply: ', isReply.value)
   if (isReply.value) {
     const content = `<div><strong>@${props.author}</strong>${editedComment.value}</div>`
     editComment(props.id, props.ideaId, { content: content })
@@ -321,11 +320,11 @@ const isCommentOwner = computed(() => {
 })
 
 onMounted(() => {
-  const commentId = route.params.commentId; // Lấy từ params
+  const commentId = route.params.commentId // Lấy từ params
   if (commentId) {
-    const commentElement = document.getElementById(`comment-${commentId}`);
+    const commentElement = document.getElementById(`comment-${commentId}`)
     if (commentElement) {
-      commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }
 })

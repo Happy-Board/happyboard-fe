@@ -11,7 +11,10 @@
           <li>
             <router-link
               to="/"
-              :class="`flex items-center p-2 text-gray-600 rounded-lg hover:bg-backgroundButtonColor group`"
+              :class="[
+                'flex items-center p-2 text-gray-600 rounded-lg hover:bg-backgroundButtonColor group ',
+                isActiveTab('home') ? 'bg-backgroundButtonColor text-primaryColor' : ''
+              ]"
               exact-active-class="flex items-center p-2 rounded-lg group active"
             >
               <svg
@@ -34,7 +37,10 @@
           <li>
             <router-link
               to="/my-board"
-              :class="`flex items-center p-2 text-gray-600 rounded-lg hover:bg-backgroundButtonColor group`"
+              :class="[
+                'flex items-center p-2 text-gray-600 rounded-lg hover:bg-backgroundButtonColor group',
+                isActiveTab('my-board') ? 'bg-backgroundButtonColor text-primaryColor' : ''
+              ]"
               active-class="flex items-center p-2 rounded-lg group active"
             >
               <svg
@@ -158,6 +164,10 @@ import { ref, computed, onMounted } from 'vue'
 import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import { useHomePageStore } from '@/stores/home.store'
+import { useRoute } from 'vue-router';
+
+// const router = useRouter();
+const currentRoute = useRoute();
 
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
@@ -183,18 +193,18 @@ const toggleCategoryDropdown = () => {
 const filteredCategories = computed(() => {
   // Nếu không có nội dung tìm kiếm, trả về toàn bộ danh sách hoặc danh sách giới hạn tùy thuộc vào showAll
   if (!searchText.value) {
-    return showAll.value ? categories.value : categories.value.slice(0, 5);
+    return showAll.value ? categories.value : categories.value.slice(0, 5)
   }
   // Nếu có nội dung tìm kiếm, chỉ trả về các category khớp với từ khóa
   return categories.value.filter((category) =>
     category.title.toLowerCase().includes(searchText.value.toLowerCase())
-  );
-});
+  )
+})
 
 // Only show up to 5 categories, and add "Others" if there are more
 const displayedCategories = computed(() => {
-  return filteredCategories.value.slice(0, 5);
-});
+  return filteredCategories.value.slice(0, 5)
+})
 
 const hasMoreCategories = computed(() => {
   return filteredCategories.value.length > 5
@@ -216,8 +226,16 @@ const showAllCategories = () => {
   showAll.value = true // Kích hoạt chế độ hiển thị tất cả
   setCategory('') // Gửi lên store rằng không có category nào được chọn
   loadMore()
-     isDropdownOpen.value = false
+  isDropdownOpen.value = false
 }
+
+// Function to check active tab
+const isActiveTab = (routeName) => {
+  return (
+    currentRoute.name === routeName ||
+    currentRoute.name?.startsWith(routeName) // Handle children routes like 'my-board/history'
+  );
+};
 </script>
 
 <style>
@@ -237,5 +255,9 @@ const showAllCategories = () => {
 .dropdown-leave-from {
   max-height: 200px; /* Đặt giới hạn phù hợp với nội dung */
   opacity: 1;
+}
+.active {
+  background-color: var(--backgroundButtonColor);
+  /* color: white; */
 }
 </style>
