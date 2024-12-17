@@ -7,9 +7,11 @@ export const useNotificationStore = defineStore('notification', () => {
   const numNotification = ref(0)
   const notifications = ref([])
   const count = ref(0)
+  
   function getNewNotification() {
     numNotification.value++
   }
+
   const handleNotification = (noti) => {
     if (noti.type === 'NI01') return `<strong>${noti.fromUser.username}</strong> đã comment vào một idea của bạn `
     if (noti.type === 'NI02') return `<strong>${noti.fromUser.username}</strong> đã vote cho idea của bạn`

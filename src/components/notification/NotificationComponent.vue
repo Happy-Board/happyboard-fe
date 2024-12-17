@@ -30,7 +30,7 @@
     </div>
     <div
       v-if="isShowNotificationList"
-      class="absolute w-fit min-w-[350px] border border-borderColor bg-white shadow-lg py-1 rounded-lg left-1/2 transform -translate-x-1/2 top-10 max-h-[550px] overflow-y-scroll mb-5"
+      class="absolute w-fit min-w-[350px] border border-borderColor bg-white shadow-lg py-1 rounded-lg -left-16 transform -translate-x-1/2 top-10 max-h-[550px] overflow-y-scroll mb-5"
       ref="notificationList"
     >
       <div class="ps-3">
@@ -38,17 +38,17 @@
         <div class="flex gap-1 mt-2 mb-4">
           <div
             class="px-2 rounded-lg font-semibold cursor-pointer"
+            :class="typeNotification === 'unread' ? 'bg-backgroundButtonColor' : 'hover:bg-backgroundColor'"
+            @click="setType('unread')"
+            >
+            Unread
+          </div>
+          <div
+            class="px-2 rounded-lg font-semibold cursor-pointer"
             :class="typeNotification === 'all' ? 'bg-backgroundButtonColor' : 'hover:bg-backgroundColor'"
             @click="setType('all')"
           >
             All
-          </div>
-          <div
-            class="px-2 rounded-lg font-semibold cursor-pointer"
-            :class="typeNotification === 'unread' ? 'bg-backgroundButtonColor' : 'hover:bg-backgroundColor'"
-            @click="setType('unread')"
-          >
-            Unread
           </div>
         </div>
       </div>
@@ -81,19 +81,19 @@ import { storeToRefs } from 'pinia'
 import ListNotification from './ListNotification.vue'
 import NotificationSkeleton from '../skeletons/NotificationSkeleton.vue'
 
+
+const notificationStore = useNotificationStore()
+const { getNewNotification, getAllNotifications, getUnreadNotifications } = notificationStore
+
 const messaging = getMessaging()
-onMounted(() => {
-  requestPermission()
-  onMessage(messaging, (payload) => {
-    console.log(payload)
+onMounted(async () => {
+  await requestPermission()
+  onMessage(messaging, () => {
     getNewNotification()
   })
 })
 
-const notificationStore = useNotificationStore()
-
 const { numNotification } = storeToRefs(notificationStore)
-const { getNewNotification, getAllNotifications, getUnreadNotifications } = notificationStore
 const isShowNotificationList = ref(false)
 const notificationList = ref(null)
 const check = ref(false)
