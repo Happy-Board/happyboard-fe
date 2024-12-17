@@ -66,15 +66,15 @@ const ListCommentProfileComponent = defineAsyncComponent(
 )
 
 // Current active tab
-const currentTab = ref('Comments')
+// const currentTab = ref('Comments')
 // Recent ideas store
 const homePageStore = useHomePageStore()
 const { recentIdeas } = storeToRefs(homePageStore)
 
 const profilePageStore = useProfileStore()
 const { setTab, loadMore } = profilePageStore
-// const profileStoreTab = profilePageStore.tab
-// const currentTab = ref(profileStoreTab)
+const profileStoreTab = profilePageStore.tab
+const currentTab = ref(profileStoreTab)
 
 watch(currentTab, async (newTab) => {
   setTab(newTab)

@@ -52,6 +52,7 @@
           />
             <PopUpUserOption
               v-if="showUserOption"
+              :profile = profile
               @logout="handleLogout"
               @closeUserOption="closeUserOption"
             />

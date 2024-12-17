@@ -10,7 +10,7 @@
       >
         <div
           v-if="notification.status === 0"
-          class="absolute w-3 aspect-square rounded-full bg-blue-900 top-3 right-2"
+          class="absolute w-3 aspect-square rounded-full bg-red-700 top-3 right-2"
         ></div>
         <img
           :src="

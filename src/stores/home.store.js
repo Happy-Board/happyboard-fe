@@ -54,6 +54,7 @@ export const useHomePageStore = defineStore('home', () => {
         console.log(err)
       })
   }
+
   function setCurrentPage(page) {
     currentPage.value = page
   }
@@ -62,6 +63,11 @@ export const useHomePageStore = defineStore('home', () => {
   }
   function setCategory(checkedCategory) {
     category.value = checkedCategory
+  }
+
+  function resetListIdea() {
+    pageData.value = []
+    pageDataBackup.value = []
   }
 
   async function loadMore() {
@@ -114,5 +120,6 @@ export const useHomePageStore = defineStore('home', () => {
     getHotIdeas,
     getRecentIdeas,
     setCategory,
+    resetListIdea
   }
 })

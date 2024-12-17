@@ -67,6 +67,10 @@
             <div
               @click="toggleCategoryDropdown"
               class="flex items-center justify-between p-2 cursor-pointer text-gray-600 rounded-lg hover:bg-backgroundButtonColor"
+              :class="{
+                'bg-backgroundButtonColor': selectedCategory !== '',
+                'hover:bg-backgroundButtonColor': selectedCategory === ''
+              }"
             >
               <!-- Icon kính lúp và text Category -->
               <div class="flex items-center">
@@ -138,6 +142,7 @@
                   <li
                     v-if="hasMoreCategories"
                     class="flex items-center p-2 text-sm text-gray-600 rounded-lg hover:bg-backgroundButtonColor group cursor-pointer"
+                    @click="expandAllCategories"
                   >
                     <span class="ml-3">...Others</span>
                   </li>
@@ -160,20 +165,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import { useHomePageStore } from '@/stores/home.store'
-import { useRoute } from 'vue-router';
+import { useRoute } from 'vue-router'
 
 // const router = useRouter();
-const currentRoute = useRoute();
+const currentRoute = useRoute()
 
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
 const { getAllCategory } = categoryStore
 const homePageStore = useHomePageStore()
-const { setCategory, loadMore } = homePageStore
+const { setCategory, loadMore, resetListIdea } = homePageStore
 
 onMounted(() => {
   getAllCategory()
@@ -183,6 +188,23 @@ const isDropdownOpen = ref(false)
 const searchText = ref('')
 const selectedCategory = ref('')
 const showAll = ref(true)
+const isExpanded = ref(false)
+
+// Watch for route changes
+watch(
+  () => currentRoute.name,
+  async (newRoute) => {
+    // Khi chuyển sang route khác ngoài "Home", reset selectedCategory và đóng dropdown
+    if (newRoute !== 'home') {
+      selectedCategory.value = ''
+      setCategory('')
+      isDropdownOpen.value = false
+    } else {
+      resetListIdea()
+      loadMore()
+    }
+  }
+)
 
 // Toggle dropdown
 const toggleCategoryDropdown = () => {
@@ -193,7 +215,7 @@ const toggleCategoryDropdown = () => {
 const filteredCategories = computed(() => {
   // Nếu không có nội dung tìm kiếm, trả về toàn bộ danh sách hoặc danh sách giới hạn tùy thuộc vào showAll
   if (!searchText.value) {
-    return showAll.value ? categories.value : categories.value.slice(0, 5)
+    return showAll.value ? categories.value : categories.value
   }
   // Nếu có nội dung tìm kiếm, chỉ trả về các category khớp với từ khóa
   return categories.value.filter((category) =>
@@ -203,13 +225,15 @@ const filteredCategories = computed(() => {
 
 // Only show up to 5 categories, and add "Others" if there are more
 const displayedCategories = computed(() => {
-  return filteredCategories.value.slice(0, 5)
+  if (isExpanded.value) {
+    return filteredCategories.value // Hiển thị toàn bộ danh mục
+  }
+  return filteredCategories.value.slice(0, 5) // Hiển thị 5 mục đầu tiên
 })
 
 const hasMoreCategories = computed(() => {
-  return filteredCategories.value.length > 5
+  return !isExpanded.value && filteredCategories.value.length > 5
 })
-
 // Xử lý khi chọn category
 const selectCategory = (categoryItem) => {
   selectedCategory.value = categoryItem.title
@@ -218,6 +242,7 @@ const selectCategory = (categoryItem) => {
   setCategory(categoryItem.title) // Cập nhật store
   loadMore()
   isDropdownOpen.value = false
+  isExpanded.value = false
 }
 
 const showAllCategories = () => {
@@ -232,10 +257,13 @@ const showAllCategories = () => {
 // Function to check active tab
 const isActiveTab = (routeName) => {
   return (
-    currentRoute.name === routeName ||
-    currentRoute.name?.startsWith(routeName) // Handle children routes like 'my-board/history'
-  );
-};
+    currentRoute.name === routeName || currentRoute.name?.startsWith(routeName) // Handle children routes like 'my-board/history'
+  )
+}
+
+const expandAllCategories = () => {
+  isExpanded.value = true // Mở rộng để hiển thị toàn bộ danh mục
+}
 </script>
 
 <style>
