@@ -42,7 +42,7 @@
         v-html="idea?.content"
       ></div>
 
-      <div v-else class="image-container">
+      <div v-else class="image-container bg-gray-700">
         <button
           v-if="imagesArray.length > 1 && currentIndex > 0"
           @click="prevImage"
@@ -53,7 +53,12 @@
 
         <!-- <div class='img-display-container' @click=> -->
 
-        <img :src="currentImage" alt="idea image" class="image" @click="openLightBox" />
+        <img
+          :src="currentImage"
+          alt="idea image"
+          class="image"
+          @click="openLightBox"
+        />
         <!-- </div> -->
 
         <button
@@ -266,21 +271,25 @@ const prevImage = () => {
 
 <style scoped>
 .image-container {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  /* width: 100%; */
+  /* height: 100%; */
+  width: 841.4px;
+  height: 340px;
+  position: relative;
+  overflow: 'hidden';
+  /* background: rgba(0, 0, 0, 0.5); */
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  overflow: hidden;
-  position: relative;
+  /* overflow: hidden; */
+  /* border: '1px solid gray'; */
 }
 
 .image {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: cover;
+  max-width: 60%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .image-container {

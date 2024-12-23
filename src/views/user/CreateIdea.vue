@@ -92,9 +92,11 @@
         <QuillEditor
           id="content"
           theme="snow"
-          toolbar="essential"
+          :toolbar="toolbar"
           v-model:content="ideaData.content"
           contentType="html"
+          @ready="onEditorReady"
+          ref="quillEditor"
         />
       </div>
       <div v-if="tab === 'media'" class="">
@@ -102,34 +104,86 @@
           Upload Image/Video <span class="text-red-600">*</span>
         </label>
         <div
-          class="relative flex flex-col items-center justify-center w-full border-1 border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600"
+          class="relative flex flex-col items-center justify-center w-full border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600"
         >
           <div v-if="preDisplayImage.length > 0" class="flex items-center justify-center">
-            <button
-              @click="triggerFileInput"
-              class="absolute top-2 left-14 p-2 bg-blue-700 text-white rounded hover:bg-blue-800 z-10"
-            >
-              Add
-            </button>
             <button @click="prevImage" class="p-2 m-2 bg-gray-300 rounded-full hover:bg-gray-400">
-              ◀
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                class="w-6 h-6 text-gray-700 hover:text-gray-500 transition-colors duration-300"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 12H7m0 0l5-5m-5 5l5 5"
+                />
+              </svg>
             </button>
-            <div class="relative">
-              <img
-                :src="preDisplayImage[currentImageIndex]"
-                alt="Upload Image Preview"
-                class="w-100 h-70 object-cover"
-              />
+            <div
+              class="relative border-solid border-2 rounded-2xl bg-gray-700"
+              style="width: 800px; height: 380px"
+            >
+              <!-- Hiển thị hình ảnh hoặc video tùy vào loại file -->
+              <button
+                @click="triggerFileInput"
+                class="absolute top-2 left-2 p-2 bg-primaryColor text-white rounded-2xl hover:bg-blue-800 z-10"
+              >
+                Add
+              </button>
+              <template v-if="isImage(preDisplayImage[currentImageIndex])">
+                <img
+                  :src="preDisplayImage[currentImageIndex]"
+                  alt="Upload Image Preview"
+                  class="w-full h-full object-contain"
+                />
+              </template>
+              <template v-else>
+                <video
+                  :src="preDisplayImage[currentImageIndex]"
+                  controls
+                  class="w-full h-full object-contain"
+                ></video>
+              </template>
               <button
                 @click="removeFile(currentImageIndex)"
                 class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-700"
-                title="Delete Image"
+                title="Delete Image/Video"
               >
-                🗑️
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  class="w-6 h-6 text-white hover:text-gray-200 transition-colors duration-300"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-2-2m0 0L12 12 7 7M15 5h5a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2h5"
+                  />
+                </svg>
               </button>
             </div>
             <button @click="nextImage" class="p-2 m-2 bg-gray-300 rounded-full hover:bg-gray-400">
-              ▶
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                class="w-6 h-6 text-gray-700 hover:text-gray-500 transition-colors duration-300"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 12h10m0 0l-5-5m5 5l-5 5"
+                />
+              </svg>
             </button>
           </div>
           <div
@@ -158,12 +212,20 @@
               <span class="font-semibold">Click to upload</span> or drag and drop
             </p>
             <p class="text-xs text-gray-500 dark:text-gray-400">
-              SVG, PNG, JPG or GIF (MAX. 800x400px)
+              SVG, PNG, JPG, GIF, MP4, MOV, AVI (MAX. 800x400px for images)
             </p>
           </div>
-          <input id="dropzone-file" type="file" multiple @change="onFilesChange" class="hidden" />
+          <input
+            id="dropzone-file"
+            type="file"
+            multiple
+            @change="onFilesChange"
+            accept="image/*,video/*"
+            class="hidden"
+          />
         </div>
       </div>
+
       <div class="my-10 flex justify-end">
         <button
           @click.prevent="saveIdea"
@@ -196,7 +258,13 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { apiCreateIdea, apiCreateMediaIdea, apiSaveIdea, apiDeleteIdea } from '@/apis/idea.api'
+import {
+  apiCreateIdea,
+  apiCreateMediaIdea,
+  apiSaveIdea,
+  apiDeleteIdea,
+  apiUploadImageInContent
+} from '@/apis/idea.api'
 import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
 import 'vue3-toastify/dist/index.css'
@@ -258,6 +326,12 @@ const onFilesChange = (event) => {
     }
     reader.readAsDataURL(file)
   })
+
+  console.log('preDisplayImage: ', preDisplayImage.value)
+}
+
+const isImage = (fileData) => {
+  return fileData && fileData.startsWith('data:image/')
 }
 
 const removeFile = (index) => {
@@ -299,7 +373,12 @@ const saveIdea = () => {
     ideaData.title = sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })
     return
   }
-  if (!ideaData.categoryId && !ideaData.title && !ideaData.content && (preDisplayImage.value.length === 0)) {
+  if (
+    !ideaData.categoryId &&
+    !ideaData.title &&
+    !ideaData.content &&
+    preDisplayImage.value.length === 0
+  ) {
     notify('warning', 'Nothing to save')
     return
   }
@@ -327,7 +406,7 @@ const saveIdea = () => {
         console.log(err)
         notify('error', 'Create idea failed, some thing went wrong !')
       })
-      apiDeleteIdea()
+    apiDeleteIdea()
   }
 
   if (ideaData.type === 'image') {
@@ -431,6 +510,59 @@ const selected = ref({
 watch(selected, async () => {
   ideaData.categoryId = selected.value.id
 })
+
+// Cấu hình toolbar
+const toolbar = [
+  ['bold', 'italic', 'underline', 'strike'], // Basic formatting
+  ['blockquote', 'code-block'], // Block formatting
+  [{ list: 'ordered' }, { list: 'bullet' }], // List
+  [{ indent: '-1' }, { indent: '+1' }], // Indentation
+  ['link', 'image', 'video'], // Adding image and video
+  [{ align: [] }], // Align
+  ['clean'] // Clear formatting
+]
+
+const quillEditor = ref(null)
+
+// Lấy đối tượng quill từ QuillEditor
+const onEditorReady = (editor) => {
+  const imageButton = editor.theme.modules.toolbar.controls[11][1]
+  // imageButton: <button class=ql-image>
+  imageButton?.addEventListener('click', () => {
+    const fileInput = document.querySelector('input[type="file"]')
+
+    fileInput.onchange = async () => {
+      const file = fileInput.files[0]
+      if (file) {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        apiUploadImageInContent(formData)
+          .then((response) => {
+            const imageUrl = response.data.data.image_url
+            const range = editor.getSelection()
+            if (range) {
+              // editor.deleteText(range.index, range.length)
+
+              // editor.insertEmbed(range.index, 'image', imageUrl)
+
+              const editorContent = editor.root.innerHTML
+              const updatedContent = editorContent.replace(
+                /src="data:image\/png;base64,([^"]+)"/g,
+                `src="${imageUrl}"`
+              )
+
+              // Cập nhật lại nội dung của Quill editor
+              editor.root.innerHTML = updatedContent
+            }
+          })
+          .catch((err) => {
+            console.error('Error uploading image:', err)
+          })
+      }
+    }
+  })
+}
 </script>
 <style scoped>
 a {
