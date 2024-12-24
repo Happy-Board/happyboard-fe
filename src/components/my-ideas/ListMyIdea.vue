@@ -16,7 +16,8 @@
         :createdAt="idea.createdAt"
         :isDraft="idea.isDrafted"
         :isPublish="idea.isPublished"
-        :imageUrls="idea.linkImage"
+        :imageUrls="idea.linkMedia"
+        :thumbnailUrl="idea.thumbnailUrl"
         :avatar="idea.User.avatar"
       />
     </div>

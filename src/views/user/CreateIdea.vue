@@ -129,6 +129,7 @@
             >
               <!-- Hiển thị hình ảnh hoặc video tùy vào loại file -->
               <button
+                v-if="isImageUpload"
                 @click="triggerFileInput"
                 class="absolute top-2 left-2 p-2 bg-primaryColor text-white rounded-2xl hover:bg-blue-800 z-10"
               >
@@ -298,7 +299,7 @@ const ideaData = reactive({
   title: '',
   content: '',
   type: '',
-  linkImage: ''
+  linkMedia: ''
 })
 
 watch(
@@ -313,21 +314,42 @@ watch(
 let selectedFiles = ref([])
 const preDisplayImage = ref([])
 const currentImageIndex = ref(0)
+const isImageUpload = ref(false)
 
 const onFilesChange = (event) => {
   const files = Array.from(event.target.files)
-  if (files && files.length > 0) {
-    selectedFiles.value = Array.from(files)
-  }
-  files.forEach((file) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      preDisplayImage.value.push(e.target.result)
-    }
-    reader.readAsDataURL(file)
-  })
+  const images = files.filter((file) => file.type.startsWith('image/'))
+  const videos = files.filter((file) => file.type.startsWith('video/'))
 
-  console.log('preDisplayImage: ', preDisplayImage.value)
+  if (images.length > 0 && videos.length > 0) {
+    // Nếu người dùng upload cả ảnh và video
+    preDisplayImage.value = [] // Reset danh sách hiển thị trước
+    alert('Please upload only images or only videos, not both at the same time.') // Thông báo lỗi
+    isImageUpload.value = false
+    return
+  }
+
+  if (images.length > 0) {
+    isImageUpload.value = true
+    selectedFiles.value = Array.from(files)
+    files.forEach((file) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        preDisplayImage.value.push(e.target.result)
+      }
+      reader.readAsDataURL(file)
+    })
+  } else if (videos.length > 0) {
+    isImageUpload.value = false
+    selectedFiles.value = Array.from(files)
+    files.forEach((file) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        preDisplayImage.value.push(e.target.result) 
+      }
+      reader.readAsDataURL(file)
+    })
+  }
 }
 
 const isImage = (fileData) => {
@@ -355,11 +377,18 @@ const prevImage = () => {
 
 const triggerFileInput = () => {
   const fileInput = document.getElementById('dropzone-file')
+
+  // Chỉ chấp nhận hình ảnh
+  fileInput.setAttribute('accept', 'image/*')
+
+  // Kích hoạt input
   fileInput.click()
+
+  // Reset lại `accept` nếu cần hỗ trợ cả video ở lần khác
 }
 
 const saveIdea = () => {
-  ideaData.type = tab.value === 'text' ? 'text' : 'image'
+  ideaData.type = tab.value == 'text' ? 'text' : 'media'
 
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
@@ -409,7 +438,7 @@ const saveIdea = () => {
     apiDeleteIdea()
   }
 
-  if (ideaData.type === 'image') {
+  if (ideaData.type === 'media') {
     if (!preDisplayImage.value || !(ideaData.content && preDisplayImage.value.length === 0)) {
       notify('warning', 'Media is not empty !')
       return
@@ -437,7 +466,7 @@ const saveIdea = () => {
   }
 }
 const createIdea = () => {
-  ideaData.type = tab.value === 'text' ? 'text' : 'image'
+  ideaData.type = tab.value === 'text' ? 'text' : 'media'
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
@@ -484,7 +513,7 @@ const createIdea = () => {
     formData.append('categoryId', ideaData.categoryId)
     formData.append('type', ideaData.type)
     selectedFiles.value.forEach((file) => {
-      console.log(file)
+      console.log('123: ', file)
       console.log('---------------------------')
       formData.append('files', file)
     })

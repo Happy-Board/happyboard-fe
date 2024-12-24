@@ -236,10 +236,10 @@ const toggleDownvote = () => {
 const currentIndex = ref(0)
 
 const imagesArray = computed(() =>
-  idea.value.linkImage
-    ? idea.value.linkImage.includes(',')
-      ? idea.value.linkImage.split(',').map((url) => url.trim())
-      : [idea.value.linkImage]
+  idea.value.linkMedia
+    ? idea.value.linkMedia.includes(',')
+      ? idea.value.linkMedia.split(',').map((url) => url.trim())
+      : [idea.value.linkMedia]
     : null
 )
 

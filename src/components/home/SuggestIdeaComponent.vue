@@ -78,8 +78,8 @@ const props = defineProps({
 
 const imageUrls = computed(() => {
   return props.ideas.map((idea) => {
-    const firstImage = idea.linkImage
-      ? idea.linkImage.split(',')[0]
+    const firstImage = idea.linkMedia
+      ? idea.linkMedia.split(',')[0]
       : 'https://res.cloudinary.com/daokqrkdk/image/upload/v1730017098/default-image_z4afoc.jpg'
     return firstImage
   })

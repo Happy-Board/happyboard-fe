@@ -29,7 +29,7 @@
         :totalView="idea.viewCount"
         :createdAt="idea.createdAt"
         :isDraft="idea.isDrafted"
-        :imageUrls="idea.linkImage"
+        :imageUrls="idea.linkMedia"
         :avatar="idea.User.avatar"
       />
     </div>
