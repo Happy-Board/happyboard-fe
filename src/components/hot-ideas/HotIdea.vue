@@ -18,7 +18,7 @@
           :total-comment="idea?.commentCount"
           :total-view="idea?.viewCount"
           :total-vote="idea?.voteCount"
-          :imageUrls="idea.linkImage"
+          :imageUrls="idea.linkMedia"
         />
       </slide>
       <template #addons>

@@ -7,9 +7,11 @@
           position: 'relative',
           overflow: 'hidden',
           width: '150px',
-          height: '100px'
+          height: '100px',
+          borderRadius: '8px',
+          border: '1px solid gray'
         }"
-        @click="showLightbox = true"
+        class="container-image"
       >
         <!-- Slideshow Container -->
         <div
@@ -26,10 +28,9 @@
             :src="image"
             alt="Idea Image"
             :style="{
-              width: '150px',
-              height: '100px',
-              objectFit: 'cover',
-              borderRadius: '8px'
+              width: '100%' /* Làm cho ảnh chiếm đầy chiều rộng của div */,
+              height: '100%' /* Làm cho ảnh chiếm đầy chiều cao của div */,
+              objectFit: 'contain' /* Đảm bảo ảnh co lại mà không bị cắt, có thể có khoảng trống */
             }"
           />
         </div>
@@ -46,7 +47,7 @@
             padding: '4px 8px',
             borderRadius: '12px',
             fontSize: '12px',
-            zIndex: '1'
+            zIndex: '1' /* Ensures the indicator is on top */
           }"
         >
           {{ currentIndex + 1 }} / {{ imagesArray.length }}
@@ -110,16 +111,15 @@
       </div>
     </div>
 
-      <!-- Lightbox Component -->
-      <VueEasyLightbox
-        :visible="showLightbox"
-        :imgs="imagesArray"
-        :index="currentIndex"
-        @hide="showLightbox = false"
-      />
+    <!-- Lightbox Component -->
+    <VueEasyLightbox
+      :visible="showLightbox"
+      :imgs="imagesArray"
+      :index="currentIndex"
+      @hide="showLightbox = false"
+    />
   </div>
 </template>
-
 
 <script setup>
 import { useRouter } from 'vue-router'
@@ -148,8 +148,31 @@ const props = defineProps({
   }
 })
 
+let imagesArray = []
+
 // Split the image URLs into an array
-const imagesArray = computed(() => props.imageUrls.split(',').map((url) => url.trim()))
+
+// const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
+
+// Split the image URLs into an array
+imagesArray = computed(() => {
+  if (
+    !props.imageUrls ||
+    props.imageUrls == 'https://res.cloudinary.com/daokqrkdk/image/upload/default-image_z4afoc.jpg'
+  ) {
+    console.log('content:', props.content)
+    const match = props.content.match(/<img[^>]*src="([^"]+)"/)
+    console.log('Matched image URL:', match)
+    const firstImageUrl = match
+      ? match[1]
+      : 'https://res.cloudinary.com/daokqrkdk/image/upload/default-image_z4afoc.jpg'
+    console.log('First image URL or default:', firstImageUrl) // Debug URL đầu tiên hoặc ảnh mặc định
+    return [firstImageUrl]
+  } else {
+    const urls = props.imageUrls.split(',').map((url) => url.trim())
+    return urls
+  }
+})
 
 // Track the index of the currently displayed image
 const currentIndex = ref(0)
@@ -168,7 +191,6 @@ const startSlideshow = () => {
 onMounted(() => {
   startSlideshow()
 })
-
 
 onBeforeUnmount(() => {
   clearInterval(intervalId)

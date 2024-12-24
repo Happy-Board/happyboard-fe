@@ -7,8 +7,11 @@
           position: 'relative',
           overflow: 'hidden',
           width: '150px',
-          height: '100px'
+          height: '100px',
+          borderRadius: '8px',
+          border: '1px solid gray'
         }"
+        class="container-image"
       >
         <!-- Slideshow Container -->
         <div
@@ -19,18 +22,27 @@
           }"
         >
           <!-- Loop over images and display each image -->
-          <img
-            v-for="(image, index) in imagesArray"
-            :key="index"
-            :src="image"
-            alt="Idea Image"
-            :style="{
-              width: '150px',
-              height: '100px',
-              objectFit: 'cover',
-              borderRadius: '8px'
-            }"
-          />
+          <div class="thumbnail-wrapper">
+            <img
+              v-for="(image, index) in imagesArray"
+              :key="index"
+              :src="image"
+              alt="Idea Image"
+              :style="{
+                width: '100%' /* Làm cho ảnh chiếm đầy chiều rộng của div */,
+                height: '100%' /* Làm cho ảnh chiếm đầy chiều cao của div */,
+                objectFit:
+                  'contain' /* Đảm bảo ảnh co lại mà không bị cắt, có thể có khoảng trống */
+              }"
+            />
+            <!-- Biểu tượng "play" nếu là video -->
+            <div v-if="thumbnailUrl" class="video-overlay">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="play-icon">
+                <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.5)" />
+                <polygon points="10,8 16,12 10,16" fill="#fff" />
+              </svg>
+            </div>
+          </div>
         </div>
 
         <!-- Image Indicator -->
@@ -181,24 +193,43 @@ const props = defineProps({
   imageUrls: {
     type: String,
     default: 'https://res.cloudinary.com/daokqrkdk/image/upload/default-image_z4afoc.jpg' // Provide a default image URL if none is provided
-  }
+  },
+  thumbnailUrl: String
 })
 
 // const avatarURL = props.avatar === '' ? 'avatar/default-avatar.jpg' : props.avatar
+let imagesArray = []
+imagesArray = computed(() => {
+  const defaultImageUrl =
+    'https://res.cloudinary.com/daokqrkdk/image/upload/default-image_z4afoc.jpg'
 
-// Split the image URLs into an array
-const imagesArray = computed(() => props.imageUrls.split(',').map((url) => url.trim()))
+  // Kiểm tra nếu có `thumbnailUrl` (video)
+  if (props.thumbnailUrl) {
+    return [props.thumbnailUrl] // Trả về thumbnail vì đó là video
+  }
 
-// Track the index of the currently displayed image
+  // Nếu không có thumbnail, xử lý như danh sách ảnh
+  if (props.imageUrls && props.imageUrls.trim()) {
+    return props.imageUrls.split(',').map((url) => url.trim()) // Tách và trả về danh sách ảnh
+  }
+
+  // Nếu không có `imageUrls`, kiểm tra nội dung hoặc trả về ảnh mặc định
+  if (props.content) {
+    const match = props.content.match(/<img[^>]*src="([^"]+)"/)
+    return [match ? match[1] : defaultImageUrl]
+  }
+
+  return [defaultImageUrl] // Trả về ảnh mặc định nếu không có gì
+})
+
 const currentIndex = ref(0)
 
-// Function to update the image index every 3 seconds
 let intervalId
 
 const startSlideshow = () => {
   intervalId = setInterval(() => {
     currentIndex.value = (currentIndex.value + 1) % imagesArray.value.length
-  }, 3000) // 3000ms = 3 seconds
+  }, 3000)
 }
 
 onMounted(() => {
@@ -267,5 +298,24 @@ const viewDetailIdea = () => {
 
 .ql-editor {
   padding: 0 !important;
+}
+
+.thumbnail-wrapper {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none; /* Không ảnh hưởng tới thao tác chuột */
+}
+
+.play-icon {
+  width: 64px;
+  height: 64px;
 }
 </style>

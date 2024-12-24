@@ -253,7 +253,7 @@ const ideaData = reactive({
   title: '',
   content: '',
   type: '',
-  linkImage: ''
+  linkMedia: ''
 })
 
 const selectedCategory = ref(null)
@@ -270,7 +270,7 @@ const populateFormData = (idea) => {
   ideaData.title = idea.title || ''
   ideaData.categoryId = idea.Category?.id || ''
   ideaData.content = idea.content || ''
-  ideaData.linkImage = idea.linkImage || ''
+  ideaData.linkMedia = idea.linkMedia || ''
 
   // Cập nhật danh mục
   if (idea.Category?.id) {
@@ -279,9 +279,9 @@ const populateFormData = (idea) => {
   }
 
   // Xử lý tab media và preDisplayImage
-  if (idea.linkImage) {
+  if (idea.linkMedia) {
     tab.value = 'media'
-    preDisplayImage.value = idea.linkImage.split(',').map((url) => url.trim())
+    preDisplayImage.value = idea.linkMedia.split(',').map((url) => url.trim())
   } else {
     tab.value = 'text'
     preDisplayImage.value = []
