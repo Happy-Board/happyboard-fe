@@ -85,7 +85,7 @@
           id="title1"
         ></textarea>
       </div>
-      <div v-if="tab === 'text'" class="mb-10">
+      <div v-if="tab === 'text' || tab === 'poll'" class="mb-10">
         <label class="block text-sm font-medium text-black mb-3" for="content"
           >Content <span class="text-red-600">*</span></label
         >
@@ -99,6 +99,13 @@
           ref="quillEditor"
         />
       </div>
+      <div v-if="tab === 'poll'" class="mt-10">
+        <label class="block text-sm font-medium text-black mb-3" for="content"
+          >Poll <span class="text-red-600">*</span></label
+        >
+        <PollEditor @updatePollData="updatePollData" />
+      </div>
+
       <div v-if="tab === 'media'" class="">
         <label class="block text-sm font-medium text-black mb-3" for="content">
           Upload Image/Video <span class="text-red-600">*</span>
@@ -276,6 +283,7 @@ import { SANITIZE_ALLOWED_TAGS } from '@/constants'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import TabTypeCreateIdea from '../../components/idea/TabTypeCreateIdea.vue'
+import PollEditor from '../../components/idea/PollEditor.vue'
 
 const router = useRouter()
 const categoryStore = useCategoryStore()
@@ -345,7 +353,7 @@ const onFilesChange = (event) => {
     files.forEach((file) => {
       const reader = new FileReader()
       reader.onload = (e) => {
-        preDisplayImage.value.push(e.target.result) 
+        preDisplayImage.value.push(e.target.result)
       }
       reader.readAsDataURL(file)
     })
@@ -467,6 +475,9 @@ const saveIdea = () => {
 }
 const createIdea = () => {
   ideaData.type = tab.value === 'text' ? 'text' : 'media'
+
+  console.log('Debug Poll Data:', pollData.value)
+
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
@@ -591,6 +602,10 @@ const onEditorReady = (editor) => {
       }
     }
   })
+}
+const pollData = ref({ questions: [] })
+const updatePollData = (data) => {
+  pollData.value = data
 }
 </script>
 <style scoped>

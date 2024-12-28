@@ -53,12 +53,7 @@
 
         <!-- <div class='img-display-container' @click=> -->
 
-        <img
-          :src="currentImage"
-          alt="idea image"
-          class="image"
-          @click="openLightBox"
-        />
+        <img :src="currentImage" alt="idea image" class="image" @click="openLightBox" />
         <!-- </div> -->
 
         <button
@@ -86,15 +81,24 @@
             'active-background-up': vote === 'up'
           }"
         >
-          <font-awesome-icon
-            v-if="typeIdea !== 'pending'"
-            :icon="['fas', 'arrow-up']"
-            class="vote-icon upvote-icon"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-5 h-5"
             :class="{
               'hover-color-up': vote === 'up'
             }"
             @click="toggleUpvote"
-          />
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.682l1.318-1.364a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"
+            />
+          </svg>
         </div>
 
         <span class="action-count">{{ idea.voteCount !== 0 ? idea.voteCount : 'Vote' }}</span>
@@ -105,28 +109,39 @@
             'active-background-down': vote === 'down'
           }"
         >
-          <font-awesome-icon
-            :icon="['fas', 'arrow-down']"
-            class="vote-icon downvote-icon"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-5 h-5"
             :class="{
               'hover-color-down': vote === 'down'
             }"
             @click="toggleDownvote"
-          />
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.66l-1.06-1.05a5.5 5.5 0 00-7.78 7.78l1.08 1.08L12 21.5l7.78-7.78 1.08-1.08a5.5 5.5 0 000-7.78z"
+            />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.5l3 3-3 3 3 3" />
+          </svg>
         </div>
       </div>
       <!-- Comment Count -->
-      <button class="action-container flex items-center bg-gray-200 p-2">
-        <i class="fa-regular fa-comment-dots"></i>
+      <button class="flex items-center p-2">
+        <i class="fa-regular fa-comment-dots mr-2"></i>
         <span class="action-count">{{
           idea.commentCount > 0 ? idea.commentCount : 'Comment'
         }}</span>
       </button>
 
       <!-- View Count -->
-      <button class="action-container">
-        <i class="fa-regular fa-eye"></i>
-        <span class="action-count">{{ idea.viewCount }}</span>
+      <button class="">
+        <i class="fa-regular fa-eye mr-2"></i>
+        <span class="action-count"> {{ idea.viewCount }} views</span>
       </button>
     </div>
 
@@ -147,7 +162,6 @@ import { useIdeaStore } from '@/stores/idea.store'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowUp, faArrowDown, faComment } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import VueEasyLightbox from 'vue-easy-lightbox'

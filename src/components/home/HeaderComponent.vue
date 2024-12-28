@@ -4,12 +4,17 @@
   >
     <div class="flex md:grid md:grid-cols-12 items-center text-black gap-y-4">
       <div class="md:col-span-2 flex justify-center">
-        <!-- <img src="../../assets/icons/png/logo.png" alt="" class=" w-[40px] md:w-14 h-auto max-w-[500px]" @click="router.push('/')"/> -->
+        <img
+          src="../../assets/icons/png/logo.png"
+          alt=""
+          class="w-[40px] md:w-14 h-auto max-w-[500px]"
+          @click="router.push('/')"
+        />
         <a
           href="/"
           class="hidden md:grid text-[#4d3d91] w-fit cursor-pointer py-1.5 font-sans text-2xl font-bold leading-relaxed tracking-normal text-inherit antialiased"
         >
-          <!-- Happy Board -->
+          Happy Board
         </a>
       </div>
       <div class="md:col-span-7 flex w-full gap-2 px-2 md:px-5 md:justify-center items-center">
@@ -37,8 +42,8 @@
                 clip-rule="evenodd"
               />
             </svg>
-  
-            <span class="hidden md:flex md:ms-1 whitespace-nowrap text-white font-sans text-sm font-bold"
+            <span
+              class="hidden md:flex md:ms-1 whitespace-nowrap text-white font-sans text-sm font-bold"
               >New idea</span
             >
           </router-link>
@@ -50,12 +55,12 @@
             alt="avatar"
             class="aspect-square rounded-full md:w-8 w-[6rem]"
           />
-            <PopUpUserOption
-              v-if="showUserOption"
-              :profile = profile
-              @logout="handleLogout"
-              @closeUserOption="closeUserOption"
-            />
+          <PopUpUserOption
+            v-if="showUserOption"
+            :profile="profile"
+            @logout="handleLogout"
+            @closeUserOption="closeUserOption"
+          />
         </div>
       </div>
     </div>
@@ -125,10 +130,8 @@ const handleLogout = () => {
     .catch((err) => console.log(err))
 }
 
-watch(showUserOption,() => {
-console.log(showUserOption.value);
+watch(showUserOption, () => {
+  console.log(showUserOption.value)
 })
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

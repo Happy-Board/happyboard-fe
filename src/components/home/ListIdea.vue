@@ -26,11 +26,13 @@
         :content="idea.content"
         :totalComment="idea.commentCount"
         :totalVote="idea.voteCount"
+        :voteStatus="idea.vote"
         :totalView="idea.viewCount"
         :createdAt="idea.createdAt"
         :isDraft="idea.isDrafted"
         :imageUrls="idea.linkMedia"
         :avatar="idea.User.avatar"
+        :thumbnailUrl="idea.thumbnailUrl"
       />
     </div>
     <InfiniteLoading @infinite="loadMore" />

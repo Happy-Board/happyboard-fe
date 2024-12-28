@@ -19,6 +19,7 @@
           :total-view="idea?.viewCount"
           :total-vote="idea?.voteCount"
           :imageUrls="idea.linkMedia"
+          :thumbnailUrl="idea.thumbnailUrl"
         />
       </slide>
       <template #addons>

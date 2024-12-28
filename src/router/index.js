@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import SignIn from '@/views/SignIn.vue'
 import CreateIdea from '@/views/user/CreateIdea.vue'
+import CreateGroupIdea from '@/views/user/CreateGroupIdea.vue'
 import HomeView from '@/views/user/HomeView.vue'
 import DetailIdeaView from '@/views/user/DetailIdeaView.vue'
 import MyBoardView from '@/views/user/MyBoardView.vue'
@@ -12,6 +13,7 @@ import ResetPassword from '@/views/user/ResetPassword.vue'
 import MainLayout from '@/components/layouts/MainLayout.vue'
 import NotFoundPage from '@/views/user/NotFoundPage.vue'
 import ProfilePage from '@/views/user/ProfilePage.vue'
+import GroupView from '@/views/user/GroupView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,11 +28,21 @@ const router = createRouter({
           name: 'home',
           component: HomeView
         },
+        {
+          path: '/group',
+          name: 'group',
+          component: GroupView
+        },
 
         {
           path: 'create-idea',
           name: 'create-idea',
           component: CreateIdea
+        },
+        {
+          path: 'create-group-idea',
+          name: 'create-group-dea',
+          component: CreateGroupIdea
         },
         {
           path: 'idea/:type/:id/:commentId?',

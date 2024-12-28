@@ -22,6 +22,17 @@
     >
       Image & Video
     </div>
+    <div
+      @click="handleSetTab('poll')"
+      class="cursor-pointer hover:text-red-700 hover:underline hover:decoration-red-700 hover:underline-offset-8 hover:decoration-4 px-2 bg-white w-fit flex items-center gap-2"
+      :class="
+        tab === 'poll'
+          ? 'underline decoration-red-700 underline-offset-8 decoration-4 text-red-700'
+          : ''
+      "
+    >
+      Poll
+    </div>
   </div>
 </template>
 <script setup>
