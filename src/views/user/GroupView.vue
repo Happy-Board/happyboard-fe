@@ -1,0 +1,89 @@
+<template>
+  <div class="md:col-span-7 col-span-12 pt-[75px] bg-white px-5 min-h-screen md:ms-5">
+    <div>
+      <Suspense>
+        <HeaderComponent />
+        <template #fallback>
+        </template>
+      </Suspense>
+    </div>
+    <div class="flex-1">
+      <FilterComponent :store="homePageStore" />
+      <Suspense>
+        <ListIdea />
+
+        <template #fallback>
+          <ListIdeaSkeleton />
+        </template>
+      </Suspense>
+    </div>
+  </div>
+
+  <div class="col-span-3 px-2 me-5">
+    <div class="mt-[86px] sticky top-[86px]">
+      <Suspense>
+        <div>
+          <SuggestIdeaComponent
+            feature="Recently ideas"
+            :titleIdeas="titleIdea"
+            :ideas="recentIdeas"
+          />
+        </div>
+        <template #fallback>
+          <SuggestIdeaSkeleton />
+        </template>
+      </Suspense>
+      <Suspense>
+        <div>
+          <ActivityHistory />
+        </div>
+        <template #fallback>
+          <SuggestIdeaSkeleton />
+        </template>
+      </Suspense>
+    </div>
+  </div>
+</template>
+<script setup>
+import { defineAsyncComponent } from 'vue'
+import SuggestIdeaSkeleton from '@/components/skeletons/SuggestIdeaSkeleton.vue'
+import { useHomePageStore } from '@/stores/home.store'
+import { storeToRefs } from 'pinia'
+import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
+import ActivityHistory from '@/components/history-activities/ActivityHistory.vue'
+import FilterComponent from '@/components/home/FilterComponent.vue'
+const HeaderComponent = defineAsyncComponent(
+  () => import('@/components/group/HeaderComponent.vue')
+)
+const SuggestIdeaComponent = defineAsyncComponent(
+  () => import('@/components/home/SuggestIdeaComponent.vue')
+)
+
+const ListIdea = defineAsyncComponent(() => import('@/components/home/ListIdea.vue'))
+
+const homePageStore = useHomePageStore()
+const { recentIdeas } = storeToRefs(homePageStore)
+
+const cookie = document.cookie.split('; ')
+
+const setTokenToLocalStorage = () => {
+  let token
+  if (cookie[0] !== '') {
+    cookie.forEach((element) => {
+      const subCookie = element.split('=')
+      if (subCookie[0] === 'access-token') {
+        token = subCookie[1]
+      }
+    })
+  }
+  localStorage.setItem('accessToken', token)
+}
+
+setTokenToLocalStorage()
+</script>
+<style>
+.container.spinner {
+  margin: 10px !important;
+  border: blue !important;
+}
+</style>

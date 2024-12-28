@@ -60,8 +60,9 @@
           </li>
           <!-- Đường kẻ ngăn cách -->
           <li>
-            <hr class="border-gray-300 my-3" />
+            <hr class="border-gray-300 my-1" />
           </li>
+
           <!-- Category Dropdown -->
           <li>
             <div
@@ -95,7 +96,7 @@
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-5 h-5 transition-transform duration-200"
-                :class="{ 'rotate-180': isDropdownOpen }"
+                :class="{ 'rotate-180': isDropdownCategory }"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -111,16 +112,16 @@
 
             <!-- Dropdown với hiệu ứng -->
             <transition name="dropdown">
-              <div v-if="isDropdownOpen">
+              <div v-if="isDropdownCategory">
                 <!-- Input tìm kiếm -->
-                <input
+                <!-- <input
                   v-model="searchText"
                   type="text"
                   placeholder="Search categories..."
                   class="w-full px-3 py-2 mb-2 text-sm border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                />
+                /> -->
                 <!-- Danh sách categories -->
-                <ul class="mt-2 space-y-1 overflow-hidden bg-white rounded-lg shadow-lg">
+                <ul class="mt-2 space-y-1 overflow-hidden rounded-lg">
                   <li
                     v-for="(category, index) in displayedCategories"
                     :key="index"
@@ -139,24 +140,80 @@
                   </li>
 
                   <!-- Mục "Others" -->
-                  <li
+                  <!-- <li
                     v-if="hasMoreCategories"
                     class="flex items-center p-2 text-sm text-gray-600 rounded-lg hover:bg-backgroundButtonColor group cursor-pointer"
                     @click="expandAllCategories"
                   >
                     <span class="ml-3">...Others</span>
-                  </li>
+                  </li> -->
                 </ul>
                 <!-- Nút hiển thị tất cả -->
-                <button
+                <!-- <button
                   v-if="!showAll"
                   @click="showAllCategories"
                   class="block w-full px-3 py-2 mb-2 text-sm text-center text-gray-600 bg-blue-500 rounded-lg hover:underline"
                 >
                   Show All Categories
-                </button>
+                </button> -->
               </div>
             </transition>
+          </li>
+          <li>
+            <hr class="border-gray-300 my-1" />
+          </li>
+
+          <!-- Recently Dropdown -->
+          <li>
+            <div
+              @click="toggleRecentlyDropdown"
+              class="flex items-center justify-between p-2 cursor-pointer text-gray-600 rounded-lg hover:bg-backgroundButtonColor"
+            >
+              <!-- Icon kính lúp và text Category -->
+              <div class="flex items-center">
+                <span class="ml-2">Project</span>
+              </div>
+
+              <!-- Icon dropdown -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5 transition-transform duration-200"
+                :class="{ 'rotate-180': isDropdownRecently }"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+
+            <transition name="dropdown">
+              <div v-if="isDropdownRecently">
+                <ul class="mt-2 space-y-1 overflow-hidden rounded-lg">
+                  <li
+                    v-for="(group, index) in groups"
+                    :key="index"
+                    class="flex items-center p-2 text-sm text-gray-600 rounded-lg group cursor-pointer hover:bg-backgroundButtonColor"
+                  >
+                    <!-- Use router-link for navigation -->
+                    <router-link
+                      :to="`/group`"
+                      class="ml-3 block truncate line-clamp-1 break-words"
+                    >
+                    <span>{{ group }}</span>
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
+            </transition>
+          </li>
+          <li>
+            <hr class="border-gray-300 my-1" />
           </li>
         </ul>
       </div>
@@ -167,6 +224,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useCategoryStore } from '@/stores/category.store'
+import { useGroupStore } from '@/stores/group.store'
 import { storeToRefs } from 'pinia'
 import { useHomePageStore } from '@/stores/home.store'
 import { useRoute } from 'vue-router'
@@ -176,6 +234,8 @@ const currentRoute = useRoute()
 
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
+const groupStore = useGroupStore()
+const { groups } = storeToRefs(groupStore)
 const { getAllCategory } = categoryStore
 const homePageStore = useHomePageStore()
 const { setCategory, loadMore, resetListIdea } = homePageStore
@@ -184,7 +244,8 @@ onMounted(() => {
   getAllCategory()
 })
 
-const isDropdownOpen = ref(false)
+const isDropdownCategory = ref(false)
+const isDropdownRecently = ref(false)
 const searchText = ref('')
 const selectedCategory = ref('')
 const showAll = ref(true)
@@ -198,7 +259,8 @@ watch(
     if (newRoute !== 'home') {
       selectedCategory.value = ''
       setCategory('')
-      isDropdownOpen.value = false
+      isDropdownCategory.value = false
+      isDropdownRecently.value = false
     } else {
       resetListIdea()
       loadMore()
@@ -208,7 +270,11 @@ watch(
 
 // Toggle dropdown
 const toggleCategoryDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value
+  isDropdownCategory.value = !isDropdownCategory.value
+}
+
+const toggleRecentlyDropdown = () => {
+  isDropdownRecently.value = !isDropdownRecently.value
 }
 
 // Filter categories based on search text
@@ -231,28 +297,28 @@ const displayedCategories = computed(() => {
   return filteredCategories.value.slice(0, 5) // Hiển thị 5 mục đầu tiên
 })
 
-const hasMoreCategories = computed(() => {
-  return !isExpanded.value && filteredCategories.value.length > 5
-})
+// const hasMoreCategories = computed(() => {
+//   return !isExpanded.value && filteredCategories.value.length > 5
+// })
 // Xử lý khi chọn category
 const selectCategory = (categoryItem) => {
   selectedCategory.value = categoryItem.title
   searchText.value = '' // Xóa nội dung tìm kiếm
   showAll.value = false // Vô hiệu hóa chế độ hiển thị tất cả
-  setCategory(categoryItem.title) // Cập nhật store
+  setCategory(categoryItem.id) // Cập nhật store
   loadMore()
-  isDropdownOpen.value = false
+  isDropdownCategory.value = false
   isExpanded.value = false
 }
 
-const showAllCategories = () => {
-  selectedCategory.value = ''
-  searchText.value = ''
-  showAll.value = true // Kích hoạt chế độ hiển thị tất cả
-  setCategory('') // Gửi lên store rằng không có category nào được chọn
-  loadMore()
-  isDropdownOpen.value = false
-}
+// const showAllCategories = () => {
+//   selectedCategory.value = ''
+//   searchText.value = ''
+//   showAll.value = true // Kích hoạt chế độ hiển thị tất cả
+//   setCategory('') // Gửi lên store rằng không có category nào được chọn
+//   loadMore()
+//   isDropdownCategory.value = false
+// }
 
 // Function to check active tab
 const isActiveTab = (routeName) => {
@@ -261,9 +327,9 @@ const isActiveTab = (routeName) => {
   )
 }
 
-const expandAllCategories = () => {
-  isExpanded.value = true // Mở rộng để hiển thị toàn bộ danh mục
-}
+// const expandAllCategories = () => {
+//   isExpanded.value = true // Mở rộng để hiển thị toàn bộ danh mục
+// }
 </script>
 
 <style>

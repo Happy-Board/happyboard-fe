@@ -16,23 +16,38 @@
           width: '150px',
           height: '100px'
         }"
-        class="mr-4"
+        class="mr-4 rounded-lg border border-gray-400 bg-gray-200"
       >
-        <!-- Display only the first image -->
-        <img
-          v-if="imagesArray.length > 0"
-          :src="imagesArray[0]"
-          alt="Idea Image"
-          :style="{
-            width: '150px',
-            height: '100px',
-            objectFit: 'cover',
-            borderRadius: '8px'
-          }"
-        />
+        <div>
+          <svg
+            class="absolute inset-0 m-auto w-7 text-gray-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 13h8v1.25H6V13Zm0-2.75h8V9H6v1.25Zm13-7.625v14.75A1.627 1.627 0 0 1 17.375 19H2.625A1.627 1.627 0 0 1 1 17.375V2.625A1.627 1.627 0 0 1 2.625 1h14.75A1.627 1.627 0 0 1 19 2.625Zm-1.25 0a.375.375 0 0 0-.375-.375H2.625a.375.375 0 0 0-.375.375v14.75a.375.375 0 0 0 .375.375h14.75a.375.375 0 0 0 .375-.375V2.625ZM6 6.25h8V5H6v1.25Z"
+            ></path>
+          </svg>
+        </div>
+        <div>
+          <!-- Dispslay only the first image -->
+          <img
+            v-if="imagesArray.length > 0"
+            class="relative z-10 inset-0 w-full h-full object-cover "
+            :src="imagesArray[0]"
+            :style="{
+              width: '150px',
+              height: '100px',
+              objectFit: 'cover',
+              borderRadius: '8px'
+            }"
+            @error="handleImageError"
+          />
+        </div>
 
         <!-- Image Indicator -->
-        <div
+        <!-- <div
           v-if="imagesArray.length > 1"
           :style="{
             position: 'absolute',
@@ -47,7 +62,7 @@
           }"
         >
           1 / {{ imagesArray.length }}
-        </div>
+        </div> -->
       </div>
 
       <!-- Title and Content Section -->
@@ -109,10 +124,8 @@ const props = defineProps({
   totalComment: Number,
   totalView: Number,
   totalVote: Number,
-  imageUrls: {
-    type: String,
-    default: 'https://res.cloudinary.com/daokqrkdk/image/upload/default-image_z4afoc.jpg' // Provide a default image URL if none is provided
-  }
+  imageUrls: String,
+  thumbnailUrl: String
 })
 
 // Handle avatar URL
@@ -125,7 +138,31 @@ const viewDetailIdea = (id) => {
 }
 
 // Split the image URLs into an array
-const imagesArray = computed(() => props.imageUrls.split(',').map((url) => url.trim()))
+// const imagesArray = computed(() => props.imageUrls.split(',').map((url) => url.trim()))
+
+let imagesArray = []
+
+imagesArray = computed(() => {
+  const defaultImageUrl = ''
+  if (props.thumbnailUrl) {
+    return [props.thumbnailUrl]
+  }
+
+  if (props.imageUrls && props.imageUrls.trim()) {
+    return props.imageUrls.split(',').map((url) => url.trim())
+  }
+
+  if (props.content) {
+    const match = props.content.match(/<img[^>]*src="([^"]+)"/)
+    return [match ? match[1] : defaultImageUrl]
+  }
+
+  return [defaultImageUrl]
+})
+
+function handleImageError(event) {
+  event.target.style.display = 'none'
+}
 </script>
 
 <style scoped>

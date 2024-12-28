@@ -26,6 +26,7 @@ export const useIdeaStore = defineStore('idea', () => {
       })
       .catch((err) => console.log(err))
   }
+  
   async function decreaseVote(id) {
     //call api decreaseVote
     apiVoteDownIdea(id)
