@@ -16,6 +16,7 @@ export const useHomePageStore = defineStore('home', () => {
   const query = ref()
   const hotIdeas = ref([])
   const recentIdeas = ref([])
+  const oldGroupId = ref(1)
 
   async function getPageData() {
     if (searchString.value !== '') {
@@ -63,6 +64,9 @@ export const useHomePageStore = defineStore('home', () => {
   }
   function setCategory(checkedCategory) {
     category.value = checkedCategory
+    currentPage.value = 1
+    resetListIdea()
+    loadMore()
   }
 
   function resetListIdea() {
@@ -70,11 +74,17 @@ export const useHomePageStore = defineStore('home', () => {
     pageDataBackup.value = []
   }
 
-  async function loadMore() {
+  async function loadMore(groupId = 1) {
+    oldGroupId.value = groupId
+    if (oldGroupId.value !== groupId) {
+      oldGroupId.value = groupId
+      resetListIdea()
+      currentPage.value = 1
+    }
     if (searchString.value !== '') {
       query.value = `?q=${searchString.value}&page=${currentPage.value}`
     } else {
-      query.value = `?page=${currentPage.value}`
+      query.value = `?page=${currentPage.value}&group=${groupId}`
     }
     if (category.value !== '') {
       query.value = `${query.value}&categories=${category.value}`
@@ -86,6 +96,7 @@ export const useHomePageStore = defineStore('home', () => {
       response.data.data.ideas.forEach((idea) => {
         idea.createdAt = convertTime(idea.createdAt)
       })
+
       pageData.value = [...pageDataBackup.value, ...response.data.data.ideas]
       if (response.data.data.ideas.length === 10) {
         pageDataBackup.value = [...pageDataBackup.value, ...response.data.data.ideas]
@@ -97,6 +108,7 @@ export const useHomePageStore = defineStore('home', () => {
   function setOption(tabSort) {
     tab.value = tabSort
     currentPage.value = 1
+    resetListIdea()
     loadMore()
   }
 

@@ -35,7 +35,7 @@
         :thumbnailUrl="idea.thumbnailUrl"
       />
     </div>
-    <InfiniteLoading @infinite="loadMore" />
+    <InfiniteLoading @infinite="loadMore(props.groupId)" />
   </div>
   <div
     v-if="pageData?.length !== 0"
@@ -46,6 +46,7 @@
   </div>
 </template>
 <script async setup>
+import { watch } from 'vue'
 import InfiniteLoading from 'v3-infinite-loading'
 import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
@@ -54,6 +55,11 @@ import CartIdeaComponent from '../idea/CardIdeaComponent.vue'
 import NotFoundData from '../notfound-data/NotFoundData.vue'
 import { useRouter } from 'vue-router'
 
+
+const props = defineProps({
+  groupId: String
+})
+
 const router = useRouter()
 // const searchStore = useSearchStore()
 // const { searchResults } = storeToRefs(searchStore)
@@ -61,12 +67,31 @@ const homePageStore = useHomePageStore()
 const { pageData } = storeToRefs(homePageStore)
 const { loadMore } = homePageStore
 
-await loadMore().catch((error) => {
-  if (error.response.status === 401) {
-    localStorage.clear()
-    router.push({ name: 'sign-in' })
-  }
-})
+watch(
+  () => props.groupId, // Theo dõi groupId trong props
+  async (newGroupId) => {
+    if (newGroupId) {
+      try {
+        await loadMore(parseInt(newGroupId)) // Gọi loadMore với groupId mới
+      } catch (error) {
+        if (error.response?.status === 401) {
+          localStorage.clear()
+          router.push({ name: 'sign-in' }) // Điều hướng về trang đăng nhập nếu bị lỗi 401
+        } else {
+          console.error('Error loading ideas:', error)
+        }
+      }
+    }
+  },
+  { immediate: true } // Gọi ngay khi component được mount
+)
+
+// await loadMore(props?.groupId).catch((error) => {
+//   if (error.response.status === 401) {
+//     localStorage.clear()
+//     router.push({ name: 'sign-in' })
+//   }
+// })
 </script>
 <style scoped>
 .spinner {

@@ -47,7 +47,7 @@
             >
             <input
               type="text"
-              v-model="poll.questions[index].remindBeforeExpire"
+              v-model="poll.questions[index].remindBeforeExpireTime"
               placeholder="e.g., 2 hours"
               class="w-50 p-2 border border-gray-300 rounded-lg text-sm"
             />
@@ -88,7 +88,7 @@ const poll = reactive({
       type: 'radiogroup', // Type of question, can be 'radiogroup', 'checkbox', or 'text'
       choices: ['', ''], // Choices for radio or checkbox questions
       expireHour: '', // Expiry time in hours
-      remindBeforeExpire: '' // Time to remind before expiry (in hours)
+      remindBeforeExpireTime: '' // Time to remind before expiry (in hours)
     }
   ]
 })

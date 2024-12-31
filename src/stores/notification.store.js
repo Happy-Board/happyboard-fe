@@ -8,10 +8,15 @@ export const useNotificationStore = defineStore('notification', () => {
   const notifications = ref([])
   const count = ref(0)
   
+  
+  function incrementNotificationCount() {
+    this.numNotification.value++
+  }
+  
   function getNewNotification() {
     numNotification.value++
   }
-
+  
   const handleNotification = (noti) => {
     if (noti.type === 'NI01') return `<strong>${noti.fromUser.username}</strong> đã comment vào một idea của bạn `
     if (noti.type === 'NI02') return `<strong>${noti.fromUser.username}</strong> đã vote cho idea của bạn`
@@ -59,6 +64,7 @@ export const useNotificationStore = defineStore('notification', () => {
     getAllNotifications,
     getNewNotification,
     markNotificationReaded,
-    getUnreadNotifications
+    getUnreadNotifications,
+    incrementNotificationCount
   }
 })

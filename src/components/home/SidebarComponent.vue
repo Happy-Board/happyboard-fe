@@ -192,20 +192,73 @@
               </svg>
             </div>
 
-            <transition name="dropdown">
+            <!-- <transition name="dropdown">
               <div v-if="isDropdownRecently">
+                <div
+                  class="space-y-1 overflow-hidden flex items-center p-2 text-sm text-gray-600 rounded-lg group cursor-pointer hover:bg-backgroundButtonColor"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="gray"
+                    class="w-7 h-7"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7H5" />
+                  </svg>
+                  <span class="px-2">Create Group</span>
+                </div>
                 <ul class="mt-2 space-y-1 overflow-hidden rounded-lg">
                   <li
-                    v-for="(group, index) in groups"
+                    v-for="(group, index) in groups?.map((group) => {
+                      return { name: group.name, groupId: group.groupId }
+                    })"
                     :key="index"
                     class="flex items-center p-2 text-sm text-gray-600 rounded-lg group cursor-pointer hover:bg-backgroundButtonColor"
                   >
-                    <!-- Use router-link for navigation -->
                     <router-link
-                      :to="`/group`"
+                      :to="`/group/${group.groupId}`"
                       class="ml-3 block truncate line-clamp-1 break-words"
                     >
-                    <span>{{ group }}</span>
+                      <span>{{ group.name }}</span>
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
+            </transition> -->
+            <transition name="dropdown">
+              <div v-if="isDropdownRecently">
+                <router-link
+                  to="/create-group"
+                  class="space-y-1 overflow-hidden flex items-center p-2 text-sm text-gray-600 rounded-lg group cursor-pointer hover:bg-backgroundButtonColor"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="gray"
+                    class="w-7 h-7"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7H5" />
+                  </svg>
+                  <span class="px-2">Create Group</span>
+                </router-link>
+                <ul class="mt-2 space-y-1 overflow-hidden rounded-lg">
+                  <li
+                    v-for="(group, index) in groups?.map((group) => {
+                      return { name: group.name, groupId: group.groupId }
+                    })"
+                    :key="index"
+                    class="flex items-center p-2 text-sm text-gray-600 rounded-lg group cursor-pointer hover:bg-backgroundButtonColor"
+                  >
+                    <router-link
+                      :to="`/group/${group.groupId}`"
+                      class="ml-3 block truncate line-clamp-1 break-words"
+                      @click="toGroup(group.groupId)"
+                    >
+                      <span>{{ group.name }}</span>
                     </router-link>
                   </li>
                 </ul>
@@ -234,14 +287,16 @@ const currentRoute = useRoute()
 
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
+const { getAllCategory } = categoryStore
 const groupStore = useGroupStore()
 const { groups } = storeToRefs(groupStore)
-const { getAllCategory } = categoryStore
+const { getAllGroups } = groupStore
 const homePageStore = useHomePageStore()
-const { setCategory, loadMore, resetListIdea } = homePageStore
+const { setCategory, loadMore, resetListIdea, setCurrentPage } = homePageStore
 
 onMounted(() => {
   getAllCategory()
+  getAllGroups()
 })
 
 const isDropdownCategory = ref(false)
@@ -250,6 +305,7 @@ const searchText = ref('')
 const selectedCategory = ref('')
 const showAll = ref(true)
 const isExpanded = ref(false)
+// const isModalVisible = ref(false)
 
 // Watch for route changes
 watch(
@@ -263,7 +319,7 @@ watch(
       isDropdownRecently.value = false
     } else {
       resetListIdea()
-      loadMore()
+      await loadMore()
     }
   }
 )
@@ -276,6 +332,10 @@ const toggleCategoryDropdown = () => {
 const toggleRecentlyDropdown = () => {
   isDropdownRecently.value = !isDropdownRecently.value
 }
+
+// const toggleModalCreateGroup = () => {
+//   isModalVisible.value = !isModalVisible.value
+// }
 
 // Filter categories based on search text
 const filteredCategories = computed(() => {
@@ -301,12 +361,13 @@ const displayedCategories = computed(() => {
 //   return !isExpanded.value && filteredCategories.value.length > 5
 // })
 // Xử lý khi chọn category
-const selectCategory = (categoryItem) => {
+const selectCategory = async (categoryItem) => {
   selectedCategory.value = categoryItem.title
   searchText.value = '' // Xóa nội dung tìm kiếm
   showAll.value = false // Vô hiệu hóa chế độ hiển thị tất cả
   setCategory(categoryItem.id) // Cập nhật store
-  loadMore()
+  resetListIdea()
+  await loadMore()
   isDropdownCategory.value = false
   isExpanded.value = false
 }
@@ -330,6 +391,13 @@ const isActiveTab = (routeName) => {
 // const expandAllCategories = () => {
 //   isExpanded.value = true // Mở rộng để hiển thị toàn bộ danh mục
 // }
+
+const toGroup = async (groupId) => {
+  console.log(`Navigating to group with ID: ${groupId}`)
+  setCurrentPage(1)
+  resetListIdea()
+  loadMore(groupId)
+}
 </script>
 
 <style>

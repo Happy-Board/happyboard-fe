@@ -4,9 +4,14 @@ export const apiGetProfile = async () => await axiosInstance.get(`/profile`)
 export const apiUpdateProfile = async (formData) => {
   await axiosInstance.put(`/profile`, formData)
 }
+export const apiGetAllUserForAddMember = async (query) =>
+  await axiosInstance.get(`/users/forGroup${query}`)
+export const apiAddMember = async (body) => await axiosInstance.post(`/users/group`, body)
+export const apiLeaveGroup = async (groupId) => await axiosInstance.delete(`/users/leaveGroup/${groupId}`)
 
 export const apiGetMyIdeas = async (url) => await axiosInstance.get(`/ideas/own${url}`)
-export const apiGetMyPublishIdeas = async (url) => await axiosInstance.get(`/ideas/own/publish${url}`)
+export const apiGetMyPublishIdeas = async (url) =>
+  await axiosInstance.get(`/ideas/own/publish${url}`)
 export const apiGetMyHideIdeas = async (url) => await axiosInstance.get(`/ideas/own/hide${url}`)
 export const apiGetMyDraftIdeas = async (url) => await axiosInstance.get(`/ideas/own/draft${url}`)
 export const apiGetMyDraftIdeaById = async (id) => await axiosInstance.get(`/ideas/own/draft/${id}`)

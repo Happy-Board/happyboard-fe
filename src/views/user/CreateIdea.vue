@@ -255,7 +255,7 @@
 </template>
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import {
   Listbox,
   ListboxButton,
@@ -271,7 +271,8 @@ import {
   apiCreateMediaIdea,
   apiSaveIdea,
   apiDeleteIdea,
-  apiUploadImageInContent
+  apiUploadImageInContent,
+  apiCreatePollIdea
 } from '@/apis/idea.api'
 import { useCategoryStore } from '@/stores/category.store'
 import { storeToRefs } from 'pinia'
@@ -286,6 +287,9 @@ import TabTypeCreateIdea from '../../components/idea/TabTypeCreateIdea.vue'
 import PollEditor from '../../components/idea/PollEditor.vue'
 
 const router = useRouter()
+const route = useRoute()
+const groupId = route.params.groupId
+
 const categoryStore = useCategoryStore()
 const myBoardStore = useMyBoardStore()
 const { categories } = storeToRefs(categoryStore)
@@ -307,8 +311,17 @@ const ideaData = reactive({
   title: '',
   content: '',
   type: '',
-  linkMedia: ''
+  linkMedia: '',
+  groupId: groupId ? groupId : 1,
+  pollOptions: [],
+  expireHour: '',
+  remindBeforeExpireTime: ''
 })
+
+const pollData = ref({ questions: [] })
+const updatePollData = (data) => {
+  pollData.value = data
+}
 
 watch(
   () => ideaData.title,
@@ -474,10 +487,6 @@ const saveIdea = () => {
   }
 }
 const createIdea = () => {
-  ideaData.type = tab.value === 'text' ? 'text' : 'media'
-
-  console.log('Debug Poll Data:', pollData.value)
-
   if (ideaData.title && !sanitizeHtml(ideaData.title, { allowedTags: SANITIZE_ALLOWED_TAGS })) {
     notify('error', 'Invalid title!')
     return
@@ -497,23 +506,56 @@ const createIdea = () => {
     notify('warning', 'Title is not empty !')
     return
   }
-  if (tab.value === 'text') {
-    if (!ideaData.content) {
-      notify('warning', 'Content is not empty !')
+  if (tab.value === 'text' || tab.value === 'poll') {
+    if (tab.value === 'text') {
+      ideaData.type = 'text'
+      if (!ideaData.content) {
+        notify('warning', 'Content is not empty !')
+      }
+
+      apiCreateIdea(ideaData)
+        .then(() => {
+          setTab('hide')
+          notify('success', 'Create idea in group successfully !')
+          setTimeout(() => {
+            router.push({ name: 'my-board-ideas' })
+          }, 1000)
+        })
+        .catch((err) => {
+          console.log(err)
+          notify('error', 'Create idea failed, some thing went wrong !')
+        })
     }
-    apiCreateIdea(ideaData)
-      .then(() => {
-        setTab('hide')
-        notify('success', 'Create idea successfully !')
-        setTimeout(() => {
-          router.push({ name: 'my-board-ideas' })
-        }, 1000)
-      })
-      .catch((err) => {
-        console.log(err)
-        notify('error', 'Create idea failed, some thing went wrong !')
-      })
+
+    if (tab.value === 'poll') {
+      if (
+        pollData.value.questions[0].choices.length <= 0 ||
+        pollData.value.questions[0].expireHour.length == 0 ||
+        pollData.value.questions[0].remindBeforeExpireTime.length == 0
+      ) {
+        notify('warning', 'Poll is not empty !')
+        return
+      }
+
+      ideaData.pollOptions = pollData.value.questions[0].choices
+      ideaData.expireHour = pollData.value.questions[0].expireHour
+      ideaData.remindBeforeExpireTime = pollData.value.questions[0].remindBeforeExpireTime
+
+      apiCreatePollIdea(ideaData)
+        .then(() => {
+          setTab('hide')
+          notify('success', 'Create poll idea successfully !')
+          setTimeout(() => {
+            router.push({ name: 'my-board-ideas' })
+          }, 1000)
+        })
+        .catch((err) => {
+          console.log(err)
+          notify('error', 'Create idea failed, some thing went wrong !')
+        })
+    }
   } else if (tab.value === 'media') {
+    ideaData.type = tab.value
     if (!preDisplayImage.value) {
       notify('warning', 'Media is not empty !')
       return
@@ -524,8 +566,6 @@ const createIdea = () => {
     formData.append('categoryId', ideaData.categoryId)
     formData.append('type', ideaData.type)
     selectedFiles.value.forEach((file) => {
-      console.log('123: ', file)
-      console.log('---------------------------')
       formData.append('files', file)
     })
 
@@ -602,10 +642,6 @@ const onEditorReady = (editor) => {
       }
     }
   })
-}
-const pollData = ref({ questions: [] })
-const updatePollData = (data) => {
-  pollData.value = data
 }
 </script>
 <style scoped>

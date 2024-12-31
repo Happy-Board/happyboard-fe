@@ -73,7 +73,7 @@
 </template>
 <script setup>
 import { onClickOutside } from '@vueuse/core'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { requestPermission } from '../../configs/firebase.config'
 import { getMessaging, onMessage } from 'firebase/messaging'
 import { useNotificationStore } from '@/stores/notification.store'
@@ -83,21 +83,22 @@ import NotificationSkeleton from '../skeletons/NotificationSkeleton.vue'
 
 
 const notificationStore = useNotificationStore()
-const { getNewNotification, getAllNotifications, getUnreadNotifications } = notificationStore
-
+const { getAllNotifications, getUnreadNotifications, incrementNotificationCount } = notificationStore
 const messaging = getMessaging()
-onMounted(async () => {
-  await requestPermission()
-  onMessage(messaging, () => {
-    getNewNotification()
-  })
-})
-
 const { numNotification } = storeToRefs(notificationStore)
 const isShowNotificationList = ref(false)
 const notificationList = ref(null)
 const check = ref(false)
 const typeNotification = ref('all')
+
+onMounted(async () => {
+  await requestPermission()
+  onMessage(messaging, async () => {
+    await getAllNotifications()
+    incrementNotificationCount()
+  })
+})
+
 
 const setType = (type) => {
   typeNotification.value = type
@@ -130,6 +131,13 @@ onClickOutside(notificationList, () => {
 })
 onClickOutside(notificationList, () => {
   closeNotificationList()
+})
+
+watch(numNotification, (newValue, oldValue) => {
+  if (newValue > oldValue) {
+    // Khi numNotification thay đổi (tăng), bạn có thể gọi API hoặc làm gì đó
+    console.log(`New notification count: ${newValue}`)
+  }
 })
 </script>
 <style scoped>
