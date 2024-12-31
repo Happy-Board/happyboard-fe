@@ -2,15 +2,19 @@
   <div class="md:col-span-7 col-span-12 pt-[75px] bg-white px-5 min-h-screen md:ms-5">
     <div>
       <Suspense>
-        <HeaderComponent />
-        <template #fallback>
-        </template>
+        <HeaderComponent :groupId="groupId"
+        :groupDescription="headerGroup?.description"
+        :groupName="headerGroup?.name"
+        :avatar="headerGroup?.avatar"
+        :backgroundImage="headerGroup?.background"
+        />
+        <template #fallback> </template>
       </Suspense>
     </div>
     <div class="flex-1">
       <FilterComponent :store="homePageStore" />
       <Suspense>
-        <ListIdea />
+        <ListIdea :groupId="groupId"/>
 
         <template #fallback>
           <ListIdeaSkeleton />
@@ -45,41 +49,52 @@
   </div>
 </template>
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import SuggestIdeaSkeleton from '@/components/skeletons/SuggestIdeaSkeleton.vue'
 import { useHomePageStore } from '@/stores/home.store'
+import { useGroupStore } from '@/stores/group.store'
 import { storeToRefs } from 'pinia'
 import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
 import ActivityHistory from '@/components/history-activities/ActivityHistory.vue'
 import FilterComponent from '@/components/home/FilterComponent.vue'
-const HeaderComponent = defineAsyncComponent(
-  () => import('@/components/group/HeaderComponent.vue')
-)
+const HeaderComponent = defineAsyncComponent(() => import('@/components/group/HeaderComponent.vue'))
 const SuggestIdeaComponent = defineAsyncComponent(
   () => import('@/components/home/SuggestIdeaComponent.vue')
 )
 
 const ListIdea = defineAsyncComponent(() => import('@/components/home/ListIdea.vue'))
 
+const route = useRoute()
 const homePageStore = useHomePageStore()
+const groupStore = useGroupStore()
+const { headerGroup } = storeToRefs(groupStore)
+const { getGroupById } = groupStore
+
 const { recentIdeas } = storeToRefs(homePageStore)
+const groupId = route.params.groupId ? route.params.groupId : 1
 
-const cookie = document.cookie.split('; ')
+onMounted(async () => {
+  await getGroupById(groupId)
+})
 
-const setTokenToLocalStorage = () => {
-  let token
-  if (cookie[0] !== '') {
-    cookie.forEach((element) => {
-      const subCookie = element.split('=')
-      if (subCookie[0] === 'access-token') {
-        token = subCookie[1]
-      }
-    })
-  }
-  localStorage.setItem('accessToken', token)
-}
 
-setTokenToLocalStorage()
+// const cookie = document.cookie.split('; ')
+
+// const setTokenToLocalStorage = () => {
+//   let token
+//   if (cookie[0] !== '') {
+//     cookie.forEach((element) => {
+//       const subCookie = element.split('=')
+//       if (subCookie[0] === 'access-token') {
+//         token = subCookie[1]
+//       }
+//     })
+//   }
+//   localStorage.setItem('accessToken', token)
+// }
+
+// setTokenToLocalStorage()
 </script>
 <style>
 .container.spinner {

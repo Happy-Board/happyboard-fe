@@ -28,7 +28,7 @@
             d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L7.5 21H3v-4.5L16.732 3.732z"
           />
         </svg>
-        <input type="file" accept="image/*" class="hidden" @change="onFileChange" />
+        <input type="file" accept="image/*" class="hidden" @change="onFileChangeBackground" />
       </label>
     </div>
 
@@ -41,7 +41,7 @@
         class="relative w-24 h-24 rounded-full border-4 border-white overflow-hidden -mt-10 flex-shrink-0 group"
       >
         <!-- Avatar -->
-        <img :src="avatar" alt="Group Avatar" class="w-full h-full object-cover" />
+        <img :src="avatarImage" alt="Group Avatar" class="w-full h-full object-cover" />
 
         <!-- Edit Icon -->
         <label
@@ -74,26 +74,22 @@
       <!-- Actions -->
       <div class="flex space-x-2">
         <!-- Create Action Icon -->
-        <label
-          class="py-2 px-4 bg-blue-600 text-black text-sm font-semibold rounded-full border-2 hover:bg-gray-300 bg-opacity-50 group-hover:opacity-100 cursor-pointer transition-opacity flex items-center justify-center"
-          @click="onCreateAction"
+        <router-link
+          :to="`/create-group-idea/${groupId}`"
+          class="flex items-center justify-center py-2 px-4 bg-blue-600 text-black text-sm font-semibold rounded-full border-2 hover:bg-gray-300 bg-opacity-50 group-hover:opacity-100 cursor-pointer transition-opacity"
         >
-          <router-link
-            to="/create-group-idea"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="black"
+            class="w-6 h-6"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="black"
-              class="w-6 h-6"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7H5" />
-            </svg>
-          </router-link>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7H5" />
+          </svg>
           <span class="ml-2">Create Idea</span>
-        </label>
+        </router-link>
         <div class="relative">
           <!-- Label with Dropdown -->
           <label
@@ -121,11 +117,82 @@
               v-for="(item, index) in dropdownItems"
               :key="index"
               @click="onDropdownSelect(item)"
-              class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
+              class="px-4 py-2 hover:bg-gray-200 cursor-pointer text-sm"
             >
               {{ item }}
             </li>
           </ul>
+
+          <!-- Modal to Add Member -->
+          <div
+            v-if="isAddMemberModalOpen"
+            class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-20"
+          >
+            <div
+              class="bg-white p-6 rounded-lg w-1/3 shadow-lg transform transition-all duration-300 ease-in-out scale-95 hover:scale-100"
+            >
+              <h2 class="text-2xl font-semibold mb-4 text-gray-800">Add Member</h2>
+
+              <!-- Search Bar -->
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search User"
+                class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+
+              <!-- User List -->
+              <ul class="max-h-60 overflow-y-auto">
+                <li
+                  v-for="(user, index) in filteredUsers"
+                  :key="index"
+                  @click="addMember(user)"
+                  class="px-4 py-2 hover:bg-indigo-100 cursor-pointer text-sm transition-colors duration-200 ease-in-out flex items-center hover:bg-gray-200 rounded-full"
+                >
+                  <!-- Avatar -->
+                  <img :src="user.avatar" alt="User Avatar" class="w-8 h-8 rounded-full mr-4" />
+                  <!-- Username -->
+                  <span class="text-gray-800">{{ user.username }}</span>
+                </li>
+              </ul>
+
+              <div class="mt-4 flex justify-end">
+                <button
+                  @click="closeAddMemberModal"
+                  class="bg-red-600 text-white py-2 px-6 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Confirm Leave Group -->
+          <div
+            v-if="isLeaveGroupModalOpen"
+            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+          >
+            <div class="bg-white rounded-lg p-6 w-80 shadow-md">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Leave Group</h3>
+              <p class="text-sm text-gray-600 mb-6">
+                Are you sure you want to leave this group? This action cannot be undone.
+              </p>
+              <div class="flex justify-end space-x-4">
+                <button
+                  @click="closeLeaveGroupModal"
+                  class="px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300 text-gray-700 text-sm"
+                >
+                  No
+                </button>
+                <button
+                  @click="confirmLeaveGroup"
+                  class="px-4 py-2 bg-red-500 rounded-full hover:bg-red-600 text-white text-sm"
+                >
+                  Yes
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -133,9 +200,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import { apiGetAllUserForAddMember, apiAddMember, apiLeaveGroup } from '@/apis/user.api'
+import { notify } from '@/utils/toast'
+
 // Props
 const props = defineProps({
+  groupId: { String, required: true },
   avatar: {
     type: String,
     required: true,
@@ -159,34 +231,84 @@ const props = defineProps({
     default: 'description of group'
   }
 })
-// State variables
-const isDropdownOpen = ref(false)
-const dropdownItems = ref(['Action 1', 'Action 2', 'Action 3'])
 
-// Methods
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value
+// State variables
+const router = useRouter()
+const isDropdownOpen = ref(false)
+const dropdownItems = ref(['Add member', 'Leave Group'])
+const avatarImage = ref(props.avatar)
+const backgroundImage = ref(props.backgroundImage)
+const isAddMemberModalOpen = ref(false)
+const isLeaveGroupModalOpen = ref(false)
+const searchQuery = ref('')
+const groupIdRef = ref(props.groupId ? props.groupId : 1)
+const query = ref(`?groupId=${groupIdRef.value}`)
+const allUsers = ref([])
+
+const confirmLeaveGroup = async () => {
+  await apiLeaveGroup(groupIdRef.value).then(() => {
+    notify('success', 'Leave group successfully !')
+    setTimeout(() => {
+      router.push({ name: 'home' })
+    }, 1000)
+  })
+  isLeaveGroupModalOpen.value = false
+  router.push()
+}
+
+const closeLeaveGroupModal = () => {
+  isLeaveGroupModalOpen.value = false
 }
 
 const onDropdownSelect = (item) => {
-  console.log('Selected:', item) // Handle dropdown item selection
-  isDropdownOpen.value = false // Close dropdown after selection
+  if (item === 'Add member') {
+    isAddMemberModalOpen.value = true
+  } else if (item === 'Leave Group') {
+    isLeaveGroupModalOpen.value = true
+  }
+  isDropdownOpen.value = false
 }
 
-// Emit Events
-const emit = defineEmits(['createAction', 'otherAction', 'avatarUpdated'])
+const toggleDropdown = async () => {
+  const response = await apiGetAllUserForAddMember(query.value)
+  allUsers.value = response.data.data.users
+  isDropdownOpen.value = !isDropdownOpen.value
+}
 
-// Handlers
-const onCreateAction = () => emit('createAction')
-// const onOtherAction = () => emit('otherAction')
+const filteredUsers = computed(() => {
+  return allUsers.value?.filter((user) =>
+    user.username.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+})
 
-// File Input Handler
+const closeAddMemberModal = () => {
+  isAddMemberModalOpen.value = false
+  searchQuery.value = ''
+}
+
+const addMember = async (user) => {
+  const newUser = await apiAddMember({ memberId: user.id, groupId: groupIdRef.value })
+  console.log('newUser: ', newUser)
+  closeAddMemberModal()
+}
+
 const onFileChange = (event) => {
   const file = event.target.files[0]
   if (file) {
     const reader = new FileReader()
     reader.onload = () => {
-      emit('avatarUpdated', reader.result) // Gửi ảnh mới về parent component
+      avatarImage.value = reader.result
+    }
+    reader.readAsDataURL(file)
+  }
+}
+
+const onFileChangeBackground = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    const reader = new FileReader()
+    reader.onload = () => {
+      backgroundImage.value = reader.result
     }
     reader.readAsDataURL(file)
   }

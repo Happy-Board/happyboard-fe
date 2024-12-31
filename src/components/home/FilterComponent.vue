@@ -153,7 +153,7 @@ const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
 const { getAllCategory } = categoryStore
 const { tab } = storeToRefs(props.store)
-const { setOption, setCategory } = props.store
+const { setOption, setCategory, resetListIdea } = props.store
 const isShowCategoryCheckbox = ref(false)
 const isChooseAll = ref()
 const checkedCategory = ref([])
@@ -200,6 +200,7 @@ const toggleSortMenu = () => {
 }
 
 const selectSortOption = (option) => {
+  resetListIdea()
   setOption(option.value) 
   isShowSortMenu.value = false
 }

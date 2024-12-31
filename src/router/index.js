@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import SignIn from '@/views/SignIn.vue'
 import CreateIdea from '@/views/user/CreateIdea.vue'
+import CreateGroup from '@/views/user/CreateGroup.vue'
 import CreateGroupIdea from '@/views/user/CreateGroupIdea.vue'
 import HomeView from '@/views/user/HomeView.vue'
 import DetailIdeaView from '@/views/user/DetailIdeaView.vue'
@@ -29,7 +30,7 @@ const router = createRouter({
           component: HomeView
         },
         {
-          path: '/group',
+          path: '/group/:groupId',
           name: 'group',
           component: GroupView
         },
@@ -40,9 +41,14 @@ const router = createRouter({
           component: CreateIdea
         },
         {
-          path: 'create-group-idea',
-          name: 'create-group-dea',
+          path: 'create-group-idea/:groupId',
+          name: 'create-group-idea',
           component: CreateGroupIdea
+        },
+        {
+          path: 'create-group',
+          name: 'create-group',
+          component: CreateGroup
         },
         {
           path: 'idea/:type/:id/:commentId?',
@@ -86,7 +92,7 @@ const router = createRouter({
 })
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('accessToken')
-  if (to.name === 'sign-in' && token) next({name: 'home'}) 
+  if (to.name === 'sign-in' && token) next({ name: 'home' })
   // if(to.name !== 'sign-in' && !token) next ({name: 'sign-in'})
   next()
 })
