@@ -47,26 +47,24 @@
         </div>
       </div>
       <div class="col-span-3 flex me-5 items-center gap-8 px-5">
-     
-          <NotificationComponent />
-          <div  @click="openUserOption" class="flex items-center cursor-pointer">
-            <img
-              :src="!profile.avatar ? '../../avatar/default-avatar.jpg' : profile.avatar"
-              alt="avatar"
-              class="aspect-square rounded-full w-[18%]"
+        <NotificationComponent />
+        <div @click="openUserOption" class="flex items-center cursor-pointer">
+          <img
+            :src="!profile.avatar ? '../../avatar/default-avatar.jpg' : profile.avatar"
+            alt="avatar"
+            class="aspect-square rounded-full w-[18%]"
+          />
+          <span class="ms-1 font-semibold text-lg line-clamp-1 break-words"
+            >{{ profile.username }}
+            <PopUpUserOption
+              v-if="showUserOption"
+              @logout="handleLogout"
+              @closeUserOption="closeUserOption"
             />
-            <span class="ms-1 font-semibold text-lg  line-clamp-1 break-words"
-              >{{ profile.username }}
-              <PopUpUserOption
-                v-if="showUserOption"
-                @logout="handleLogout"
-                @closeUserOption="closeUserOption"
-              />
-            </span>
-          </div>
+          </span>
         </div>
       </div>
-
+    </div>
   </nav>
 </template>
 <script setup>
@@ -101,6 +99,7 @@ const showUserOption = ref(false)
 
 onMounted(() => {
   const isLoggedIn = localStorage.getItem('isLoggedIn')
+
   const cookies = document.cookie.split('; ')
   if ((!isLoggedIn && cookies.length === 0) || (isLoggedIn !== 'true' && cookies.length === 0)) {
     router.push('/sign-in')
@@ -133,8 +132,8 @@ const handleLogout = () => {
     .catch((err) => console.log(err))
 }
 
-watch(showUserOption,() => {
-console.log(showUserOption.value);
+watch(showUserOption, () => {
+  console.log(showUserOption.value)
 })
 </script>
 <style scoped></style>
