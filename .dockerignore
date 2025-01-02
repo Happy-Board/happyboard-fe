@@ -1,0 +1,29 @@
+# Node modules directory (Không sao chép node_modules từ máy chủ vào Docker image)
+node_modules/
+
+# Tệp log (Chỉ cần những tệp log trong container, không sao chép từ máy chủ)
+*.log
+
+# Các tệp của hệ điều hành (Các tệp ẩn và hệ thống, không cần thiết cho container)
+.DS_Store
+Thumbs.db
+
+# Các thư mục của môi trường phát triển (Không cần thiết trong môi trường production)
+.vscode/
+.idea/
+
+# Tệp cấu hình của Git
+.git/
+.gitignore
+
+# Các tệp cấu hình của npm
+package-lock.json
+npm-debug.log
+
+# Các thư mục hoặc tệp tạm thời trong quá trình phát triển (ví dụ: build hoặc cache)
+build/
+dist/
+.cache/
+
+Dockerfile
+.dockerignore
