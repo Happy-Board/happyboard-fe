@@ -290,7 +290,7 @@ const { categories } = storeToRefs(categoryStore)
 const { getAllCategory } = categoryStore
 const groupStore = useGroupStore()
 const { groups } = storeToRefs(groupStore)
-const { getAllGroups } = groupStore
+const { getAllGroups, getGroupById } = groupStore
 const homePageStore = useHomePageStore()
 const { setCategory, loadMore, resetListIdea, setCurrentPage } = homePageStore
 
@@ -392,11 +392,11 @@ const isActiveTab = (routeName) => {
 //   isExpanded.value = true // Mở rộng để hiển thị toàn bộ danh mục
 // }
 
-const toGroup = async (groupId) => {
-  console.log(`Navigating to group with ID: ${groupId}`)
+const toGroup = (groupId) => {
   setCurrentPage(1)
   resetListIdea()
   loadMore(groupId)
+  getGroupById(groupId)
 }
 </script>
 

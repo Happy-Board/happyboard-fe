@@ -34,7 +34,7 @@
     <!-- Content or Image Display -->
     <div class="ql-toolbar ql-snow border-0 pb-5 border-b h-auto">
       <div
-        v-if="idea?.content"
+        v-if="idea?.content && !idea?.thumbnailUrl"
         class="ql-editor"
         data-gram="false"
         contenteditable="false"
@@ -42,9 +42,16 @@
         v-html="idea?.content"
       ></div>
 
+      <video
+        v-if="idea?.thumbnailUrl"
+        controls
+        :src="idea?.linkMedia"
+        style="max-width: 100%"
+      ></video>
+
       <div v-else class="image-container bg-gray-700">
         <button
-          v-if="imagesArray.length > 1 && currentIndex > 0"
+          v-if="imagesArray?.length > 1 && currentIndex > 0"
           @click="prevImage"
           class="arrow-button left-arrow"
         >
@@ -53,17 +60,32 @@
 
         <!-- <div class='img-display-container' @click=> -->
 
-        <img :src="currentImage" alt="idea image" class="image" @click="openLightBox" />
+        <img
+          v-if="currentImage"
+          :src="currentImage"
+          alt="idea image"
+          class="image"
+          @click="openLightBox"
+        />
         <!-- </div> -->
 
         <button
-          v-if="imagesArray.length > 1 && currentIndex < imagesArray.length - 1"
+          v-if="imagesArray?.length > 1 && currentIndex < imagesArray?.length - 1"
           @click="nextImage"
           class="arrow-button right-arrow"
         >
           <i class="fas fa-arrow-right"></i>
         </button>
       </div>
+    </div>
+
+    <div v-if="idea.poll">
+      <PollVoteComponent
+        :options="idea.poll.options"
+        :responses="idea.poll.responses"
+        :userId="idea.userId"
+        :pollId="idea.poll.id"
+      />
     </div>
 
     <!-- Action Buttons -->
@@ -166,6 +188,7 @@ import { faArrowUp, faArrowDown, faComment } from '@fortawesome/free-solid-svg-i
 import { library } from '@fortawesome/fontawesome-svg-core'
 import VueEasyLightbox from 'vue-easy-lightbox'
 import { nextTick } from 'vue'
+import PollVoteComponent from '../../components/idea/PollVoteComponent.vue'
 
 library.add(faArrowUp, faArrowDown, faComment)
 
@@ -175,6 +198,8 @@ const ideaStore = useIdeaStore()
 const ideaId = route.params.id
 const typeIdea = route.params.type
 const { idea } = storeToRefs(ideaStore)
+
+console.log('idea.linkMedia: ', idea.value.thumbnailUrl)
 const {
   getDetailIdea,
   increaseVote,
@@ -249,15 +274,27 @@ const toggleDownvote = () => {
 }
 const currentIndex = ref(0)
 
-const imagesArray = computed(() =>
-  idea.value.linkMedia
-    ? idea.value.linkMedia.includes(',')
-      ? idea.value.linkMedia.split(',').map((url) => url.trim())
-      : [idea.value.linkMedia]
-    : null
-)
+// const imagesArray = computed(() =>
+//   idea.value.linkMedia
+//     ? idea.value.linkMedia.includes(',')
+//       ? idea.value.linkMedia.split(',').map((url) => url.trim())
+//       : [idea.value.linkMedia]
+//     : null
+// )
 
-const currentImage = computed(() => imagesArray.value[currentIndex.value])
+const imagesArray = computed(() => {
+  if (!idea?.linkMedia) return null
+  return idea.linkMedia.includes(',')
+    ? idea.linkMedia.split(',').map((url) => url?.trim())
+    : [idea.linkMedia]
+})
+
+const currentImage = computed(() => {
+  if (!Array.isArray(imagesArray?.value) || imagesArray.value.length === 0) {
+    return null
+  }
+  return imagesArray.value[currentIndex.value] || null
+})
 
 const showLightBox = ref(false)
 

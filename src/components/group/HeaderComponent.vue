@@ -203,6 +203,7 @@
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import { apiGetAllUserForAddMember, apiAddMember, apiLeaveGroup } from '@/apis/user.api'
+import { apiUploadAvatarGroup, apiUploadBackgroundGroup } from '@/apis/group.api'
 import { notify } from '@/utils/toast'
 
 // Props
@@ -212,23 +213,23 @@ const props = defineProps({
     type: String,
     required: true,
     default:
-      'https://res.cloudinary.com/daokqrkdk/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1734993530/idea/media/4_1734993530539.png'
+      'https://res.cloudinary.com/daokqrkdk/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1730884402/default-avatar_shzypu.jpg'
   },
   backgroundImage: {
     type: String,
     required: true,
     default:
-      'https://res.cloudinary.com/daokqrkdk/image/upload/c_fill,g_auto,h_250,w_970/b_rgb:000000,e_gradient_fade,y_-0.50/c_scale,co_rgb:ffffff,fl_relative,l_text:montserrat_25_style_light_align_center:Shop%20Now,w_0.5,y_0.18/v1734963702/idea/media/4_1734963699969.png'
+      'https://res.cloudinary.com/daokqrkdk/image/upload/c_fill,g_auto,h_250,w_970/b_rgb:000000,e_gradient_fade,y_-0.50/c_scale,co_rgb:ffffff,fl_relative,l_text:montserrat_25_style_light_align_center:Shop%20Now,w_0.5,y_0.18/v1735857209/default-image-icon-vector-missing-600nw-2079504220_ff0fqp.webp'
   },
   groupName: {
     type: String,
     required: true,
-    default: 'Group Name'
+    default: 'Group name'
   },
   groupDescription: {
     type: String,
     required: false,
-    default: 'description of group'
+    default: 'Description of group'
   }
 })
 
@@ -292,25 +293,35 @@ const addMember = async (user) => {
   closeAddMemberModal()
 }
 
-const onFileChange = (event) => {
+const onFileChange = async (event) => {
   const file = event.target.files[0]
   if (file) {
+    const formData = new FormData()
+    formData.append('file', file)
     const reader = new FileReader()
     reader.onload = () => {
       avatarImage.value = reader.result
     }
     reader.readAsDataURL(file)
+    await apiUploadAvatarGroup(groupIdRef.value, formData).then(() => {
+      notify('success', 'Update avatar group successfully !')
+    })
   }
 }
 
-const onFileChangeBackground = (event) => {
+const onFileChangeBackground = async (event) => {
   const file = event.target.files[0]
   if (file) {
+    const formData = new FormData()
+    formData.append('file', file)
     const reader = new FileReader()
     reader.onload = () => {
       backgroundImage.value = reader.result
     }
     reader.readAsDataURL(file)
+    await apiUploadBackgroundGroup(groupIdRef.value, formData).then(() => {
+      notify('success', 'Update background group successfully !')
+    })
   }
 }
 </script>

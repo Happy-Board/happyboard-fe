@@ -2,11 +2,12 @@
   <div class="md:col-span-7 col-span-12 pt-[75px] bg-white px-5 min-h-screen md:ms-5">
     <div>
       <Suspense>
-        <HeaderComponent :groupId="groupId"
-        :groupDescription="headerGroup?.description"
-        :groupName="headerGroup?.name"
-        :avatar="headerGroup?.avatar"
-        :backgroundImage="headerGroup?.background"
+        <HeaderComponent
+          :groupId="groupId"
+          :groupDescription="headerGroup?.description"
+          :groupName="headerGroup?.name"
+          :avatar="headerGroup?.avatar"
+          :backgroundImage="headerGroup?.background"
         />
         <template #fallback> </template>
       </Suspense>
@@ -14,7 +15,7 @@
     <div class="flex-1">
       <FilterComponent :store="homePageStore" />
       <Suspense>
-        <ListIdea :groupId="groupId"/>
+        <ListIdea :groupId="groupId" />
 
         <template #fallback>
           <ListIdeaSkeleton />
@@ -76,8 +77,9 @@ const groupId = route.params.groupId ? route.params.groupId : 1
 
 onMounted(async () => {
   await getGroupById(groupId)
+  console.log('headerGroup: ', headerGroup.value)
+  console.log('groupId: ', groupId)
 })
-
 
 // const cookie = document.cookie.split('; ')
 
