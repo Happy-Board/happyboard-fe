@@ -58,6 +58,7 @@ export const useHomePageStore = defineStore('home', () => {
 
   function setCurrentPage(page) {
     currentPage.value = page
+    resetListIdea()
   }
   function setSearchString(search) {
     searchString.value = search
