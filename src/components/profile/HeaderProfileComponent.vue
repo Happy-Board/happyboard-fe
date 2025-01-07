@@ -27,29 +27,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.store'
 import { useProfileStore } from '@/stores/profile.store'
 import { storeToRefs } from 'pinia'
 
 // Tabs
-const tabs = ['Comments', 'Posts', 'Upvoted', 'Downvoted']
+const tabs = ['Posts', 'Comments', 'Upvoted', 'Downvoted']
 
 // Profile Store
 const profileStore = useProfileStore()
 const { tab: activeTab } = storeToRefs(profileStore) 
+watch(activeTab, (newTab) => {
+  console.log('Active Tab changed to: ', newTab)
+})
 
 // Change tab
 const changeTab = (tab) => {
   profileStore.setTab(tab)  // Update the tab in the store
-  console.log('profileStore.tab: ', profileStore.tab)
 }
-
-// Watch for activeTab change
-// watch(activeTab, (newTab) => {
-//   console.log('Active Tab changed to: ', newTab)  // Log when activeTab changes
-// })
 
 // Fetch user profile
 const router = useRouter()

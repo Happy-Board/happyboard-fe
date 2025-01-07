@@ -389,6 +389,7 @@ const truncatedContent = computed(() => {
 })
 
 const toggleUpvote = () => {
+  console.log('toggleVote: ',voteStatus.value)
   if (!isVotingAllowed.value) return
 
   if (voteStatus.value === 'up') {

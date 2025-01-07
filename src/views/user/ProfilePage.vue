@@ -8,8 +8,8 @@
     <div class="flex-1">
       <FilterComponent :store="profilePageStore" />
       <Suspense>
-        <ListIdeaProfileComponent v-if="currentTab !== 'Comments'" :activeTab="currentTab" />
-        <ListCommentProfileComponent v-else />
+        <ListCommentProfileComponent v-if="tab == 'Comments'" :activeTab="tab" />
+        <ListIdeaProfileComponent v-else :activeTab="tab" />
         <template #fallback>
           <ListIdeaSkeleton />
         </template>
@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 import { defineAsyncComponent } from 'vue'
 import SuggestIdeaSkeleton from '@/components/skeletons/SuggestIdeaSkeleton.vue'
 // import { useProfileStore } from '@/stores/profile.store'
@@ -72,14 +72,22 @@ const homePageStore = useHomePageStore()
 const { recentIdeas } = storeToRefs(homePageStore)
 
 const profilePageStore = useProfileStore()
-const { setTab, loadMore } = profilePageStore
-const profileStoreTab = profilePageStore.tab
-const currentTab = ref(profileStoreTab)
+const {  loadMore, } = profilePageStore
+const { tab } = storeToRefs(profilePageStore)
 
-watch(currentTab, async (newTab) => {
-  setTab(newTab)
-  loadMore()
-})
+// watch(tab, async (newTab) => {
+//   setTab(newTab)
+//   await loadMore()
+// })
+
+watch(
+  () => tab.value,
+  (newTab) => {
+    if (newTab === 'Comments') {
+      loadMore()
+    }
+  }
+)
 
 // Token management
 const cookie = document.cookie.split('; ')

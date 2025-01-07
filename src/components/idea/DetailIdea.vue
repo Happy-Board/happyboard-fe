@@ -49,7 +49,7 @@
         style="max-width: 100%"
       ></video>
 
-      <div v-else class="image-container bg-gray-700">
+      <div v-if="!idea?.content && !idea?.thumbnailUrl" class="image-container bg-gray-700">
         <button
           v-if="imagesArray?.length > 1 && currentIndex > 0"
           @click="prevImage"

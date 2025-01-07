@@ -6,7 +6,7 @@ import { apiGetAllUpvotedIdeas, apiGetAllDownvotedIdeas } from '@/apis/idea.api'
 import { convertTime } from '@/utils/convert-time'
 
 export const useProfileStore = defineStore('profile', () => {
-  const tab = ref('Comments')
+  const tab = ref('Posts')
   const option = ref('newest')
   const myComments = ref([])
   const myCommentsBackup = ref([])
@@ -15,6 +15,8 @@ export const useProfileStore = defineStore('profile', () => {
   const currentPage = ref(1)
   const ideaToEdit = ref(null)
   const searchString = ref('')
+  const isLoading = ref(false)
+  const hasMoreComments = ref(true)
 
   // Map API functions based on the current tab
   const apiMap = {
@@ -52,8 +54,14 @@ export const useProfileStore = defineStore('profile', () => {
   }
 
   async function loadMore() {
+    if (isLoading.value) return
+    isLoading.value = true
+
     const fetchApi = apiMap[tab.value]
-    if (!fetchApi) return
+    if (!fetchApi) {
+      isLoading.value = false
+      return
+    }
 
     const query = searchString.value
       ? `?q=${searchString.value}&page=${currentPage.value}&option=${option.value}`
@@ -67,25 +75,46 @@ export const useProfileStore = defineStore('profile', () => {
           updatedAt: convertTime(comment.updatedAt),
           createdAt: convertTime(comment.createdAt)
         }))
-        myComments.value = [...newComments] // Cập nhật trực tiếp vào myComments
-        myCommentsBackup.value = [...newComments]
-        if (newComments.length === 10) {
-          myCommentsBackup.value = [...myCommentsBackup.value, ...newComments]
-          currentPage.value++
+        if (newComments.length === 0) {
+          hasMoreComments.value = false
+        } else {
+          // Lọc các comment mới chưa có trong myComments
+          const newUniqueComments = newComments.filter(
+            (comment) =>
+              !myComments.value.some((existingComment) => existingComment.id === comment.id)
+          )
+
+          // Cập nhật myComments với các comment mới
+          myComments.value = [...myComments.value, ...newUniqueComments]
+
+          // Kiểm tra và chuyển trang nếu có đủ 10 comment
+          if (newUniqueComments.length === 10) {
+            currentPage.value++
+          }
         }
       } else {
         const newIdeas = response.data.data.ideas.map((idea) => ({
           ...idea,
           createdAt: convertTime(idea.createdAt)
         }))
-        myIdeas.value = [...myIdeasBackup.value, ...newIdeas]
-        if (newIdeas.length === 10) {
-          myIdeasBackup.value = [...myIdeasBackup.value, ...newIdeas]
+
+        // Lọc các ý tưởng mới chưa có trong myIdeas
+        const newUniqueIdeas = newIdeas.filter(
+          (idea) => !myIdeas.value.some((existingIdea) => existingIdea.id === idea.id)
+        )
+
+        // Cập nhật myIdeas với các ý tưởng mới
+        myIdeas.value = [...myIdeas.value, ...newUniqueIdeas]
+
+        // Kiểm tra và chuyển trang nếu có đủ 10 ý tưởng
+        if (newUniqueIdeas.length === 10) {
           currentPage.value++
         }
       }
     } catch (err) {
       console.error(err)
+    } finally {
+      isLoading.value = false // Kết thúc tải
     }
   }
 

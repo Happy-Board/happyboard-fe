@@ -101,10 +101,10 @@ const props = defineProps({
 // }
 
 const viewDetailIdea = (id, type, commentId = null) => {
-  const params = { id, type };
-  if (commentId) params.commentId = commentId;
-  router.push({ name: 'detail-idea', params });
-};
+  const params = { id, type }
+  if (commentId) params.commentId = commentId
+  router.push({ name: 'detail-idea', params })
+}
 
 const avatarURL = ref(props.avatar)
 </script>

@@ -1,9 +1,8 @@
 <template>
-  <div v-if="myComments?.length === 0" class="mt-20">
+  <div v-if="!myComments?.length" class="mt-20">
     <NotFoundData />
   </div>
-  <div v-if="myComments.length > 0" class="w-full">
-    <pre>{{ myComments }}</pre>
+  <div v-if="myComments?.length" class="w-full">
     <div v-for="comment in myComments" :key="comment?.id" class="w-full">
       <CardCommentProfileComponent
         :commentId="comment.id"
@@ -35,25 +34,20 @@ import { storeToRefs } from 'pinia'
 import CardCommentProfileComponent from '../profile/CardCommentProfileComponent.vue'
 import NotFoundData from '../notfound-data/NotFoundData.vue'
 import { useRouter } from 'vue-router'
-import { onMounted } from 'vue'
 
 const router = useRouter()
 const profilePageStore = useProfileStore()
-const { myComments } = storeToRefs(profilePageStore)
+const { myComments, tab } = storeToRefs(profilePageStore)
 const { loadMore } = profilePageStore
 
-onMounted(async () => {
-  await loadMore()
-})
-
-console.log('Rendered comments:', myComments.value);
-
-await loadMore().catch((error) => {
-  if (error.response.status === 401) {
-    localStorage.clear()
-    router.push({ name: 'sign-in' })
-  }
-})
+if (tab.value === 'Comments') {
+  await loadMore().catch((error) => {
+    if (error.response.status === 401) {
+      localStorage.clear()
+      router.push({ name: 'sign-in' })
+    }
+  })
+}
 </script>
 <style scoped>
 .spinner {

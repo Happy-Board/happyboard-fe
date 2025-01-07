@@ -16,6 +16,7 @@
                 isActiveTab('home') ? 'bg-backgroundButtonColor text-primaryColor' : ''
               ]"
               exact-active-class="flex items-center p-2 rounded-lg group active"
+              @click="toHome()"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -318,8 +319,8 @@ watch(
       isDropdownCategory.value = false
       isDropdownRecently.value = false
     } else {
-      resetListIdea()
-      await loadMore()
+      // resetListIdea()
+      // await loadMore()
     }
   }
 )
@@ -397,6 +398,12 @@ const toGroup = (groupId) => {
   resetListIdea()
   loadMore(groupId)
   getGroupById(groupId)
+}
+
+const toHome = () => {
+  setCurrentPage(1)
+  resetListIdea()
+  loadMore()
 }
 </script>
 
