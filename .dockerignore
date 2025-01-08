@@ -1,5 +1,5 @@
 # Node modules directory (Không sao chép node_modules từ máy chủ vào Docker image)
-node_modules/
+# node_modules/
 
 # Tệp log (Chỉ cần những tệp log trong container, không sao chép từ máy chủ)
 *.log
