@@ -36,37 +36,37 @@ const router = createRouter({
         },
 
         {
-          path: 'create-idea',
+          path: '/create-idea',
           name: 'create-idea',
           component: CreateIdea
         },
         {
-          path: 'create-group-idea/:groupId',
+          path: '/create-group-idea/:groupId',
           name: 'create-group-idea',
           component: CreateGroupIdea
         },
         {
-          path: 'create-group',
+          path: '/create-group',
           name: 'create-group',
           component: CreateGroup
         },
         {
-          path: 'idea/:type/:id/:commentId?',
+          path: '/idea/:type/:id/:commentId?',
           name: 'detail-idea',
           component: DetailIdeaView
         },
         {
-          path: 'settings',
+          path: '/settings',
           name: 'settings',
           component: SettingsView
         },
         {
-          path: 'profile',
+          path: '/profile',
           name: 'profile',
           component: ProfilePage
         },
         {
-          path: 'my-board',
+          path: '/my-board',
           name: 'my-board',
           component: MyBoardView,
           children: [
@@ -92,9 +92,13 @@ const router = createRouter({
 })
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('accessToken')
-  if (to.name === 'sign-in' && token) next({ name: 'home' })
-  // if(to.name !== 'sign-in' && !token) next ({name: 'sign-in'})
-  next()
+  if (to.name === 'sign-in' && token) {
+    next({ name: 'home' }) // Redirect to home if already signed in
+  } else if (to.name !== 'sign-in' && !token) {
+    next({ name: 'sign-in' }) // Redirect to sign-in if not authenticated
+  } else {
+    next() // Proceed to the route
+  }
 })
 
 export default router
