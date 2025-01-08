@@ -13,12 +13,8 @@
 
 FROM node:lts-alpine as base
 WORKDIR /app
-
-# Sao chép toàn bộ file từ host vào container, bao gồm cả node_modules
 COPY . .
-
-# Mở cổng ứng dụng
+COPY package*.json ./
+COPY node_modules /app/node_modules
 EXPOSE 8888
-
-# Chạy ứng dụng
 CMD ["npm", "run", "dev"]
