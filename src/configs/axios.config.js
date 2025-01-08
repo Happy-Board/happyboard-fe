@@ -1,9 +1,11 @@
 import axios from 'axios'
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_URL
+  baseURL: 
+  import.meta.env.VITE_SERVER_URL
     ? import.meta.env.VITE_SERVER_URL
-    : 'http://localhost:8000/api/v1',
+    : 
+    'https://api.happyidea.io.vn/api/v1',
   withCredentials: true
 })
 
