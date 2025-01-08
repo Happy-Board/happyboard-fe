@@ -13,7 +13,7 @@ export const useNotificationStore = defineStore('notification', () => {
   const count = ref(0)
 
   function incrementNotificationCount() {
-    ++this.numNotification.value
+    ++numNotification.value
   }
 
   function getNewNotification() {
