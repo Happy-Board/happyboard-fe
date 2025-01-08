@@ -2,7 +2,7 @@
   <div class="relative scroll-smooth">
     <div
       @click="handleOpenNotificationList"
-      class="p-1  hover:bg-secondaryColor/20 rounded-full relative"
+      class="p-1 hover:bg-secondaryColor/20 rounded-full relative"
       :class="isShowNotificationList === true ? '!bg-secondaryColor/20' : ''"
     >
       <svg
@@ -38,14 +38,20 @@
         <div class="flex gap-1 mt-2 mb-4">
           <div
             class="px-2 rounded-lg font-semibold cursor-pointer"
-            :class="typeNotification === 'unread' ? 'bg-backgroundButtonColor' : 'hover:bg-backgroundColor'"
+            :class="
+              typeNotification === 'unread'
+                ? 'bg-backgroundButtonColor'
+                : 'hover:bg-backgroundColor'
+            "
             @click="setType('unread')"
-            >
+          >
             Unread
           </div>
           <div
             class="px-2 rounded-lg font-semibold cursor-pointer"
-            :class="typeNotification === 'all' ? 'bg-backgroundButtonColor' : 'hover:bg-backgroundColor'"
+            :class="
+              typeNotification === 'all' ? 'bg-backgroundButtonColor' : 'hover:bg-backgroundColor'
+            "
             @click="setType('all')"
           >
             All
@@ -81,9 +87,9 @@ import { storeToRefs } from 'pinia'
 import ListNotification from './ListNotification.vue'
 import NotificationSkeleton from '../skeletons/NotificationSkeleton.vue'
 
-
 const notificationStore = useNotificationStore()
-const { getAllNotifications, getUnreadNotifications, incrementNotificationCount } = notificationStore
+const { getAllNotifications, getUnreadNotifications, incrementNotificationCount } =
+  notificationStore
 const messaging = getMessaging()
 const { numNotification } = storeToRefs(notificationStore)
 const isShowNotificationList = ref(false)
@@ -91,14 +97,11 @@ const notificationList = ref(null)
 const check = ref(false)
 const typeNotification = ref('all')
 
-onMounted(async () => {
-  await requestPermission()
-  onMessage(messaging, async () => {
-    await getAllNotifications()
-    incrementNotificationCount()
-  })
+await requestPermission()
+onMessage(messaging, async () => {
+  // await getAllNotifications()
+  incrementNotificationCount()
 })
-
 
 const setType = (type) => {
   typeNotification.value = type
@@ -110,7 +113,6 @@ const setType = (type) => {
 onMounted(() => {
   getAllNotifications('')
 })
-
 
 const handleOpenNotificationList = () => {
   getAllNotifications('')
@@ -131,13 +133,6 @@ onClickOutside(notificationList, () => {
 })
 onClickOutside(notificationList, () => {
   closeNotificationList()
-})
-
-watch(numNotification, (newValue, oldValue) => {
-  if (newValue > oldValue) {
-    // Khi numNotification thay đổi (tăng), bạn có thể gọi API hoặc làm gì đó
-    console.log(`New notification count: ${newValue}`)
-  }
 })
 </script>
 <style scoped>

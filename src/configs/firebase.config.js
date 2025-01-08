@@ -36,7 +36,6 @@ export const requestPermission = async () => {
       })
         .then((currentToken) => {
           if (currentToken) {
-            console.log('currentToken: ', currentToken)
             localStorage.setItem('device-token', currentToken)
           } else {
             console.log('Failed to generate the app registration token')

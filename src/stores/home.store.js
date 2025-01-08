@@ -17,6 +17,14 @@ export const useHomePageStore = defineStore('home', () => {
   const hotIdeas = ref([])
   const recentIdeas = ref([])
   const oldGroupId = ref(1)
+  const groupId = ref(1)
+
+  function setGroupId(newGroupId) {
+    groupId.value = newGroupId
+    resetListIdea()
+    currentPage.value = 1
+    loadMore()
+  }
 
   async function getPageData() {
     if (searchString.value !== '') {
@@ -133,6 +141,7 @@ export const useHomePageStore = defineStore('home', () => {
     getHotIdeas,
     getRecentIdeas,
     setCategory,
-    resetListIdea
+    resetListIdea,
+    setGroupId
   }
 })

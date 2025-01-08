@@ -233,6 +233,7 @@
                 <router-link
                   to="/create-group"
                   class="space-y-1 overflow-hidden flex items-center p-2 text-sm text-gray-600 rounded-lg group cursor-pointer hover:bg-backgroundButtonColor"
+                  @click="toGroup()"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -257,7 +258,6 @@
                     <router-link
                       :to="`/group/${group.groupId}`"
                       class="ml-3 block truncate line-clamp-1 break-words"
-                      @click="toGroup(group.groupId)"
                     >
                       <span>{{ group.name }}</span>
                     </router-link>
@@ -396,8 +396,7 @@ const isActiveTab = (routeName) => {
 const toGroup = (groupId) => {
   setCurrentPage(1)
   resetListIdea()
-  loadMore(groupId)
-  getGroupById(groupId)
+  // getGroupById(groupId)
 }
 
 const toHome = () => {

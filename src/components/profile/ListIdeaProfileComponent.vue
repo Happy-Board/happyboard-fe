@@ -43,7 +43,6 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const profilePageStore = useProfileStore()
 const { myIdeas } = storeToRefs(profilePageStore)
-console.log('myIdeas: ', myIdeas.value)
 const { loadMore } = profilePageStore
 
 await loadMore().catch((error) => {
