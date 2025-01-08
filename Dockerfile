@@ -11,10 +11,19 @@
 # EXPOSE 8888
 # CMD ["npm", "run", "dev"]
 
-FROM node:lts-alpine as base
+# FROM node:lts-alpine as base
+# WORKDIR /app
+# COPY . .
+# COPY package*.json ./
+# COPY node_modules /app/node_modules
+# EXPOSE 8888
+# CMD ["npm", "run", "dev"]
+
+FROM node:lts-alpine as build-stage
 WORKDIR /app
-COPY . .
 COPY package*.json ./
-COPY node_modules /app/node_modules
+RUN npm install
+COPY . .
 EXPOSE 8888
+# RUN npm run build
 CMD ["npm", "run", "dev"]
