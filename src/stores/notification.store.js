@@ -29,6 +29,8 @@ export const useNotificationStore = defineStore('notification', () => {
       return `<strong>${noti.fromUser.username}</strong> đã react cho một comment của bạn`
     if (noti.type === 'NI03')
       return `<strong>${noti.fromUser.username}</strong> bài viết của bạn đã được duyệt`
+    if (noti.type === 'PE01')
+      return `Thăm dò ý kiến của <strong>${noti.fromUser.username}</strong> sắp hết hạn`
   }
   async function getAllNotifications() {
     return await apiGetNotifications().then((res) => {

@@ -396,7 +396,7 @@ const isActiveTab = (routeName) => {
 const toGroup = (groupId) => {
   setCurrentPage(1)
   resetListIdea()
-  // getGroupById(groupId)
+  getGroupById(groupId)
 }
 
 const toHome = () => {

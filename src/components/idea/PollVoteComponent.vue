@@ -10,10 +10,10 @@
         <div class="flex items-center space-x-3">
           <input
             type="radio"
-            :value="option.optionText"
+            :value="option.id"
             v-model="selectedOption"
             class="poll-radio"
-            :disabled="hasVoted"
+            :disabled="diff <= 0 || hasVoted || isSubmitting"
           />
           <span class="text-gray-800 font-medium text-sm">{{ option.optionText }}</span>
         </div>
@@ -41,16 +41,22 @@
       </div>
     </div>
 
-    <div v-if="!hasVoted" class="mt-4 text-center">
+    <div class="mt-4 text-center">
+      <!-- Hide button when submitting or has voted -->
       <button
+        v-if="!isSubmitting && !hasVoted && diff > 0"
         @click="submitVote"
+        :disabled="isSubmitting || hasVoted || diff <= 0"
         class="bg-primaryColor hover:bg-blue-700 text-white py-2 px-4 rounded-full focus:ring focus:ring-indigo-300 transition duration-150"
       >
-        Submit Vote
+        {{ isSubmitting ? 'Submitting...' : 'Submit Vote' }}
       </button>
+      <div class="text-gray-500 text-sm mt-2">
+        {{ timeLeft }}
+      </div>
     </div>
 
-    <div v-else class="mt-4 text-center text-gray-600">
+    <div v-if="hasVoted" class="mt-4 text-center text-gray-600">
       <p>
         You voted for: <strong>{{ selectedOptionText }}</strong>
       </p>
@@ -59,91 +65,107 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { apiCreatePollResponse } from '@/apis/poll.api'
+
 const props = defineProps({
   options: Array,
   responses: Array,
   userId: String,
-  pollId: String
+  pollId: String,
+  endDate: Date
 })
 
 const optionsRef = ref(props.options)
 const responsesRef = ref(props.responses)
 const userIdRef = ref(props.userId)
 const pollIdRef = ref(props.pollId)
+const endDateRef = ref(props.endDate)
+console.log('endDateRef.value: ', endDateRef.value)
 
 const selectedOption = ref(null)
+const isSubmitting = ref(false)
+const diff = ref(0)
 
-// Tổng số phiếu
-const totalVotes = ref(optionsRef.value.reduce((sum, option) => sum + option.votesCount, 0)) // Tổng số phiếu hiện có
+// Tính toán khoảng thời gian còn lại
+const timeLeft = computed(() => {
+  if (diff.value <= 0) {
+    return 'Poll has ended'
+  }
 
-// Trạng thái đã vote
+  const days = Math.floor(diff.value / (1000 * 60 * 60 * 24))
+  const hours = Math.floor((diff.value % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  const minutes = Math.floor((diff.value % (1000 * 60 * 60)) / (1000 * 60))
+  if (days > 0) {
+    return `${days} day${days > 1 ? 's' : ''} left before expiration`
+  } else if (hours > 0) {
+    return `${hours} hour${hours > 1 ? 's' : ''} left before expiration`
+  } else {
+    return `${minutes} minute${minutes > 1 ? 's' : ''} left before expiration`
+  }
+})
+
+watch(
+  () => endDateRef.value,
+  (newEndDate) => {
+    const now = new Date()
+    diff.value = new Date(newEndDate) - now
+    console.log('diff.value: ', diff.value)
+  },
+  { immediate: true }
+)
+
+const totalVotes = computed(() => optionsRef.value.reduce((sum, option) => sum + option.votes, 0))
+
 const hasVoted = computed(() => !!selectedOption.value)
-
-selectedOption.value = (() => {
-  const response = responsesRef.value?.find(
-    (response) => response.userId === userIdRef.value && response.pollId === pollIdRef.value
-  )
-  return response ? response.pollOptionId : null
-})()
-
-console.log('selectedOption.value: ', selectedOption.value)
-console.log('props.options: ', props.options)
 
 const selectedOptionText = computed(() => {
   const selected = optionsRef.value.find((option) => option.id === selectedOption.value)
   return selected ? selected.optionText : 'N/A'
 })
 
-// Hàm tính phần trăm phiếu cho mỗi lựa chọn
+const initializeSelectedOption = () => {
+  const response = responsesRef.value?.find(
+    (response) => response.userId === userIdRef.value && response.pollId === pollIdRef.value
+  )
+  selectedOption.value = response ? response.pollOptionId : null
+}
+
 const calculateVotePercentage = (index) => {
   if (totalVotes.value === 0) return 0
   return ((optionsRef.value[index].votes / totalVotes.value) * 100).toFixed(1)
 }
 
-// Hàm xử lý khi nhấn nút Submit
-const submitVote = () => {
+const submitVote = async () => {
   if (!selectedOption.value) {
     alert('Please select an option before submitting!')
     return
   }
 
-  const selectedIndex = optionsRef.value.findIndex(
-    (option) => option.optionText === selectedOption.value
-  )
+  isSubmitting.value = true
+
+  const selectedIndex = optionsRef.value.findIndex((option) => option.id === selectedOption.value)
 
   if (selectedIndex !== -1) {
     optionsRef.value[selectedIndex].votes++
-    totalVotes.value++
-    hasVoted.value = true // Đánh dấu trạng thái đã vote
+  }
+
+  try {
+    await apiCreatePollResponse({
+      userId: userIdRef.value,
+      pollId: pollIdRef.value,
+      pollOptionId: selectedOption.value
+    })
+    alert('Your vote has been submitted successfully!')
+  } catch (err) {
+    console.error('Error submitting vote:', err)
+    alert('Failed to submit your vote. Please try again later.')
+  } finally {
+    isSubmitting.value = false
   }
 }
+
+onMounted(() => {
+  initializeSelectedOption()
+})
 </script>
-
-<style scoped>
-.poll-radio {
-  appearance: none;
-  width: 1.2rem;
-  height: 1.2rem;
-  border: 2px solid #4f46e5; /* Indigo */
-  border-radius: 50%;
-  outline: none;
-  cursor: pointer;
-  position: relative;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
-}
-
-.poll-radio:checked {
-  background-color: #4f46e5; /* Indigo */
-  border: 5px solid white;
-  box-shadow: 0 0 0 2px #4f46e5;
-  transform: scale(1.2);
-}
-
-.option-container.bg-orange-200 {
-  background-color: #fed7aa !important; /* Highlight màu cam nhạt */
-}
-</style>

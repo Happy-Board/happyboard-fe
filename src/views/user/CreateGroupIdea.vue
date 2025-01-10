@@ -314,8 +314,7 @@ const ideaData = reactive({
   linkMedia: '',
   groupId: groupId ? groupId : 1,
   pollOptions: [],
-  expireHour: '',
-  remindBeforeExpireTime: ''
+  endDate: ''
 })
 
 const pollData = ref({ questions: [] })
@@ -398,14 +397,8 @@ const prevImage = () => {
 
 const triggerFileInput = () => {
   const fileInput = document.getElementById('dropzone-file')
-
-  // Chỉ chấp nhận hình ảnh
   fileInput.setAttribute('accept', 'image/*')
-
-  // Kích hoạt input
   fileInput.click()
-
-  // Reset lại `accept` nếu cần hỗ trợ cả video ở lần khác
 }
 
 const saveIdea = () => {
@@ -529,21 +522,27 @@ const createIdea = () => {
         })
     }
 
-    
     if (tab.value === 'poll') {
       if (
-        pollData.value.questions[0].choices.length <= 0 ||
-        pollData.value.questions[0].expireHour.length == 0 ||
-        pollData.value.questions[0].remindBeforeExpireTime.length == 0
+        !pollData.value.questions[0].expireDays &&
+        !pollData.value.questions[0].expireHours &&
+        !pollData.value.questions[0].expireMinutes
       ) {
         notify('warning', 'Poll is not empty !')
         return
       }
+      const currentDate = new Date()
+      const question = pollData.value.questions[0]
 
+      const endDate = new Date(
+        currentDate.getTime() +
+          question.expireDays * 24 * 60 * 60 * 1000 +
+          question.expireHours * 60 * 60 * 1000 +
+          question.expireMinutes * 60 * 1000
+      )
+      ideaData.endDate = endDate
       ideaData.pollOptions = pollData.value.questions[0].choices
-      ideaData.expireHour = pollData.value.questions[0].expireHour
-      ideaData.remindBeforeExpireTime = pollData.value.questions[0].remindBeforeExpireTime
-      
+
       apiCreatePollIdea(ideaData)
         .then(() => {
           setTab('hide')

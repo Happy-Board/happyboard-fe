@@ -99,7 +99,7 @@ const typeNotification = ref('all')
 
 await requestPermission()
 onMessage(messaging, async () => {
-  // await getAllNotifications()
+  console.log('messaging: ', messaging)
   incrementNotificationCount()
 })
 

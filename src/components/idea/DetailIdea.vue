@@ -81,10 +81,11 @@
 
     <div v-if="idea.poll">
       <PollVoteComponent
-        :options="idea.poll.options"
-        :responses="idea.poll.responses"
-        :userId="idea.userId"
-        :pollId="idea.poll.id"
+        :options="idea?.poll?.options"
+        :responses="idea?.poll?.responses"
+        :userId="idea?.userId"
+        :pollId="idea?.poll.id"
+        :endDate="idea?.poll?.endDate"
       />
     </div>
 
@@ -199,7 +200,6 @@ const ideaId = route.params.id
 const typeIdea = route.params.type
 const { idea } = storeToRefs(ideaStore)
 
-console.log('idea.linkMedia: ', idea.value.thumbnailUrl)
 const {
   getDetailIdea,
   increaseVote,

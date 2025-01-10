@@ -3,9 +3,7 @@
     <h2 class="text-2xl font-bold text-center text-gray-800 mb-8"></h2>
 
     <div class="" v-for="(question, index) in poll.questions" :key="index">
-      <div class="flex justify-between">
-        <!-- Title and type info (optional, uncomment if needed) -->
-      </div>
+      <div class="flex justify-between"></div>
 
       <div v-if="question.type === 'radiogroup' || question.type === 'checkbox'" class="flex mb-4">
         <div class="flex flex-col flex-1 mr-8">
@@ -27,42 +25,33 @@
             + Add Choice
           </button>
 
-          <!-- Expire Hour Input -->
+          <!-- New Expiry Time Inputs -->
           <div class="mt-4">
-            <label class="block text-sm font-medium text-black mb-1" for="expire-hour"
-              >Enter the expire hour:</label
-            >
-            <input
-              type="text"
-              v-model="poll.questions[index].expireHour"
-              placeholder="e.g., 24"
-              class="w-50 p-2 border border-gray-300 rounded-lg text-sm"
-            />
+            <label class="block text-sm font-medium text-black mb-1">Set Poll Expiry Time:</label>
+            <div class="flex items-center space-x-2">
+              <input
+                type="number"
+                v-model="poll.questions[index].expireDays"
+                placeholder="Days"
+                class="w-20 p-2 border border-gray-300 rounded-lg text-sm"
+              />
+              <span>Days</span>
+              <input
+                type="number"
+                v-model="poll.questions[index].expireHours"
+                placeholder="Hours"
+                class="w-20 p-2 border border-gray-300 rounded-lg text-sm"
+              />
+              <span>Hours</span>
+              <input
+                type="number"
+                v-model="poll.questions[index].expireMinutes"
+                placeholder="Minutes"
+                class="w-20 p-2 border border-gray-300 rounded-lg text-sm"
+              />
+              <span>Minutes</span>
+            </div>
           </div>
-
-          <!-- Remind Time Input -->
-          <div class="mt-4">
-            <label class="block text-sm font-medium text-black mb-1" for="remind-time"
-              >Enter time remind before expire:</label
-            >
-            <input
-              type="text"
-              v-model="poll.questions[index].remindBeforeExpireTime"
-              placeholder="e.g., 2 hours"
-              class="w-50 p-2 border border-gray-300 rounded-lg text-sm"
-            />
-          </div>
-        </div>
-
-        <!-- Sidebar for tips -->
-        <div class="flex-shrink-0 w-60 bg-gray-100 rounded-lg">
-          <h3 class="font-semibold text-lg text-gray-700 mb-2">Tips on Better Polls</h3>
-          <ul class="list-disc pl-5 text-sm text-gray-600">
-            <li>Suggest short clear options</li>
-            <li>The more options, the better</li>
-            <li>Choose the poll duration</li>
-            <li>Options can't be edited after post creation</li>
-          </ul>
         </div>
       </div>
 
@@ -80,27 +69,23 @@
 <script setup>
 import { reactive, watch } from 'vue'
 
+// Emits updated poll data to parent component
 const emit = defineEmits(['updatePollData'])
+
 // Define the poll data model
 const poll = reactive({
   questions: [
     {
-      type: 'radiogroup', // Type of question, can be 'radiogroup', 'checkbox', or 'text'
-      choices: ['', ''], // Choices for radio or checkbox questions
-      expireHour: '', // Expiry time in hours
-      remindBeforeExpireTime: '' // Time to remind before expiry (in hours)
+      type: 'radiogroup',
+      choices: ['', ''],
+      expireDays: 0,
+      expireHours: 0,
+      expireMinutes: 0,
     }
   ]
 })
-const addChoice = (index) => {
-  poll.questions[index].choices.push('')
-  emit('updatePollData', poll.value)
-}
 
-const removeChoice = (questionIndex, choiceIndex) => {
-  poll.questions[questionIndex].choices.splice(choiceIndex, 1)
-}
-
+// Automatically emit changes
 watch(
   poll,
   () => {
@@ -108,4 +93,13 @@ watch(
   },
   { deep: true }
 )
+
+// Functions for adding/removing choices
+const addChoice = (index) => {
+  poll.questions[index].choices.push('')
+}
+
+const removeChoice = (questionIndex, choiceIndex) => {
+  poll.questions[questionIndex].choices.splice(choiceIndex, 1)
+}
 </script>
