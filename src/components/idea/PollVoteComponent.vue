@@ -5,7 +5,7 @@
     <div v-for="(option, index) in optionsRef" :key="index" class="option-container mb-4">
       <label
         class="flex items-center justify-between cursor-pointer hover:bg-gray-100 p-3 rounded-lg transition duration-150"
-        :class="{ 'bg-yellow-700': selectedOption === option.id && hasVoted }"
+        :class="{ 'bg-yellow-700': selectedOption === option.id && (hasVoted || isVoteSubmitted) }"
       >
         <div class="flex items-center space-x-3">
           <input
@@ -13,7 +13,7 @@
             :value="option.id"
             v-model="selectedOption"
             class="poll-radio"
-            :disabled="diff <= 0 || hasVoted || isSubmitting"
+            :disabled="hasVoted || isVoteSubmitted || diff <= 0 || isSubmitting"
           />
           <span class="text-gray-800 font-medium text-sm">{{ option.optionText }}</span>
         </div>
@@ -42,11 +42,10 @@
     </div>
 
     <div class="mt-4 text-center">
-      <!-- Hide button when submitting or has voted -->
       <button
-        v-if="!isSubmitting && !hasVoted && diff > 0"
+        v-if="!isSubmitting && diff > 0 && !hasVoted && !isVoteSubmitted"
         @click="submitVote"
-        :disabled="isSubmitting || hasVoted || diff <= 0"
+        :disabled="isSubmitting || diff <= 0"
         class="bg-primaryColor hover:bg-blue-700 text-white py-2 px-4 rounded-full focus:ring focus:ring-indigo-300 transition duration-150"
       >
         {{ isSubmitting ? 'Submitting...' : 'Submit Vote' }}
@@ -56,7 +55,7 @@
       </div>
     </div>
 
-    <div v-if="hasVoted" class="mt-4 text-center text-gray-600">
+    <div v-if="hasVoted || isVoteSubmitted" class="mt-4 text-center text-gray-600">
       <p>
         You voted for: <strong>{{ selectedOptionText }}</strong>
       </p>
@@ -81,28 +80,22 @@ const responsesRef = ref(props.responses)
 const userIdRef = ref(props.userId)
 const pollIdRef = ref(props.pollId)
 const endDateRef = ref(props.endDate)
-console.log('endDateRef.value: ', endDateRef.value)
 
 const selectedOption = ref(null)
 const isSubmitting = ref(false)
 const diff = ref(0)
+const isVoteSubmitted = ref(false) // Trạng thái vote trong phiên
 
-// Tính toán khoảng thời gian còn lại
 const timeLeft = computed(() => {
-  if (diff.value <= 0) {
-    return 'Poll has ended'
-  }
+  if (diff.value <= 0) return 'Poll has ended'
 
   const days = Math.floor(diff.value / (1000 * 60 * 60 * 24))
   const hours = Math.floor((diff.value % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-  const minutes = Math.floor((diff.value % (1000 * 60 * 60)) / (1000 * 60))
-  if (days > 0) {
-    return `${days} day${days > 1 ? 's' : ''} left before expiration`
-  } else if (hours > 0) {
-    return `${hours} hour${hours > 1 ? 's' : ''} left before expiration`
-  } else {
-    return `${minutes} minute${minutes > 1 ? 's' : ''} left before expiration`
-  }
+  const minutes = Math.floor((diff.value % (1000 * 60)) / (1000 * 60))
+  if (days > 0) return `${days} day${days > 1 ? 's' : ''} left before expiration`
+  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} left before expiration`
+  return `Less than 1 hour left before expiration`
+  // return `${minutes} minute${minutes > 1 ? 's' : ''} left before expiration`
 })
 
 watch(
@@ -110,14 +103,18 @@ watch(
   (newEndDate) => {
     const now = new Date()
     diff.value = new Date(newEndDate) - now
-    console.log('diff.value: ', diff.value)
   },
   { immediate: true }
 )
 
 const totalVotes = computed(() => optionsRef.value.reduce((sum, option) => sum + option.votes, 0))
 
-const hasVoted = computed(() => !!selectedOption.value)
+const hasVoted = computed(() => {
+  const response = responsesRef.value?.find(
+    (response) => response.userId === userIdRef.value && response.pollId === pollIdRef.value
+  )
+  return !!response
+})
 
 const selectedOptionText = computed(() => {
   const selected = optionsRef.value.find((option) => option.id === selectedOption.value)
@@ -137,18 +134,12 @@ const calculateVotePercentage = (index) => {
 }
 
 const submitVote = async () => {
-  if (!selectedOption.value) {
-    alert('Please select an option before submitting!')
+  if (!selectedOption.value || hasVoted.value || isVoteSubmitted.value) {
+    alert('You have already voted or no option selected.')
     return
   }
 
   isSubmitting.value = true
-
-  const selectedIndex = optionsRef.value.findIndex((option) => option.id === selectedOption.value)
-
-  if (selectedIndex !== -1) {
-    optionsRef.value[selectedIndex].votes++
-  }
 
   try {
     await apiCreatePollResponse({
@@ -156,7 +147,12 @@ const submitVote = async () => {
       pollId: pollIdRef.value,
       pollOptionId: selectedOption.value
     })
+    const selectedIndex = optionsRef.value.findIndex((option) => option.id === selectedOption.value)
+    if (selectedIndex !== -1) {
+      optionsRef.value[selectedIndex].votes++
+    }
     alert('Your vote has been submitted successfully!')
+    isVoteSubmitted.value = true
   } catch (err) {
     console.error('Error submitting vote:', err)
     alert('Failed to submit your vote. Please try again later.')

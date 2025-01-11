@@ -68,7 +68,7 @@
           </transition>
         </div>
       </Listbox>
-      <TabTypeCreateIdea :tab="tab" @setTab="handleSetTab"> </TabTypeCreateIdea>
+      <TabTypeCreateIdeaGroup :tab="tab" @setTab="handleSetTab"> </TabTypeCreateIdeaGroup>
       <div class="">
         <label for="message" class="block text-sm font-medium text-black mb-3"
           >Title <span class="text-red-600">*</span>
@@ -235,17 +235,17 @@
       </div>
 
       <div class="my-10 flex justify-end">
-        <button
+        <!-- <button
           @click.prevent="saveIdea"
           type="button"
           class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 md:mb-2 mt-5"
         >
           Save Draft
-        </button>
+        </button> -->
         <button
           @click.prevent="createIdea"
           type="button"
-          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 md:mb-2 mt-5"
+          class="text-white bg-primaryColor border border-borderColor focus:outline-none hover:bg-secondaryColor focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2 me-2 md:mb-2 mt-1 w-36"
         >
           Create
         </button>
@@ -283,7 +283,7 @@ import sanitizeHtml from 'sanitize-html'
 import { SANITIZE_ALLOWED_TAGS } from '@/constants'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-import TabTypeCreateIdea from '../../components/idea/TabTypeCreateIdea.vue'
+import TabTypeCreateIdeaGroup from '../../components/idea/TabTypeCreateIdeaGroup.vue'
 import PollEditor from '../../components/idea/PollEditor.vue'
 // import TabAccountSkeleton from '@/components/skeletons/TabAccountSkeleton.vue'
 
@@ -513,7 +513,7 @@ const createIdea = () => {
           setTab('hide')
           notify('success', 'Create idea in group successfully !')
           setTimeout(() => {
-            router.push({ name: 'my-board-ideas' })
+            router.push({ name: 'group' })
           }, 1000)
         })
         .catch((err) => {
@@ -548,7 +548,7 @@ const createIdea = () => {
           setTab('hide')
           notify('success', 'Create idea in group successfully !')
           setTimeout(() => {
-            router.push({ name: 'my-board-ideas' })
+            router.push({ name: 'group' })
           }, 1000)
         })
         .catch((err) => {
@@ -577,7 +577,7 @@ const createIdea = () => {
         setTab('hide')
         notify('success', 'Create media idea in group successfully!')
         setTimeout(() => {
-          router.push({ name: 'my-board-ideas' })
+          router.push({ name: 'group' })
         }, 1000)
       })
       .catch((err) => {

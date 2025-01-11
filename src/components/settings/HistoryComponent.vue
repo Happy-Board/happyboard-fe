@@ -20,6 +20,12 @@ await getMyHistoryActivities().catch((error) => {
 })
 
 const HISTORY_TYPE = {
+  CG01: {
+    icon: 'fa-regular fa-square-plus text-green-600',
+    display: 'detailGroup',
+    title: 'You created A new group',
+    path: 'group'
+  },
   CI01: {
     icon: 'fa-regular fa-square-plus text-green-600',
     display: 'contentIdea',

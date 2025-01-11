@@ -10,6 +10,30 @@ const { historyActivities } = storeToRefs(userStore)
 const router = useRouter()
 
 const HISTORY_TYPE = {
+  CP01: {
+    icon: 'fa-regular fa-circle-check text-green-600',
+    display: 'contentIdea',
+    title: 'You voted to poll',
+    path: 'detail-idea'
+  },
+  CG03: {
+    icon: 'fa-solid fa-right-from-bracket text-red-600',
+    display: 'contentIdea',
+    title: 'You leave group',
+    path: 'group'
+  },
+  CG02: {
+    icon: 'fa-regular fa-square-plus text-green-600',
+    display: 'contentIdea',
+    title: 'You add a new member to group',
+    path: 'group'
+  },
+  CG01: {
+    icon: 'fa-solid fa-layer-group text-blue-600',
+    display: 'contentIdea',
+    title: 'You created a new group',
+    path: 'group'
+  },
   CI01: {
     icon: 'fa-regular fa-square-plus text-green-600',
     display: 'contentIdea',
@@ -71,8 +95,10 @@ const HISTORY_TYPE = {
 // }
 
 const handleShowAction = (targetId, type) => {
-  if (HISTORY_TYPE[type].path) {
+  if (!HISTORY_TYPE[type].path?.includes('group')) {
     router.push({ name: HISTORY_TYPE[type].path, params: { id: targetId, type: 'publish' } })
+  } else {
+    router.push({ name: HISTORY_TYPE[type].path, params: { groupId: targetId } })
   }
 }
 </script>

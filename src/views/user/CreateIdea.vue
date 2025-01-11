@@ -460,7 +460,7 @@ const saveIdea = () => {
   }
 
   if (ideaData.type === 'media') {
-    if (!preDisplayImage.value || !(ideaData.content && preDisplayImage.value.length === 0)) {
+    if (!preDisplayImage.value) {
       notify('warning', 'Media is not empty !')
       return
     }
@@ -565,6 +565,7 @@ const createIdea = () => {
     formData.append('title', ideaData.title)
     formData.append('categoryId', ideaData.categoryId)
     formData.append('type', ideaData.type)
+    formData.append('groupId', 1)
     selectedFiles.value.forEach((file) => {
       formData.append('files', file)
     })

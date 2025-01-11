@@ -157,9 +157,7 @@
                 }"
               >
                 <!-- Upvote Button -->
-                <button
-                  class="flex items-center gap-1 font-medium hover:text-blue-700"
-                >
+                <button class="flex items-center gap-1 font-medium hover:text-blue-700">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -181,7 +179,7 @@
                 <span class="text-sm black">{{ totalVote }}</span>
 
                 <!-- Downvote Button -->
-                <button class="flex items-center gap-2 hover:text-red-700" >
+                <button class="flex items-center gap-2 hover:text-red-700">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -209,7 +207,7 @@
                 <span>{{ props.totalComment }} comments</span>
               </button>
               <span class="text-sm">{{ props.totalView }} views</span>
-              <div class="relative">
+              <!-- <div class="relative">
                 <button
                   class="flex items-center text-sm hover:bg-gray-200 px-2 py-2 rounded-full hover:bg-opacity-50"
                   @click="toggleDropdown"
@@ -236,7 +234,7 @@
                   <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800">Hide</li>
                   <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800">Delete</li>
                 </ul>
-              </div>
+              </div> -->
             </div>
             <!-- Expanded Content Section -->
           </div>
@@ -265,7 +263,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { defineProps, computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import { defineProps, computed, ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
 import { useIdeaStore } from '@/stores/idea.store'
 
@@ -319,6 +317,7 @@ imagesArray = computed(() => {
 
   return [defaultImageUrl]
 })
+
 const currentIndex = ref(0)
 const showLightbox = ref(false)
 const isExpandedContentSection = ref(false)
@@ -349,18 +348,29 @@ function handleImageError(event) {
   event.target.style.display = 'none'
 }
 
-let intervalId
+let intervalId = null
 
 const startSlideshow = () => {
+  if (!imagesArray.value || imagesArray.value.length === 0) {
+    console.error('Images array is empty')
+    return
+  }
   intervalId = setInterval(() => {
-    currentIndex.value = (currentIndex.value + 1) % imagesArray.value.length
+    currentIndex.value = (currentIndex.value) % imagesArray.value.length
   }, 3000)
 }
 
 // Start the slideshow on component mount and clean up on unmount
 onMounted(() => {
+  console.log("imagesArray.value: ", imagesArray.value)
   startSlideshow()
 })
+
+// watch(imagesArray, (newArray) => {
+//   if (newArray && newArray.length > 0) {
+//     startSlideshow()
+//   }
+// })
 
 onBeforeUnmount(() => {
   clearInterval(intervalId)
@@ -389,7 +399,7 @@ const truncatedContent = computed(() => {
 })
 
 const toggleUpvote = () => {
-  console.log('toggleVote: ',voteStatus.value)
+  console.log('toggleVote: ', voteStatus.value)
   if (!isVotingAllowed.value) return
 
   if (voteStatus.value === 'up') {

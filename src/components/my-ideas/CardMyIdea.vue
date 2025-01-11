@@ -406,7 +406,7 @@ let intervalId
 
 const startSlideshow = () => {
   intervalId = setInterval(() => {
-    currentIndex.value = (currentIndex.value + 1) % imagesArray.value.length
+    currentIndex.value = (currentIndex.value) % imagesArray.value.length
   }, 3000)
 }
 

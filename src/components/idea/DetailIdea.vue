@@ -110,7 +110,7 @@
             viewBox="0 0 24 24"
             stroke-width="2"
             stroke="currentColor"
-            class="w-5 h-5"
+            class="w-6 h-6"
             :class="{
               'hover-color-up': vote === 'up'
             }"
@@ -124,7 +124,7 @@
           </svg>
         </div>
 
-        <span class="action-count">{{ idea.voteCount !== 0 ? idea.voteCount : 'Vote' }}</span>
+        <span class="action-count">{{ totalVote !== 0 ? totalVote : 'Vote' }}</span>
 
         <div
           class="arrow-container downvote-container"
@@ -226,6 +226,7 @@ await getRelatedIdeas(ideaId).catch((error) => {
 const isVotingAllowed = ref(true)
 const debounceTime = 2000
 const vote = ref(idea.value?.vote)
+const totalVote = ref(idea?.value?.voteCount)
 
 const toggleUpvote = () => {
   if (!isVotingAllowed.value) return
@@ -233,13 +234,16 @@ const toggleUpvote = () => {
   if (vote.value === 'up') {
     // If already upvoted, clicking will cancel the upvote
     cancelVote(ideaId)
+    --totalVote.value
     vote.value = null // Clear the vote
   } else if (vote.value === 'down') {
     cancelVote(ideaId)
+    ++totalVote.value
     vote.value = null
   } else {
     // Set vote to up
     increaseVote(ideaId)
+    ++totalVote.value
     vote.value = 'up'
   }
 
@@ -256,14 +260,17 @@ const toggleDownvote = () => {
   if (vote.value === 'down') {
     // If already downvoted, clicking will cancel the downvote
     cancelVote(ideaId)
+    ++totalVote.value
     vote.value = null // Clear the vote
   } else if (vote.value === 'up') {
     cancelVote(ideaId)
+    --totalVote.value
     vote.value = null
   } else {
     // Set vote to down
     decreaseVote(ideaId)
     vote.value = 'down'
+    --totalVote.value
   }
 
   // Prevent rapid multiple votes
@@ -283,10 +290,10 @@ const currentIndex = ref(0)
 // )
 
 const imagesArray = computed(() => {
-  if (!idea?.linkMedia) return null
-  return idea.linkMedia.includes(',')
-    ? idea.linkMedia.split(',').map((url) => url?.trim())
-    : [idea.linkMedia]
+  if (!idea?.value?.linkMedia) return null
+  return idea?.value?.linkMedia.includes(',')
+    ? idea?.value?.linkMedia.split(',').map((url) => url?.trim())
+    : [idea?.value?.linkMedia]
 })
 
 const currentImage = computed(() => {
@@ -338,7 +345,7 @@ const prevImage = () => {
 }
 
 .image {
-  max-width: 60%;
+  max-width: 100%;
   max-height: 100%;
   object-fit: contain;
 }
