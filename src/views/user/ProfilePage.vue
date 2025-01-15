@@ -5,8 +5,7 @@
         <HeaderProfileComponent v-model:tab="currentTab" />
       </Suspense>
     </header>
-    <div class="flex-1">
-      <FilterComponent :store="profilePageStore" />
+    <div class="flex-1 mt-6">
       <Suspense>
         <ListCommentProfileComponent v-if="tab == 'Comments'" :activeTab="tab" />
         <ListIdeaProfileComponent v-else :activeTab="tab" />

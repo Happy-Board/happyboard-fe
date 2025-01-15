@@ -263,7 +263,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { defineProps, computed, ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { defineProps, computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
 import { useIdeaStore } from '@/stores/idea.store'
 

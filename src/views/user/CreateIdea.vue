@@ -516,7 +516,7 @@ const createIdea = () => {
       apiCreateIdea(ideaData)
         .then(() => {
           setTab('hide')
-          notify('success', 'Create idea in group successfully !')
+          notify('success', 'Create idea successfully !')
           setTimeout(() => {
             router.push({ name: 'my-board-ideas' })
           }, 1000)

@@ -94,6 +94,7 @@ const messaging = getMessaging()
 const { numNotification } = storeToRefs(notificationStore)
 const isShowNotificationList = ref(false)
 const notificationList = ref(null)
+console.log('notificationList: ', notificationList.value)
 const check = ref(false)
 const typeNotification = ref('all')
 

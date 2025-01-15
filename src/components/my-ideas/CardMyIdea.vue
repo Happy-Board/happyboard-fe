@@ -232,7 +232,7 @@
                 <span>{{ props.totalComment }} comments</span>
               </button>
               <span class="text-sm">{{ 0 }} views</span>
-              <!-- <div class="relative">
+              <div class="relative">
                 <button
                   class="flex items-center text-sm hover:bg-gray-200 px-2 py-2 rounded-full hover:bg-opacity-50"
                   @click="toggleDropdown"
@@ -256,18 +256,10 @@
                   v-if="isDropdownOpen"
                   class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg border border-gray-300 z-10"
                 >
-                  <li
-                    class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
-                  >
-                    Hide
-                  </li>
-                  <li
-                    class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
-                  >
-                    Delete
-                  </li>
+                  <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800">Hide</li>
+                  <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800">Delete</li>
                 </ul>
-              </div> -->
+              </div>
             </div>
           </div>
 
@@ -355,6 +347,15 @@ const props = defineProps({
   thumbnailUrl: String
 })
 
+// Khai báo reactive cho dropdown
+const isDropdownOpen = ref(false)
+
+// Hàm toggle dropdown
+const toggleDropdown = () => {
+  console.log('Toggling dropdown...')
+  isDropdownOpen.value = !isDropdownOpen.value
+  console.log('isDropdownOpen.value: ', isDropdownOpen.value)
+}
 let imagesArray = []
 imagesArray = computed(() => {
   const defaultImageUrl = ''
@@ -406,7 +407,7 @@ let intervalId
 
 const startSlideshow = () => {
   intervalId = setInterval(() => {
-    currentIndex.value = (currentIndex.value) % imagesArray.value.length
+    currentIndex.value = currentIndex.value % imagesArray.value.length
   }, 3000)
 }
 

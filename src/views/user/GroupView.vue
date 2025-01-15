@@ -12,8 +12,8 @@
         <template #fallback> </template>
       </Suspense>
     </div>
-    <div class="flex-1">
-      <FilterComponent :store="homePageStore" />
+    <div class="flex-1 mt-10">
+      <!-- <FilterComponent :store="homePageStore" /> -->
       <Suspense>
         <ListIdea :groupId="groupId" />
 
@@ -58,7 +58,7 @@ import { useGroupStore } from '@/stores/group.store'
 import { storeToRefs } from 'pinia'
 import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
 import ActivityHistory from '@/components/history-activities/ActivityHistory.vue'
-import FilterComponent from '@/components/home/FilterComponent.vue'
+// import FilterComponent from '@/components/home/FilterComponent.vue'
 const HeaderComponent = defineAsyncComponent(() => import('@/components/group/HeaderComponent.vue'))
 const SuggestIdeaComponent = defineAsyncComponent(
   () => import('@/components/home/SuggestIdeaComponent.vue')

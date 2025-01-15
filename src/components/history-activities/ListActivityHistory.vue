@@ -10,6 +10,12 @@ const { historyActivities } = storeToRefs(userStore)
 const router = useRouter()
 
 const HISTORY_TYPE = {
+  CI01: {
+    icon: 'fa-regular fa-square-plus text-green-600',
+    display: 'contentIdea',
+    title: 'You created a new idea',
+    path: 'detail-idea'
+  },
   CP01: {
     icon: 'fa-regular fa-circle-check text-green-600',
     display: 'contentIdea',
@@ -33,12 +39,6 @@ const HISTORY_TYPE = {
     display: 'contentIdea',
     title: 'You created a new group',
     path: 'group'
-  },
-  CI01: {
-    icon: 'fa-regular fa-square-plus text-green-600',
-    display: 'contentIdea',
-    title: 'You created a new idea',
-    path: 'detail-idea'
   },
   EI01: {
     icon: 'fa-regular fa-pen-to-square text-blue-600',

@@ -27,8 +27,8 @@ export const useNotificationStore = defineStore('notification', () => {
       return `<strong>${noti.fromUser.username}</strong> đã vote cho idea của bạn`
     if (noti.type === 'NC01')
       return `<strong>${noti.fromUser.username}</strong> đã react cho một comment của bạn`
-    if (noti.type === 'NI03')
-      return `<strong>${noti.fromUser.username}</strong> bài viết của bạn đã được duyệt`
+    if (noti.type === 'NI03') return `Bài viết của bạn đã được <strong>Quản trị viên</strong> duyệt`
+    if (noti.type === 'NI04') return `Bài viết của bạn đã bị <strong>Quản trị viên</strong> ẩn`
     if (noti.type === 'PE01')
       return `Thăm dò ý kiến của <strong>${noti.fromUser.username}</strong> sắp hết hạn`
   }

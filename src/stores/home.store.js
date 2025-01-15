@@ -68,9 +68,11 @@ export const useHomePageStore = defineStore('home', () => {
     currentPage.value = page
     resetListIdea()
   }
+
   function setSearchString(search) {
     searchString.value = search
   }
+  
   function setCategory(checkedCategory) {
     category.value = checkedCategory
     currentPage.value = 1

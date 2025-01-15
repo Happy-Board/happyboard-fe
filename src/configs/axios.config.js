@@ -5,7 +5,7 @@ export const axiosInstance = axios.create({
   import.meta.env.VITE_SERVER_URL
     ? import.meta.env.VITE_SERVER_URL
     : 
-    'https://api.happyidea.io.vn/api/v1',
+    'https://api.happyboard.io.vn/api/v1',
   withCredentials: true
 })
 
