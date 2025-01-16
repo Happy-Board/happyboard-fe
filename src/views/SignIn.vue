@@ -337,7 +337,9 @@ onMounted(() => {
 })
 const ggLogin = () => {
   console.log('gg login')
-  window.open('http://localhost:8000/api/v1/auth/google', '_self')
+  // window.open('http://localhost:8000/api/v1/auth/google', '_self')
+  window.open('https://happyboard.io.vn/api/v1/auth/google', '_self')
+
 }
 const router = useRouter()
 const signInInfo = reactive({
