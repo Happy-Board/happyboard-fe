@@ -78,14 +78,14 @@ const router = createRouter({
       ]
     },
     {
-      path: '/sign-in',
-      name: 'sign-in',
-      component: SignIn
-    },
-    {
       path: '/reset-password/:token',
       name: 'reset-password',
       component: ResetPassword
+    },
+    {
+      path: '/sign-in',
+      name: 'sign-in',
+      component: SignIn
     },
     { path: '/:pathMatch(.*)*', component: NotFoundPage }
   ]

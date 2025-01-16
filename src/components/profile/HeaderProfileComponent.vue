@@ -2,7 +2,15 @@
   <header class="flex flex-col items-start bg-white">
     <div class="flex items-center gap-x-6 my-10">
       <!-- Avatar -->
-      <img :src="avatar" alt="Profile Picture" class="w-20 h-20 rounded-full object-cover" />
+      <img
+        :src="
+          avatar
+            ? avatar
+            : 'https://res.cloudinary.com/daokqrkdk/image/upload/v1731055054/user/avatar/4.jpg'
+        "
+        alt="Profile Picture"
+        class="w-20 h-20 rounded-full object-cover"
+      />
 
       <!-- User Information -->
       <div>
@@ -38,14 +46,14 @@ const tabs = ['Posts', 'Comments', 'Upvoted', 'Downvoted']
 
 // Profile Store
 const profileStore = useProfileStore()
-const { tab: activeTab } = storeToRefs(profileStore) 
+const { tab: activeTab } = storeToRefs(profileStore)
 watch(activeTab, (newTab) => {
   console.log('Active Tab changed to: ', newTab)
 })
 
 // Change tab
 const changeTab = (tab) => {
-  profileStore.setTab(tab)  // Update the tab in the store
+  profileStore.setTab(tab) // Update the tab in the store
 }
 
 // Fetch user profile

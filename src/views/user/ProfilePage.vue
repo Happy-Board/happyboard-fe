@@ -50,7 +50,7 @@ import { useHomePageStore } from '@/stores/home.store'
 import { storeToRefs } from 'pinia'
 import ListIdeaSkeleton from '@/components/skeletons/ListIdeaSkeleton.vue'
 import ActivityHistory from '@/components/history-activities/ActivityHistory.vue'
-import FilterComponent from '@/components/home/FilterComponent.vue'
+// import FilterComponent from '@/components/home/FilterComponent.vue'
 import HeaderProfileComponent from '@/components/profile/HeaderProfileComponent.vue'
 import { useProfileStore } from '@/stores/profile.store'
 
