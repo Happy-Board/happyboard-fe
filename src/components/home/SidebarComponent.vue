@@ -355,7 +355,7 @@ const displayedCategories = computed(() => {
   if (isExpanded.value) {
     return filteredCategories.value // Hiển thị toàn bộ danh mục
   }
-  return filteredCategories.value.slice(0, 5) // Hiển thị 5 mục đầu tiên
+  return filteredCategories.value.slice(0, 20) // Hiển thị 5 mục đầu tiên
 })
 
 // const hasMoreCategories = computed(() => {

@@ -150,7 +150,15 @@
                   class="px-4 py-2 hover:bg-indigo-100 cursor-pointer text-sm transition-colors duration-200 ease-in-out flex items-center hover:bg-gray-200 rounded-full"
                 >
                   <!-- Avatar -->
-                  <img :src="user.avatar" alt="User Avatar" class="w-8 h-8 rounded-full mr-4" />
+                  <img
+                    :src="
+                      user.avatar
+                        ? user.avatar
+                        : 'https://res.cloudinary.com/daokqrkdk/image/upload/v1731055054/user/avatar/4.jpg'
+                    "
+                    alt="User Avatar"
+                    class="w-8 h-8 rounded-full mr-4"
+                  />
                   <!-- Username -->
                   <span class="text-gray-800">{{ user.username }}</span>
                 </li>
@@ -219,7 +227,7 @@ const props = defineProps({
     type: String,
     required: true,
     default:
-      'https://res.cloudinary.com/daokqrkdk/image/upload/c_fill,g_auto,h_250,w_970/b_rgb:000000,e_gradient_fade,y_-0.50/c_scale,co_rgb:ffffff,fl_relative,l_text:montserrat_25_style_light_align_center:Shop%20Now,w_0.5,y_0.18/v1735857209/default-image-icon-vector-missing-600nw-2079504220_ff0fqp.webp'
+      'https://res.cloudinary.com/daokqrkdk/image/upload/v1737011422/blue-curve-background_53876-113112_chvo7p.avif'
   },
   groupName: {
     type: String,

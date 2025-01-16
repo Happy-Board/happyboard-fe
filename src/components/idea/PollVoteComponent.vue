@@ -135,7 +135,6 @@ const calculateVotePercentage = (index) => {
 
 const submitVote = async () => {
   if (!selectedOption.value || hasVoted.value || isVoteSubmitted.value) {
-    alert('You have already voted or no option selected.')
     return
   }
 
@@ -151,11 +150,9 @@ const submitVote = async () => {
     if (selectedIndex !== -1) {
       optionsRef.value[selectedIndex].votes++
     }
-    alert('Your vote has been submitted successfully!')
     isVoteSubmitted.value = true
   } catch (err) {
     console.error('Error submitting vote:', err)
-    alert('Failed to submit your vote. Please try again later.')
   } finally {
     isSubmitting.value = false
   }
